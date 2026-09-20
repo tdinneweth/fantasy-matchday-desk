@@ -20,6 +20,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 CONFIG = os.path.join(HERE, "config.json")
 STATE = os.path.join(HERE, "state.json")
 EVENTS = os.path.join(HERE, "events.json")
+NEW_EVENTS = os.path.join(HERE, "new-events.json")
 RANKS = os.path.join(HERE, "ranks-history.json")
 CACHE = os.path.join(HERE, ".cache")
 
@@ -715,6 +716,9 @@ def track_events(state):
             pass
 
     first_seen = book["firstSeen"]
+    # a cold start has no history, so everything looks new — worth noting so the
+    # notifier does not announce the whole week at once
+    cold_start = not first_seen
     now = datetime.now(timezone.utc).isoformat(timespec="seconds")
 
     owners = {}
@@ -770,6 +774,11 @@ def track_events(state):
 
     log.sort(key=lambda e: e["at"], reverse=True)
     log = log[:60]
+
+    # what appeared for the first time in this pass, for the notifier to announce
+    announce = [] if cold_start else [e for e in log if e["ts"] == now]
+    with open(NEW_EVENTS, "w") as fh:
+        json.dump({"coldStart": cold_start, "events": announce}, fh, indent=1)
 
     # forget first-seen stamps for events that no longer exist
     live_ids = {e["id"] for e in log}
