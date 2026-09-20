@@ -27,9 +27,6 @@ CACHE = os.path.join(HERE, ".cache")
 FPL = "https://fantasy.premierleague.com/api"
 PRO = "https://proleague.code.brussels"
 PRO_Q = "competitionFeed=JPL&seasonId=2027"
-UCL = "https://gaming.uefa.com/en/uclfantasy/services/feeds"
-UCL_SEASON = 90
-UCL_POS = {1: "GK", 2: "DEF", 3: "MID", 4: "FWD"}
 
 POS = {1: "GK", 2: "DEF", 3: "MID", 4: "FWD", 5: "MNG"}
 
@@ -669,188 +666,6 @@ def pro_block(cfg):
 # --------------------------------------------------------------------------
 
 # what we watch, and how each reads in the ticker
-# --------------------------------------------------------------------------
-# UEFA Champions League Fantasy
-# --------------------------------------------------------------------------
-
-# Scoring fitted against matchday 1 and exact for 553 of the 557 players who
-# featured (99.3%); whatever the model misses lands in the `other` driver, and
-# the team total always comes from UEFA's own per-player figure.
-UCL_GOAL = {"GK": 6, "DEF": 6, "MID": 5, "FWD": 4}
-
-
-def ucl_drivers(pos, p, total):
-    rows = []
-
-    def add(label, points):
-        if points:
-            rows.append({"label": label, "points": points})
-
-    minutes = p.get("minsPlyd") or 0
-    if minutes:
-        add("minutes", 2 if minutes >= 60 else 1)
-    add("goals", (p.get("gS") or 0) * UCL_GOAL.get(pos, 4))
-    add("assists", (p.get("assist") or 0) * 3)
-    if p.get("cS") and minutes >= 60:
-        add("clean sheet", 4 if pos in ("GK", "DEF") else (1 if pos == "MID" else 0))
-    if pos in ("GK", "DEF"):
-        add("conceded", -((p.get("gC") or 0) // 2))
-    add("saves", (p.get("saves") or 0) // 3)
-    add("pen save", (p.get("pS") or 0) * 5)
-    add("yellow card", -(p.get("yC") or 0))
-    add("red card", -((p.get("rC") or 0) * 3))
-    add("own goal", -((p.get("oG") or 0) * 2))
-    add("recoveries", (p.get("bR") or 0) // 3)
-    add("goal outside box", p.get("gOB") or 0)
-    add("man of the match", int(p.get("mOMPts") or 0))
-    add("other", (total or 0) - sum(r["points"] for r in rows))
-    rows.sort(key=lambda r: -abs(r["points"]))
-    return rows
-
-
-def ucl_block(cfg):
-    squad_cfg = (cfg or {}).get("squad") or []
-    if not squad_cfg:
-        return None
-
-    days = get(f"{UCL}/fixtures/fixtures_{UCL_SEASON}_en.json", cache_seconds=600)["data"]["value"]
-    # mdIsCurrent: 1 is the matchday in play or next up, 2 is finished
-    day = next((d for d in days if d.get("mdIsCurrent") == 1), None)
-    if day is None:
-        played = [d for d in days if d.get("mdIsCurrent") == 2]
-        day = played[-1] if played else days[0]
-    md = day["mdId"]
-
-    feed = get(f"{UCL}/players/players_{UCL_SEASON}_en_{md}.json", cache_seconds=60)
-    everyone = feed["data"]["value"]["playerList"]
-    by_id = {str(p["id"]): p for p in everyone}
-
-    matches, club_ctx = [], {}
-    for m in day.get("match") or []:
-        started = str(m.get("isLive")) in ("1", "2")
-        finished = str(m.get("isLive")) == "2"
-        home, away = m.get("htCCode", "?"), m.get("atCCode", "?")
-        hs, as_ = m.get("htScore"), m.get("atScore")
-        row = {
-            "id": m.get("mId"),
-            "home": home,
-            "away": away,
-            "homeBadge": "ucl-club-%s.png" % m.get("htId"),
-            "awayBadge": "ucl-club-%s.png" % m.get("atId"),
-            "homeGoals": int(hs) if started and str(hs).isdigit() else None,
-            "awayGoals": int(as_) if started and str(as_).isdigit() else None,
-            "started": started,
-            "finished": finished,
-            "kickoff": ucl_time(m.get("dateTime")),
-        }
-        matches.append(row)
-        state = "done" if finished else ("live" if started else "upcoming")
-        score = None if row["homeGoals"] is None else "%s-%s" % (row["homeGoals"], row["awayGoals"])
-        club_ctx[home] = {"opponent": away + " (H)", "state": state, "kickoff": row["kickoff"], "score": score}
-        club_ctx[away] = {"opponent": home + " (A)", "state": state, "kickoff": row["kickoff"], "score": score}
-
-    # the feed carries every player, so scorers per match come free
-    club_match = {}
-    for m in matches:
-        club_match[m["home"]] = m
-        club_match[m["away"]] = m
-    for p in everyone:
-        m = club_match.get(p.get("cCode"))
-        if not m:
-            continue
-        for count, kind in ((p.get("gS") or 0, "goal"), (p.get("assist") or 0, "assist"),
-                            (p.get("oG") or 0, "own goal")):
-            if count:
-                m.setdefault("events", []).append({
-                    "kind": kind, "player": p.get("pDName") or "?",
-                    "club": p.get("cCode", ""), "count": count,
-                })
-    order = {"goal": 0, "assist": 1, "own goal": 2}
-    for m in matches:
-        if m.get("events"):
-            m["events"].sort(key=lambda e: (order.get(e["kind"], 9), -e["count"], e["player"]))
-
-    squad, total, bench_total = [], 0, 0
-    for entry in squad_cfg:
-        p = by_id.get(str(entry["id"]), {})
-        pos = UCL_POS.get(p.get("skill"), "?")
-        pts = p.get("curGDPts") or 0
-        club = p.get("cCode", "")
-        ctx = club_ctx.get(club) or {}
-        row = {
-            "id": entry["id"],
-            "name": p.get("pDName") or entry.get("label", "?"),
-            "photo": "ucl-%s.jpg" % entry["id"],
-            "photoSource": "https://img.uefa.com/imgml/TP/players/1/2027/324x324/%s.jpg" % entry["id"],
-            "pos": pos,
-            "club": club,
-            "opponent": ctx.get("opponent", ""),
-            "kickoff": ctx.get("kickoff"),
-            "score": ctx.get("score"),
-            "state": ctx.get("state", "blank"),
-            "points": pts,
-            "bonus": 0,
-            "multiplier": 2 if entry.get("captain") else 1,
-            "captain": bool(entry.get("captain")),
-            "vice": False,
-            "bench": bool(entry.get("bench")),
-            "minutes": p.get("minsPlyd") or 0,
-            "goals": p.get("gS") or 0,
-            "assists": p.get("assist") or 0,
-            "cleanSheet": bool(p.get("cS")),
-            "yellow": p.get("yC") or 0,
-            "red": p.get("rC") or 0,
-            "ownGoals": p.get("oG") or 0,
-            "penaltySaves": p.get("pS") or 0,
-            "penaltyMisses": 0,
-            "bps": 0,
-            "credit": {},
-            "drivers": ucl_drivers(pos, p, pts),
-        }
-        squad.append(row)
-        if row["bench"]:
-            bench_total += pts
-        else:
-            total += pts * row["multiplier"]
-
-    squad.sort(key=lambda r: (r["bench"], {"GK": 0, "DEF": 1, "MID": 2, "FWD": 3}.get(r["pos"], 4)))
-    starters = [r for r in squad if not r["bench"]]
-
-    return {
-        "matchday": md,
-        "deadline": day.get("deadline"),
-        "matches": matches,
-        "capturedAt": (cfg or {}).get("capturedAt"),
-        "teams": [{
-            "game": "UCL",
-            "id": (cfg or {}).get("userId"),
-            "name": (cfg or {}).get("label", "?"),
-            "gwPoints": total,
-            "benchPoints": bench_total,
-            "totalPoints": None,
-            "overallRank": None,
-            "gwRank": None,
-            "squad": squad,
-            "capturedAt": (cfg or {}).get("capturedAt"),
-            "playersPlayed": sum(1 for r in starters if r["state"] == "done"),
-            "playersLive": sum(1 for r in starters if r["state"] == "live"),
-            "playersLeft": sum(1 for r in starters if r["state"] == "upcoming"),
-        }],
-    }
-
-
-def ucl_time(raw):
-    """UEFA stamps fixtures as MM/DD/YYYY HH:MM:SS in CET."""
-    if not raw:
-        return None
-    try:
-        naive = datetime.strptime(raw, "%m/%d/%Y %H:%M:%S")
-    except ValueError:
-        return None
-    return naive.replace(tzinfo=timezone(timedelta(hours=2))).astimezone(timezone.utc)\
-        .isoformat(timespec="seconds")
-
-
 KINDS = [
     ("goal", "goals", "goal", "goals_scored"),
     ("assist", "assists", "assist", "assists"),
@@ -907,7 +722,7 @@ def track_events(state):
     now = datetime.now(timezone.utc).isoformat(timespec="seconds")
 
     owners = {}
-    for t in all_teams(state):
+    for t in state["fpl"]["teams"] + ((state.get("pro") or {}).get("teams") or []):
         for p in t.get("squad", []):
             owners.setdefault(player_key(t, p), []).append({
                 "team": t["name"],
@@ -917,7 +732,7 @@ def track_events(state):
             })
 
     log, seen_players = [], set()
-    for t in all_teams(state):
+    for t in state["fpl"]["teams"] + ((state.get("pro") or {}).get("teams") or []):
         for p in t.get("squad", []):
             k = player_key(t, p)
             if k in seen_players:
@@ -990,13 +805,6 @@ def happened_at(kickoff, minute, fallback):
     return (start + timedelta(minutes=minute or 0)).isoformat(timespec="seconds")
 
 
-def all_teams(state):
-    out = list((state.get("fpl") or {}).get("teams") or [])
-    for game in ("pro", "ucl"):
-        out += ((state.get(game) or {}).get("teams") or [])
-    return out
-
-
 def player_key(team, player):
     return "%s:%s" % (team["game"], player.get("id") or player["name"])
 
@@ -1040,7 +848,6 @@ def main():
         "updatedAt": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "fpl": fpl_block([t for t in cfg.get("fpl", []) if t.get("entry")]),
         "pro": pro_block(cfg.get("proleague")),
-        "ucl": ucl_block(cfg.get("ucl")),
     }
 
     try:
@@ -1049,10 +856,8 @@ def main():
         state["ticker"] = []
         state["tickerError"] = str(exc)
 
-    playing = list(((state.get("pro") or {}).get("matches") or [])) + \
-              list(((state.get("ucl") or {}).get("matches") or []))
     live = state["fpl"]["anyLive"] or any(
-        m.get("started") and not m.get("finished") for m in playing
+        m.get("started") and not m.get("finished") for m in ((state["pro"] or {}).get("matches") or [])
     )
     state["live"] = live
 

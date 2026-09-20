@@ -21,7 +21,6 @@ STATE = os.path.join(HERE, "state.json")
 FPL_PHOTO = "https://resources.premierleague.com/premierleague/photos/players/110x140/p{}.png"
 FPL_BADGE = "https://resources.premierleague.com/premierleague/badges/70/t{}.png"
 PRO_BADGE = "https://fanarena.s3.eu-west-1.amazonaws.com/badges/club_{}.png"
-UCL_BADGE = "https://img.uefa.com/imgml/TP/teams/logos/70x70/{}.png"
 # some players only exist under the newer path, without the "p" prefix
 FPL_PHOTO_ALT = "https://resources.premierleague.com/premierleague25/photos/players/110x140/{}.png"
 WIDTH = 96
@@ -29,9 +28,7 @@ WIDTH = 96
 
 def squads():
     state = json.load(open(STATE))
-    teams = ((state.get("fpl") or {}).get("teams") or []) \
-        + ((state.get("pro") or {}).get("teams") or []) \
-        + ((state.get("ucl") or {}).get("teams") or [])
+    teams = (state.get("fpl") or {}).get("teams", []) + ((state.get("pro") or {}).get("teams") or [])
     wanted = {}
     for t in teams:
         for p in t.get("squad", []):
@@ -46,18 +43,15 @@ def squads():
 
     # club badges, named by the fixtures that reference them
     fixtures = ((state.get("fpl") or {}).get("matches") or []) + \
-               ((state.get("pro") or {}).get("matches") or []) + \
-               ((state.get("ucl") or {}).get("matches") or [])
+               ((state.get("pro") or {}).get("matches") or [])
     for m in fixtures:
         for key in ("homeBadge", "awayBadge"):
             name = m.get(key)
             if not name or name in wanted:
                 continue
-            ident = name.rsplit("-", 1)[-1].rsplit(".", 1)[0]
-            source = (FPL_BADGE if name.startswith("fpl-")
-                      else UCL_BADGE if name.startswith("ucl-")
-                      else PRO_BADGE)
-            wanted[name] = [source.format(ident)]
+            ident = name.rsplit("-", 1)[-1][:-4]
+            wanted[name] = [FPL_BADGE.format(ident) if name.startswith("fpl-")
+                            else PRO_BADGE.format(ident)]
     return wanted
 
 

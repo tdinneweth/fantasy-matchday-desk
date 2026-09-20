@@ -16,8 +16,6 @@
     --fpl-soft: #f1e4f6;
     --jpl: #1f3bbf;
     --jpl-soft: #e2e7fb;
-    --ucl: #6b1f9e;
-    --ucl-soft: #efe0f8;
     --live: #d93b12;
     --live-soft: #fce6df;
     --good: #0b8457;
@@ -44,8 +42,6 @@
       --fpl-soft: #2c1b38;
       --jpl: #8ea3ff;
       --jpl-soft: #1a2245;
-      --ucl: #cf9bf0;
-      --ucl-soft: #2a1740;
       --live: #ff6b3d;
       --live-soft: #33180f;
       --good: #34d399;
@@ -71,8 +67,6 @@
     --fpl-soft: #2c1b38;
     --jpl: #8ea3ff;
     --jpl-soft: #1a2245;
-    --ucl: #cf9bf0;
-    --ucl-soft: #2a1740;
     --live: #ff6b3d;
     --live-soft: #33180f;
     --good: #34d399;
@@ -190,8 +184,8 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  /* packs to the available width rather than a fixed count, so a fifth team
-     does not strand one card on a row of its own */
+  /* packs to the available width rather than a fixed count, so the row stays
+     full whatever number of teams is on the board */
   @media (min-width: 720px) {
     .teams { grid-template-columns: repeat(auto-fit, minmax(176px, 1fr)); }
   }
@@ -220,7 +214,6 @@
 
   .card.fpl { --accent: var(--fpl); --accent-soft: var(--fpl-soft); }
   .card.pro { --accent: var(--jpl); --accent-soft: var(--jpl-soft); }
-  .card.ucl { --accent: var(--ucl); --accent-soft: var(--ucl-soft); }
   .card.muted { opacity: .72; }
   .card.on { border-color: var(--ink); }
 
@@ -678,7 +671,6 @@
 
   .owner.fpl { --accent: var(--fpl); --accent-soft: var(--fpl-soft); }
   .owner.pro { --accent: var(--jpl); --accent-soft: var(--jpl-soft); }
-  .owner.ucl { --accent: var(--ucl); --accent-soft: var(--ucl-soft); }
   .owner.sub { opacity: .55; }
 
   .np-right { text-align: right; }
@@ -1309,14 +1301,7 @@
     var out = [];
     if (s && s.fpl && s.fpl.teams) out = out.concat(s.fpl.teams);
     if (s && s.pro && s.pro.teams) out = out.concat(s.pro.teams);
-    if (s && s.ucl && s.ucl.teams) out = out.concat(s.ucl.teams);
     return out;
-  }
-
-  function gameClass(g) { return g === "FPL" ? "fpl" : (g === "UCL" ? "ucl" : "pro"); }
-
-  function gameName(g) {
-    return g === "FPL" ? "Premier League" : (g === "UCL" ? "Champions League" : "Pro League");
   }
 
   function num(v) { return v == null ? "–" : Number(v).toLocaleString("en-GB"); }
@@ -1384,11 +1369,6 @@
   }
 
   function ranksHtml(t) {
-    if (t.overallRank == null && t.gwRank == null) {
-      return '<div class="ranks"><div class="rk season">' +
-        '<span class="k">Rank</span><span class="v">–</span>' +
-        '<span class="move flat">UEFA publishes ranks only behind a login</span></div></div>';
-    }
     return '' +
       '<div class="ranks">' +
         '<div class="rk season">' +
@@ -1423,13 +1403,13 @@
       : '<div class="score">' + t.gwPoints + '<small>this week</small></div>';
 
     return '' +
-      '<article class="card ' + gameClass(t.game) + (t.unavailable ? " muted" : "") +
+      '<article class="card ' + (t.game === "FPL" ? "fpl" : "pro") + (t.unavailable ? " muted" : "") +
         (index === focus ? " on" : "") + '" data-i="' + index + '" tabindex="0" role="button" ' +
         'aria-pressed="' + (index === focus) + '" ' +
         'title="' + (index === focus ? "Show all teams" : "Show only " + esc(t.name)) + '">' +
         '<div class="card-top">' +
           '<div>' +
-            '<span class="league">' + esc(gameName(t.game)) + '</span>' +
+            '<span class="league">' + (t.game === "FPL" ? "Premier League" : "Pro League") + '</span>' +
             '<h3 class="team-name">' + esc(t.name) + '</h3>' +
           '</div>' + score +
         '</div>' +
@@ -1484,7 +1464,7 @@
   function npHtml(p) {
     var minute = p.matchMinute != null ? p.matchMinute + "'" : "live";
     var owners = p.owners.map(function (o) {
-      return '<span class="owner ' + gameClass(o.game) + (o.bench ? " sub" : "") + '">' +
+      return '<span class="owner ' + (o.game === "FPL" ? "fpl" : "pro") + (o.bench ? " sub" : "") + '">' +
         esc(o.team) + (o.captain ? " (C)" : "") + (o.bench ? " · bench" : "") + '</span>';
     }).join("");
 
@@ -1517,9 +1497,7 @@
 
     if (!rows.length) {
       var next = [];
-      ((s && s.fpl && s.fpl.matches) || [])
-        .concat((s && s.pro && s.pro.matches) || [])
-        .concat((s && s.ucl && s.ucl.matches) || [])
+      ((s && s.fpl && s.fpl.matches) || []).concat((s && s.pro && s.pro.matches) || [])
         .forEach(function (m) { if (!m.started && m.kickoff) next.push(m); });
       next.sort(function (a, b) { return a.kickoff < b.kickoff ? -1 : 1; });
       var who = focusedName();
@@ -1574,7 +1552,7 @@
           (e.points > 0 ? "+" : "") + e.points + '</span>';
 
       var teams = (e.teams || []).map(function (t) {
-        return '<span class="owner ' + gameClass(t.game) + (t.bench ? " sub" : "") + '">' +
+        return '<span class="owner ' + (t.game === "FPL" ? "fpl" : "pro") + (t.bench ? " sub" : "") + '">' +
           esc(t.team) + (t.multiplier > 1 ? " ×" + t.multiplier : "") + (t.bench ? " · bench" : "") +
           '</span>';
       }).join("");
@@ -1766,11 +1744,9 @@
     var out = "";
     var pl = (s && s.fpl && s.fpl.matches) || [];
     var jpl = (s && s.pro && s.pro.matches) || [];
-    var ucl = (s && s.ucl && s.ucl.matches) || [];
     var row = function (m) { return fxRow(m, s); };
     if (pl.length) out += '<div class="fxgroup">Premier League · GW ' + (s.fpl.gw || "") + '</div>' + pl.map(row).join("");
     if (jpl.length) out += '<div class="fxgroup">Pro League · week ' + (s.pro.week || "") + '</div>' + jpl.map(row).join("");
-    if (ucl.length) out += '<div class="fxgroup">Champions League · matchday ' + (s.ucl.matchday || "") + '</div>' + ucl.map(row).join("");
     return out || '<p class="empty">No matches scheduled in this window.</p>';
   }
 
@@ -1818,17 +1794,14 @@
 
     el("fixtures").innerHTML = fixturesHtml(s);
 
-    var mm = ((s && s.fpl && s.fpl.matches) || [])
-      .concat((s && s.pro && s.pro.matches) || [])
-      .concat((s && s.ucl && s.ucl.matches) || []);
+    var mm = ((s && s.fpl && s.fpl.matches) || []).concat((s && s.pro && s.pro.matches) || []);
     var liveCount = mm.filter(function (m) { return m.started && !m.finished; }).length;
     el("fxmeta").textContent = liveCount ? liveCount + " in play" : mm.length + " scheduled";
 
-    var bits = [];
-    if (s && s.fpl) bits.push("GW " + s.fpl.gw + (s.fpl.average != null ? " · avg " + s.fpl.average : ""));
-    if (s && s.pro && s.pro.week) bits.push("JPL week " + s.pro.week);
-    if (s && s.ucl && s.ucl.matchday) bits.push("UCL MD " + s.ucl.matchday);
-    el("gwline").textContent = bits.join(" · ");
+    el("gwline").textContent = s && s.fpl
+      ? "GW " + s.fpl.gw + (s.fpl.average != null ? " · avg " + s.fpl.average : "") +
+        (s.pro && s.pro.week ? " · JPL week " + s.pro.week : "")
+      : "";
 
     tick();
   }
