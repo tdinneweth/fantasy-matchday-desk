@@ -1722,12 +1722,14 @@
             (e.count > 1 ? " ×" + e.count : "") + '</span>' +
         '</div>';
       }).join("") +
-      (partial ? '<p class="caveat">Only players from your squads — the Pro League feed ' +
-                 'does not publish full scorer lists.</p>' : "") +
+      (partial ? '<p class="caveat">Only players from your squads — the full list lands ' +
+                 'once the Pro League confirms the week.</p>' : "") +
+      (m.unattributed ? '<p class="caveat">' + m.unattributed + ' goal' +
+                 (m.unattributed > 1 ? "s" : "") + ' not attributed to a player by the feed.</p>' : "") +
       '</div>';
     } else if (partial) {
-      body = '<p class="empty">The Pro League feed does not publish scorers, and nobody ' +
-        'from your squads scored here.</p>';
+      body = '<p class="empty">Scorers for this round land once the Pro League confirms the ' +
+        'week; nobody from your squads scored here.</p>';
     } else {
       body = '<p class="empty">' + (m.started ? "No goals yet." : "Not kicked off.") + '</p>';
     }

@@ -405,6 +405,7 @@ def pro_matches(week):
                 started = False
         finished = final is not None and final >= 1
         out.append({
+            "id": m.get("id"),
             "home": (m.get("homeId") or {}).get("short", "?"),
             "away": (m.get("awayId") or {}).get("short", "?"),
             "homeBadge": "pro-club-%s.png" % (m.get("homeId") or {}).get("id"),
@@ -415,6 +416,45 @@ def pro_matches(week):
             "finished": finished,
             "kickoff": kickoff,
         })
+    return out
+
+
+def pro_scorers(week, headers):
+    """Goal scorers and assist givers for every Pro League match of a week.
+
+    `players-stats` carries a row per player per match. Its `goals` and `assists`
+    fields are fantasy POINTS, not counts — the raw counts are `statGoals` and
+    `statAssists`, which is what this reads. Verified against week 6: the derived
+    scorers reproduce WES 4-2 STA exactly.
+
+    Rows only exist once a week has been confirmed, so a round still being played
+    returns nothing and the caller falls back to what it knows.
+    """
+    confirmed = get(f"{PRO}/points-confirmation?{PRO_Q}", cache_seconds=600)
+    if not any(c.get("weekId") == week and c.get("confirmed") for c in confirmed):
+        return {}
+
+    names = {p["id"]: (p.get("short") or p.get("name") or "?")
+             for p in get(f"{PRO}/players?{PRO_Q}", cache_seconds=86400)["players"]}
+    rows = get(f"{PRO}/players-stats?{PRO_Q}&weekId={week}&pageNumber=1&pageRecords=800",
+               headers=headers, cache_seconds=3600).get("data") or []
+
+    out = {}
+    for r in rows:
+        for count, kind in ((r.get("statGoals") or 0, "goal"),
+                            (r.get("statAssists") or 0, "assist"),
+                            (r.get("statOwnGoal") or 0, "own goal")):
+            if count:
+                out.setdefault(r.get("matchId"), []).append({
+                    "kind": kind,
+                    "player": names.get(r.get("playerId"), "?"),
+                    "club": r.get("clubShort", ""),
+                    "count": count,
+                })
+
+    order = {"goal": 0, "assist": 1, "own goal": 2}
+    for rows_ in out.values():
+        rows_.sort(key=lambda r: (order.get(r["kind"], 9), -r["count"], r["player"]))
     return out
 
 
@@ -567,6 +607,21 @@ def pro_block(cfg):
         clubs = {c["id"]: c["short"] for c in get(f"{PRO}/clubs?{PRO_Q}", cache_seconds=3600)["clubs"]}
     except Exception:
         clubs = {}
+
+    try:
+        scorers = pro_scorers(week, headers)
+    except Exception as exc:
+        scorers, out["scorerError"] = {}, str(exc)
+    for m in out["matches"]:
+        if m.get("id") not in scorers:
+            continue
+        m["events"] = scorers[m["id"]]
+        # the feed occasionally leaves a goal unattributed (1 of 49 across weeks 5
+        # and 6), so say so rather than presenting a short list as complete
+        scored = sum(e["count"] for e in m["events"] if e["kind"] in ("goal", "own goal"))
+        total = (m.get("homeGoals") or 0) + (m.get("awayGoals") or 0)
+        if total > scored:
+            m["unattributed"] = total - scored
 
     # what each club is doing this week, so every player row can name an opponent
     context = {}
