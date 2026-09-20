@@ -14,7 +14,7 @@ import os
 import subprocess
 import sys
 import time
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 CONFIG = os.path.join(HERE, "config.json")
@@ -582,8 +582,11 @@ def track_events(state):
                 minutes = (p.get("minuteLog") or {}).get(kind) or []
                 for i in range(gained):
                     index = before.get(kind, 0) + i
+                    minute = (minutes[index] if index < len(minutes)
+                              else (None if first_run else p.get("matchMinute")))
                     fresh.append({
                         "ts": now,
+                        "at": happened_at(p.get("kickoff"), minute, now),
                         "backfilled": first_run,
                         "kind": kind,
                         "label": label if kind != "bonus" else
@@ -593,8 +596,7 @@ def track_events(state):
                         "photo": p.get("photo"),
                         "opponent": p.get("opponent", ""),
                         "score": p.get("score"),
-                        "minute": (minutes[index] if index < len(minutes)
-                                   else (None if first_run else p.get("matchMinute"))),
+                        "minute": minute,
                         "points": credit_for(t["game"], p, kind, identifier, after[kind],
                                              gained if kind == "bonus" else 1),
                         "teams": owners.get(k, []),
@@ -603,13 +605,29 @@ def track_events(state):
                         break  # one line for the whole bonus change
 
     log = fresh + book["log"]
-    log.sort(key=lambda e: (e["ts"], e["minute"] if e.get("minute") is not None else -1),
-             reverse=True)
+    log.sort(key=lambda e: e.get("at") or e["ts"], reverse=True)
     book["log"] = log[:60]
     book["key"] = key
     with open(EVENTS, "w") as fh:
         json.dump(book, fh, indent=1)
     return book["log"]
+
+
+def happened_at(kickoff, minute, fallback):
+    """When an event actually occurred, in absolute time.
+
+    Match minutes alone sort wrongly across matches that kicked off hours apart,
+    so each event is placed at kickoff + minute. An event whose minute the feed
+    does not publish sits at its own kickoff — the right neighbourhood, without
+    inventing a minute it never gave us.
+    """
+    if not kickoff:
+        return fallback
+    try:
+        start = datetime.fromisoformat(kickoff.replace("Z", "+00:00"))
+    except ValueError:
+        return fallback
+    return (start + timedelta(minutes=minute or 0)).isoformat(timespec="seconds")
 
 
 def player_key(team, player):

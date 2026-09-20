@@ -388,6 +388,24 @@
     gap: 8px;
   }
 
+  .filterbar { display: flex; align-items: center; gap: 6px; }
+
+  .clearfilter {
+    font: inherit;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 4px;
+    border: 1px solid var(--ink);
+    background: var(--ink);
+    color: var(--surface);
+    cursor: pointer;
+  }
+
+  .clearfilter:focus-visible { outline: 2px solid var(--live); outline-offset: 2px; }
+
   .panel.onpitch { border-color: var(--live); }
   .panel.onpitch > header { background: var(--live-soft); border-bottom-color: transparent; }
   .panel.onpitch h2 { color: var(--live); }
@@ -979,7 +997,10 @@
     <section class="panel" id="pitchpanel">
       <header>
         <h2><i class="dot"></i> On the pitch</h2>
-        <span class="chip" id="npmeta"></span>
+        <span class="filterbar">
+          <button class="clearfilter" id="clearfilter" hidden></button>
+          <span class="chip" id="npmeta"></span>
+        </span>
       </header>
       <div id="nowplaying"></div>
     </section>
@@ -1025,6 +1046,7 @@
 
   var state = SNAPSHOT;
   var selected = 0;
+  var focus = null;   // team index the live view is filtered to, null = all
   var view = "pitch";
   var el = function (id) { return document.getElementById(id); };
   var esc = function (s) {
@@ -1125,7 +1147,9 @@
 
     return '' +
       '<article class="card ' + (t.game === "FPL" ? "fpl" : "pro") + (t.unavailable ? " muted" : "") +
-        (index === selected ? " on" : "") + '" data-i="' + index + '">' +
+        (index === focus ? " on" : "") + '" data-i="' + index + '" tabindex="0" role="button" ' +
+        'aria-pressed="' + (index === focus) + '" ' +
+        'title="' + (index === focus ? "Show all teams" : "Show only " + esc(t.name)) + '">' +
         '<div class="card-top">' +
           '<div>' +
             '<span class="league">' + (t.game === "FPL" ? "Premier League" : "Pro League") + '</span>' +
@@ -1149,9 +1173,16 @@
 
   /* ---------- on the pitch ---------- */
 
+  function focusedName() {
+    var teams = allTeams(state);
+    return focus != null && teams[focus] ? teams[focus].name : null;
+  }
+
   function livePlayers(s) {
+    var only = focusedName();
     var byKey = {};
     allTeams(s).forEach(function (t) {
+      if (only && t.name !== only) return;
       (t.squad || []).forEach(function (p) {
         if (p.state !== "live") return;
         var key = p.name + "|" + p.club;
@@ -1211,7 +1242,10 @@
       ((s && s.fpl && s.fpl.matches) || []).concat((s && s.pro && s.pro.matches) || [])
         .forEach(function (m) { if (!m.started && m.kickoff) next.push(m); });
       next.sort(function (a, b) { return a.kickoff < b.kickoff ? -1 : 1; });
-      el("nowplaying").innerHTML = '<p class="empty">Nobody from your squads is on the pitch right now.' +
+      var who = focusedName();
+      el("nowplaying").innerHTML = '<p class="empty">' +
+        (who ? "Nobody from " + esc(who) + " is on the pitch right now."
+             : "Nobody from your squads is on the pitch right now.") +
         (next.length ? " Next kickoff " + esc(kickoff(next[0].kickoff)) + " — " +
           esc(next[0].home) + " v " + esc(next[0].away) + "." : "") + '</p>';
       el("npmeta").textContent = "quiet";
@@ -1220,14 +1254,20 @@
 
     el("nowplaying").innerHTML = '<div class="nowplaying">' + rows.map(npHtml).join("") + '</div>';
     var pts = rows.reduce(function (a, p) { return a + (p.points || 0); }, 0);
-    el("npmeta").textContent = rows.length + (rows.length === 1 ? " player · " : " players · ") + pts + " pts on the field";
+    el("npmeta").textContent = rows.length + (rows.length === 1 ? " player · " : " players · ") +
+      pts + " pts on the field";
   }
 
   function tickerHtml(s) {
-    var rows = (s && s.ticker) || [];
+    var only = focusedName();
+    var rows = ((s && s.ticker) || []).filter(function (e) {
+      return !only || (e.teams || []).some(function (t) { return t.team === only; });
+    });
     if (!rows.length) {
-      return '<p class="empty">No scoring events yet. Goals, assists, cards and bonus will appear ' +
-        'here as they land, with what each one is worth to you.</p>';
+      return '<p class="empty">' + (only
+        ? 'Nothing has moved ' + esc(only) + '&rsquo;s score yet this week.'
+        : 'No scoring events yet. Goals, assists, cards and bonus will appear here as they land, ' +
+          'with what each one is worth to you.') + '</p>';
     }
 
     var now = Date.now();
@@ -1373,8 +1413,15 @@
     el("viewpitch").setAttribute("aria-pressed", view === "pitch");
     el("viewlist").setAttribute("aria-pressed", view === "list");
 
+    var who = focusedName();
+    var clear = el("clearfilter");
+    clear.hidden = !who;
+    clear.textContent = who ? who + " only · show all" : "";
+
     el("ticker").innerHTML = tickerHtml(s);
-    var evs = (s && s.ticker) || [];
+    var evs = ((s && s.ticker) || []).filter(function (e) {
+      return !who || (e.teams || []).some(function (t) { return t.team === who; });
+    });
     var swing = evs.reduce(function (a, e) { return a + (e.points || 0); }, 0);
     el("tkmeta").textContent = evs.length
       ? evs.length + " events" + (swing ? " · " + (swing > 0 ? "+" : "") + swing + " pts" : "")
@@ -1413,6 +1460,12 @@
     render();
   }
 
+  function focusTeam(i) {
+    focus = (focus === i) ? null : i;   // clicking the focused card clears it
+    selected = i;
+    render();
+  }
+
   el("tabs").addEventListener("click", function (e) {
     var b = e.target.closest(".tab");
     if (b) pick(Number(b.dataset.i));
@@ -1420,7 +1473,20 @@
 
   el("teams").addEventListener("click", function (e) {
     var c = e.target.closest(".card");
-    if (c) pick(Number(c.dataset.i));
+    if (c) focusTeam(Number(c.dataset.i));
+  });
+
+  el("teams").addEventListener("keydown", function (e) {
+    if (e.key !== "Enter" && e.key !== " ") return;
+    var c = e.target.closest(".card");
+    if (!c) return;
+    e.preventDefault();
+    focusTeam(Number(c.dataset.i));
+  });
+
+  el("clearfilter").addEventListener("click", function () {
+    focus = null;
+    render();
   });
 
   el("viewpitch").addEventListener("click", function () { view = "pitch"; render(); });
