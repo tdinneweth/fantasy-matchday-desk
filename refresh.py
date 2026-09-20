@@ -203,7 +203,9 @@ def fpl_team(entry, label, boot, live, fixtures, gw):
 
         score = minute = None
         if fx and (fx.get("started") or fx.get("finished")):
-            score = "%s-%s" % (fx.get("team_h_score"), fx.get("team_a_score"))
+            # a match that has just kicked off carries no score yet
+            if fx.get("team_h_score") is not None and fx.get("team_a_score") is not None:
+                score = "%s-%s" % (fx["team_h_score"], fx["team_a_score"])
             minute = fx.get("minutes")
 
         credit = {}
