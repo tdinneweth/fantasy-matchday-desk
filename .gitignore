@@ -3,3 +3,5 @@ state.json
 events.json
 ranks-history.json
 .cache/
+dashboard.html
+site/

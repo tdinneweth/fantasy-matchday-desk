@@ -1,0 +1,62 @@
+name: Refresh points
+
+# GitHub's cron floor is 5 minutes, so each run loops internally and publishes
+# a reading every minute. Times are UTC; this covers roughly 12:00-24:00 in
+# Brussels on the days both leagues play.
+on:
+  schedule:
+    - cron: "*/5 10-22 * * 5,6,0,1"
+  workflow_dispatch:
+
+concurrency:
+  group: refresh
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Restore the running state
+        run: |
+          # events.json and ranks-history.json carry the ticker and rank history
+          # between runs; without them every run would re-backfill from scratch.
+          git clone --depth 1 --branch data \
+            "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" data-branch \
+            || { mkdir -p data-branch; }
+          for f in events.json ranks-history.json; do
+            [ -f "data-branch/$f" ] && cp "data-branch/$f" . || true
+          done
+
+      - name: Collect and publish readings
+        env:
+          PROLEAGUE_TOKEN: ${{ secrets.PROLEAGUE_TOKEN }}
+        run: |
+          set -u
+          git config --global user.email "actions@github.com"
+          git config --global user.name "Matchday refresher"
+          remote="https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"
+
+          for i in 1 2 3 4 5; do
+            if ./refresh.py; then
+              rm -rf data-branch/.git data-branch
+              mkdir -p data-branch
+              cp state.json events.json ranks-history.json data-branch/ 2>/dev/null || true
+              (
+                cd data-branch
+                git init -q
+                git checkout -q -b data
+                git add -A
+                git commit -q -m "reading $(date -u +%FT%TZ)"
+                git push -q -f "$remote" data
+              )
+              echo "published reading $i"
+            else
+              echo "collector failed on pass $i" >&2
+            fi
+            [ "$i" -lt 5 ] && sleep 60
+          done

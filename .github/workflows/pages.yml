@@ -1,0 +1,50 @@
+name: Deploy page
+
+# The page itself changes rarely - only when the template or the portraits do.
+# Readings reach it from the data branch at runtime, so this does not run on a
+# schedule.
+on:
+  push:
+    branches: [main]
+    paths:
+      - dashboard.template.html
+      - build.py
+      - photos/**
+      - .github/workflows/pages.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Seed a first reading so the page is never blank
+        env:
+          PROLEAGUE_TOKEN: ${{ secrets.PROLEAGUE_TOKEN }}
+        run: ./refresh.py || echo '{}' > state.json
+
+      - name: Build
+        run: |
+          ./build.py \
+            --out site/index.html \
+            --data-url "https://raw.githubusercontent.com/${{ github.repository }}/data/state.json"
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - id: deployment
+        uses: actions/deploy-pages@v4

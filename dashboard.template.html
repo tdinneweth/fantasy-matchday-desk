@@ -1021,6 +1021,7 @@
 <script>
   var SNAPSHOT = /*__SNAPSHOT__*/ null;
   var PHOTOS = /*__PHOTOS__*/ {};
+  var DATA_URL = /*__DATA_URL__*/ "";
 
   var state = SNAPSHOT;
   var selected = 0;
@@ -1428,17 +1429,31 @@
   render();
   setInterval(tick, 1000);
 
-  /* live updates from the refresher */
+  /* live updates: a published data file when the page is hosted, the artifact
+     database when it runs as an artifact. Whichever is there wins. */
+  function accept(next) {
+    if (!next || !next.updatedAt) return;
+    if (state && state.updatedAt && next.updatedAt < state.updatedAt) return;
+    state = next;
+    render();
+  }
+
+  if (DATA_URL) {
+    var pull = function () {
+      fetch(DATA_URL + (DATA_URL.indexOf("?") < 0 ? "?" : "&") + "t=" + Date.now(), { cache: "no-store" })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(accept)
+        .catch(function () { /* keep showing the last good reading */ });
+    };
+    pull();
+    setInterval(pull, 30000);
+  }
+
   (async function () {
     var db = await window.claude?.use?.("db");
     if (!db) return;
     db.doc("live/state").onSnapshot(function (snap) {
-      if (!snap.exists) return;
-      var next = snap.data();
-      if (!next || !next.updatedAt) return;
-      if (state && state.updatedAt && next.updatedAt < state.updatedAt) return;
-      state = next;
-      render();
+      if (snap.exists) accept(snap.data());
     }, function () { /* keep showing the last good reading */ });
   })();
 </script>

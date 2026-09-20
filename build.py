@@ -6,9 +6,15 @@ the portraits, because the artifact runtime does not serve published files at
 their own paths and its CSP drops inline onerror handlers, so a src-and-fallback
 approach silently renders nothing.
 """
+import argparse
 import base64
 import json
 import os
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--data-url", default="", help="poll this JSON for live readings")
+parser.add_argument("--out", default="dashboard.html")
+args = parser.parse_args()
 
 here = os.path.dirname(os.path.abspath(__file__))
 
@@ -26,6 +32,10 @@ if os.path.isdir(photo_dir):
 
 out = tpl.replace("/*__SNAPSHOT__*/ null", json.dumps(state, separators=(",", ":")))
 out = out.replace("/*__PHOTOS__*/ {}", json.dumps(photos, separators=(",", ":")))
+out = out.replace('/*__DATA_URL__*/ ""', json.dumps(args.data_url))
 
-open(os.path.join(here, "dashboard.html"), "w").write(out)
-print(f"dashboard.html {len(out) / 1024:.0f} KB · {len(photos)} portraits inlined")
+dest = args.out if os.path.isabs(args.out) else os.path.join(here, args.out)
+os.makedirs(os.path.dirname(dest) or ".", exist_ok=True)
+open(dest, "w").write(out)
+print(f"{args.out} {len(out) / 1024:.0f} KB · {len(photos)} portraits inlined"
+      + (f" · polling {args.data_url}" if args.data_url else ""))
