@@ -33,7 +33,10 @@ if os.path.isdir(photo_dir):
             photos[name] = "data:image/png;base64," + base64.b64encode(fh.read()).decode()
 
 out = tpl.replace("/*__SNAPSHOT__*/ null", json.dumps(state, separators=(",", ":")))
-out = out.replace("/*__PHOTOS__*/ {}", json.dumps(photos, separators=(",", ":")))
+badges = {k: v for k, v in photos.items() if "-club-" in k}
+faces = {k: v for k, v in photos.items() if "-club-" not in k}
+out = out.replace("/*__PHOTOS__*/ {}", json.dumps(faces, separators=(",", ":")))
+out = out.replace("/*__BADGES__*/ {}", json.dumps(badges, separators=(",", ":")))
 out = out.replace('/*__DATA_URL__*/ ""', json.dumps(args.data_url))
 
 if args.standalone:
@@ -66,5 +69,5 @@ if args.standalone:
 dest = args.out if os.path.isabs(args.out) else os.path.join(here, args.out)
 os.makedirs(os.path.dirname(dest) or ".", exist_ok=True)
 open(dest, "w").write(out)
-print(f"{args.out} {len(out) / 1024:.0f} KB · {len(photos)} portraits inlined"
+print(f"{args.out} {len(out) / 1024:.0f} KB · {len(faces)} portraits, {len(badges)} badges inlined"
       + (f" · polling {args.data_url}" if args.data_url else ""))

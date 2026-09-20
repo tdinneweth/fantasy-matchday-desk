@@ -19,6 +19,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, "photos")
 STATE = os.path.join(HERE, "state.json")
 FPL_PHOTO = "https://resources.premierleague.com/premierleague/photos/players/110x140/p{}.png"
+FPL_BADGE = "https://resources.premierleague.com/premierleague/badges/70/t{}.png"
+PRO_BADGE = "https://fanarena.s3.eu-west-1.amazonaws.com/badges/club_{}.png"
 # some players only exist under the newer path, without the "p" prefix
 FPL_PHOTO_ALT = "https://resources.premierleague.com/premierleague25/photos/players/110x140/{}.png"
 WIDTH = 96
@@ -38,6 +40,18 @@ def squads():
                 wanted[name] = [FPL_PHOTO.format(code), FPL_PHOTO_ALT.format(code)]
             elif p.get("photoSource"):
                 wanted[name] = [p["photoSource"]]
+
+    # club badges, named by the fixtures that reference them
+    fixtures = ((state.get("fpl") or {}).get("matches") or []) + \
+               ((state.get("pro") or {}).get("matches") or [])
+    for m in fixtures:
+        for key in ("homeBadge", "awayBadge"):
+            name = m.get(key)
+            if not name or name in wanted:
+                continue
+            ident = name.rsplit("-", 1)[-1][:-4]
+            wanted[name] = [FPL_BADGE.format(ident) if name.startswith("fpl-")
+                            else PRO_BADGE.format(ident)]
     return wanted
 
 
@@ -62,7 +76,9 @@ def main():
         if not got:
             failed.append(name)
             continue
-        subprocess.run(["sips", "-Z", str(WIDTH), path], capture_output=True)
+        # badges are shown small and sit beside every fixture
+        subprocess.run(["sips", "-Z", "56" if "-club-" in name else str(WIDTH), path],
+                       capture_output=True)
         fetched += 1
 
     # drop portraits for players who have left the squads

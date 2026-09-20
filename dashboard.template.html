@@ -406,6 +406,31 @@
 
   .clearfilter:focus-visible { outline: 2px solid var(--live); outline-offset: 2px; }
 
+  .clearfilter.ghost {
+    background: transparent;
+    color: var(--ink-2);
+    border-color: var(--line);
+  }
+
+  .clearfilter.ghost:hover { color: var(--ink); border-color: var(--ink-3); }
+
+  .tk .tick {
+    font: inherit;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px;
+    line-height: 1;
+    padding: 3px 5px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--ink-3);
+    cursor: pointer;
+  }
+
+  .tk .tick:hover { background: var(--sunken); color: var(--ink); border-color: var(--line); }
+  .tk .tick:focus-visible { outline: 2px solid var(--live); outline-offset: 1px; }
+  .tk.seen { opacity: .5; }
+
   .panel.onpitch { border-color: var(--live); }
   .panel.onpitch > header { background: var(--live-soft); border-bottom-color: transparent; }
   .panel.onpitch h2 { color: var(--live); }
@@ -489,7 +514,7 @@
 
   .tk {
     display: grid;
-    grid-template-columns: 34px 30px minmax(0, 1fr) auto;
+    grid-template-columns: 34px 30px minmax(0, 1fr) auto 26px;
     align-items: center;
     gap: 9px;
     padding: 9px 14px 9px 11px;
@@ -998,7 +1023,7 @@
 
   .fx {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) 44px 52px;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) 44px;
     align-items: center;
     gap: 8px;
     padding: 9px 16px;
@@ -1014,44 +1039,47 @@
   .fx:hover { background: var(--sunken); }
   .fx:focus-visible { outline: 2px solid var(--live); outline-offset: -2px; }
 
-  .mineflag {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 9.5px;
-    letter-spacing: .05em;
-    text-transform: uppercase;
-    color: var(--ink-3);
-    text-align: right;
-  }
+  .side { display: flex; align-items: center; gap: 7px; min-width: 0; }
+  .side.home { justify-content: flex-end; }
+  .side.away { justify-content: flex-start; }
 
-  .fxline { display: flex; gap: 10px; padding: 10px 16px 4px; }
-
-  .fxk {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 9.5px;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    color: var(--ink-3);
+  .crest {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
     flex: none;
-    padding-top: 3px;
-    width: 86px;
+    display: inline-block;
   }
 
-  .fxv { display: flex; flex-wrap: wrap; gap: 4px; }
+  .scorers { display: flex; flex-direction: column; padding: 6px 0 10px; }
 
-  .fxmine { display: flex; flex-direction: column; padding: 6px 0 10px; }
-
-  .fxp {
+  .scorer {
     display: grid;
-    grid-template-columns: 30px minmax(0, 1fr) minmax(0, 1.3fr) 34px;
+    grid-template-columns: 20px minmax(0, 1fr) auto;
     align-items: center;
     gap: 9px;
     padding: 6px 16px;
+    font-size: 13px;
   }
 
-  .fxp .who b { font-size: 13px; font-weight: 600; display: block; }
-  .fxp .who span { font-family: "IBM Plex Mono", monospace; font-size: 9.5px; color: var(--ink-3); }
-  .fxp .mug { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; object-position: top center; background: var(--sunken); }
-  .fxp .mug.initials { display: grid; place-items: center; font-family: "Anton", sans-serif; font-size: 12px; color: var(--ink-3); }
+  .scorer b { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  .scorer .kind {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10px;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  .scorer .kind.goal { color: var(--good); font-weight: 600; }
+
+  .caveat {
+    font-size: 11.5px;
+    color: var(--ink-3);
+    margin: 4px 16px 0;
+  }
+
   .fx.playing { background: var(--live-soft); }
   .fx .away { text-align: left; }
   .fx .home { text-align: right; }
@@ -1131,7 +1159,7 @@
     .np-pts { font-size: 23px; }
 
     .ticker { max-height: 60vh; }
-    .tk { grid-template-columns: 30px 26px minmax(0, 1fr) auto; padding: 8px 12px 8px 9px; }
+    .tk { grid-template-columns: 30px 26px minmax(0, 1fr) auto 24px; padding: 8px 12px 8px 9px; }
     .tk .mug { width: 26px; height: 26px; }
 
     /* five across has to fit inside 375px */
@@ -1148,10 +1176,8 @@
     .row { grid-template-columns: 26px minmax(0, 1fr) 32px 28px; padding: 7px 12px 7px 9px; }
     .row .drivers { display: none; }
     .fx { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) 40px; padding: 9px 12px; }
-    .mineflag { display: none; }
-    .fxp { grid-template-columns: 26px minmax(0, 1fr) 30px; padding: 6px 12px; }
-    .fxp .drivers { display: none; }
-    .fxk { width: 64px; }
+    .crest { width: 17px; height: 17px; }
+    .scorer { padding: 6px 12px; }
     .tabs { padding: 8px 10px; }
     .tab { font-size: 12px; padding: 5px 9px; }
   }
@@ -1192,7 +1218,11 @@
     <section class="panel p-ticker">
       <header>
         <h2>Point ticker</h2>
-        <span class="chip" id="tkmeta"></span>
+        <span class="filterbar">
+          <button class="clearfilter" id="markseen" hidden>Mark all seen</button>
+          <button class="clearfilter ghost" id="toggleseen" hidden></button>
+          <span class="chip" id="tkmeta"></span>
+        </span>
       </header>
       <div class="ticker" id="ticker"></div>
     </section>
@@ -1224,12 +1254,39 @@
 <script>
   var SNAPSHOT = /*__SNAPSHOT__*/ null;
   var PHOTOS = /*__PHOTOS__*/ {};
+  var BADGES = /*__BADGES__*/ {};
   var DATA_URL = /*__DATA_URL__*/ "";
 
   var state = SNAPSHOT;
   var selected = 0;
   var focus = null;   // team index the live view is filtered to, null = all
   var view = "pitch";
+  var showSeen = false;
+
+  /* which ticker entries this viewer has ticked off, kept in their own browser */
+  var SEEN_KEY = "fmd.seen";
+
+  function loadSeen() {
+    try { return JSON.parse(localStorage.getItem(SEEN_KEY) || "[]"); }
+    catch (e) { return []; }
+  }
+
+  function saveSeen(list) {
+    try { localStorage.setItem(SEEN_KEY, JSON.stringify(list.slice(-300))); }
+    catch (e) { /* private window, or storage refused: the page still works */ }
+  }
+
+  var seenList = loadSeen();
+  var seenSet = {};
+  seenList.forEach(function (id) { seenSet[id] = true; });
+
+  function markSeen(ids) {
+    ids.forEach(function (id) {
+      if (id && !seenSet[id]) { seenSet[id] = true; seenList.push(id); }
+    });
+    saveSeen(seenList);
+    render();
+  }
   var el = function (id) { return document.getElementById(id); };
   var esc = function (s) {
     return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) {
@@ -1457,12 +1514,25 @@
       pts + " pts on the field";
   }
 
-  function tickerHtml(s) {
+  function tickerRows(s) {
     var only = focusedName();
-    var rows = ((s && s.ticker) || []).filter(function (e) {
+    return ((s && s.ticker) || []).filter(function (e) {
       return !only || (e.teams || []).some(function (t) { return t.team === only; });
     });
+  }
+
+  function tickerHtml(s) {
+    var only = focusedName();
+    var all = tickerRows(s);
+    var unseen = all.filter(function (e) { return !seenSet[e.id]; });
+    var rows = showSeen ? all : unseen;
+
     if (!rows.length) {
+      if (all.length) {
+        return '<p class="empty">You are up to date on ' +
+          (only ? esc(only) + "&rsquo;s" : "all") + ' events. ' +
+          all.length + ' already seen.</p>';
+      }
       return '<p class="empty">' + (only
         ? 'Nothing has moved ' + esc(only) + '&rsquo;s score yet this week.'
         : 'No scoring events yet. Goals, assists, cards and bonus will appear here as they land, ' +
@@ -1472,6 +1542,7 @@
     var now = Date.now();
     return rows.map(function (e) {
       var fresh = !e.backfilled && (now - new Date(e.ts).getTime()) < 15 * 60 * 1000;
+      var isSeen = !!seenSet[e.id];
       var swing = e.points == null
         ? '<span class="swing unknown">?</span>'
         : '<span class="swing ' + (e.points > 0 ? "plus" : (e.points < 0 ? "minus" : "")) + '">' +
@@ -1484,12 +1555,14 @@
       }).join("");
 
       return '' +
-        '<div class="tk' + (fresh ? " recent" : "") + '">' +
+        '<div class="tk' + (fresh && !isSeen ? " recent" : "") + (isSeen ? " seen" : "") + '">' +
           '<span class="clock">' + (e.minute != null ? e.minute + "'" : "—") + '</span>' +
           faceHtml({ photo: e.photo, name: e.player }, "mug") +
           '<span class="what"><b>' + esc(e.player) + '</b><span>' + esc(e.label) +
             (e.club ? " · " + esc(e.club) : "") + '</span></span>' +
           swing +
+          (isSeen ? '' : '<button class="tick" data-seen="' + esc(e.id) +
+            '" title="Mark as seen" aria-label="Mark as seen">✓</button>') +
           '<span class="for">' + teams + '</span>' +
         '</div>';
     }).join("");
@@ -1593,6 +1666,7 @@
         var key = p.name + "|" + p.club;
         if (!seen[key]) {
           seen[key] = { name: p.name, club: p.club, photo: p.photo, points: p.points,
+                        goals: p.goals || 0, assists: p.assists || 0,
                         drivers: p.drivers || [], teams: [] };
           out.push(seen[key]);
         }
@@ -1602,43 +1676,60 @@
     return out.sort(function (a, b) { return b.points - a.points; });
   }
 
+  function badgeHtml(file, club) {
+    var src = file && BADGES[file];
+    return src
+      ? '<img class="crest" src="' + src + '" alt="" title="' + esc(club) + '">'
+      : '<span class="crest"></span>';
+  }
+
   function fxRow(m, s) {
     var playing = m.started && !m.finished;
     var clock = playing ? (m.minutes ? m.minutes + "'" : "live") : (m.finished ? "FT" : kickoff(m.kickoff));
     var score = m.homeGoals == null ? "v" : m.homeGoals + "–" + m.awayGoals;
-    var mine = mineIn(s, m);
-    var events = m.events || [];
+
+    // who scored and who set them up — nothing else belongs in here
+    var rows = [], partial = false;
+    if (m.events) {
+      rows = m.events.filter(function (e) {
+        return e.kind === "goal" || e.kind === "assist" || e.kind === "own goal";
+      });
+    } else {
+      // the Pro League feed publishes no scorer list, so only players of yours
+      // can be accounted for
+      partial = true;
+      mineIn(s, m).forEach(function (p) {
+        if (p.goals) rows.push({ kind: "goal", player: p.name, club: p.club, count: p.goals });
+        if (p.assists) rows.push({ kind: "assist", player: p.name, club: p.club, count: p.assists });
+      });
+    }
 
     var head = '' +
       '<summary class="fx' + (playing ? " playing" : "") + '">' +
-        '<span class="club home">' + esc(m.home) + '</span>' +
+        '<span class="side home">' + esc(m.home) + badgeHtml(m.homeBadge, m.home) + '</span>' +
         '<span class="sc">' + esc(score) + '</span>' +
-        '<span class="club away">' + esc(m.away) + '</span>' +
+        '<span class="side away">' + badgeHtml(m.awayBadge, m.away) + esc(m.away) + '</span>' +
         '<span class="clock">' + esc(clock) + '</span>' +
-        '<span class="mineflag">' + (mine.length ? mine.length + " yours" : "") + '</span>' +
       '</summary>';
 
-    var body = "";
-    if (events.length) {
-      body += '<div class="fxline"><span class="fxk">In the match</span><span class="fxv">' +
-        events.map(function (e) {
-          return '<span class="ev' + (e.kind === "goal" ? " g" : (e.kind === "red card" ? " rc" :
-                 (e.kind === "yellow card" ? " yc" : ""))) + '">' +
-            esc(e.player) + ' · ' + esc(e.kind) + (e.count > 1 ? " ×" + e.count : "") + '</span>';
-        }).join("") + '</span></div>';
-    }
-
-    if (mine.length) {
-      body += '<div class="fxmine">' + mine.map(function (p) {
-        return '<div class="fxp">' +
-          faceHtml(p, "mug") +
-          '<span class="who"><b>' + esc(p.name) + '</b><span>' + esc(p.teams.join(" · ")) + '</span></span>' +
-          '<span class="drivers">' + driversHtml(p) + '</span>' +
-          '<span class="pts' + (p.points ? "" : " zero") + '">' + (p.points || 0) + '</span>' +
+    var body;
+    if (rows.length) {
+      body = '<div class="scorers">' + rows.map(function (e) {
+        return '<div class="scorer">' +
+          badgeHtml(e.club === m.home ? m.homeBadge : m.awayBadge, e.club) +
+          '<b>' + esc(e.player) + '</b>' +
+          '<span class="kind' + (e.kind === "goal" ? " goal" : "") + '">' + esc(e.kind) +
+            (e.count > 1 ? " ×" + e.count : "") + '</span>' +
         '</div>';
-      }).join("") + '</div>';
+      }).join("") +
+      (partial ? '<p class="caveat">Only players from your squads — the Pro League feed ' +
+                 'does not publish full scorer lists.</p>' : "") +
+      '</div>';
+    } else if (partial) {
+      body = '<p class="empty">The Pro League feed does not publish scorers, and nobody ' +
+        'from your squads scored here.</p>';
     } else {
-      body += '<p class="empty">Nobody of yours in this one.</p>';
+      body = '<p class="empty">' + (m.started ? "No goals yet." : "Not kicked off.") + '</p>';
     }
 
     return '<details class="fxwrap"' + (playing ? " open" : "") + '>' + head + body + '</details>';
@@ -1682,13 +1773,19 @@
       : "";
 
     el("ticker").innerHTML = tickerHtml(s);
-    var evs = ((s && s.ticker) || []).filter(function (e) {
-      return !who || (e.teams || []).some(function (t) { return t.team === who; });
-    });
-    var swing = evs.reduce(function (a, e) { return a + (e.points || 0); }, 0);
+    var evs = tickerRows(s);
+    var unseen = evs.filter(function (e) { return !seenSet[e.id]; });
+    var swing = unseen.reduce(function (a, e) { return a + (e.points || 0); }, 0);
     el("tkmeta").textContent = evs.length
-      ? evs.length + " events" + (swing ? " · " + (swing > 0 ? "+" : "") + swing + " pts" : "")
+      ? (unseen.length ? unseen.length + " new" + (swing ? " · " + (swing > 0 ? "+" : "") + swing + " pts" : "")
+                       : "up to date")
       : "watching";
+
+    var mark = el("markseen");
+    mark.hidden = !unseen.length;
+    var toggle = el("toggleseen");
+    toggle.hidden = evs.length === unseen.length;
+    toggle.textContent = showSeen ? "Only new" : "Show all " + evs.length;
 
     el("fixtures").innerHTML = fixturesHtml(s);
 
@@ -1750,6 +1847,20 @@
   el("clearfilter").addEventListener("click", function () {
     focus = null;
     render();
+  });
+
+  el("markseen").addEventListener("click", function () {
+    markSeen(tickerRows(state).map(function (e) { return e.id; }));
+  });
+
+  el("toggleseen").addEventListener("click", function () {
+    showSeen = !showSeen;
+    render();
+  });
+
+  el("ticker").addEventListener("click", function (e) {
+    var b = e.target.closest(".tick");
+    if (b) markSeen([b.dataset.seen]);
   });
 
   el("viewpitch").addEventListener("click", function () { view = "pitch"; render(); });

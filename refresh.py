@@ -293,10 +293,13 @@ def fpl_block(cfg):
     fixtures = get(f"{FPL}/fixtures/?event={gw}")
     clubs = {t["id"]: t["short_name"] for t in boot["teams"]}
 
+    badge = {t["id"]: "fpl-club-%s.png" % t["code"] for t in boot["teams"]}
     matches = [
         {
             "home": clubs[f["team_h"]],
             "away": clubs[f["team_a"]],
+            "homeBadge": badge[f["team_h"]],
+            "awayBadge": badge[f["team_a"]],
             "homeGoals": f.get("team_h_score"),
             "awayGoals": f.get("team_a_score"),
             "minutes": f.get("minutes", 0),
@@ -402,6 +405,8 @@ def pro_matches(week):
         out.append({
             "home": (m.get("homeId") or {}).get("short", "?"),
             "away": (m.get("awayId") or {}).get("short", "?"),
+            "homeBadge": "pro-club-%s.png" % (m.get("homeId") or {}).get("id"),
+            "awayBadge": "pro-club-%s.png" % (m.get("awayId") or {}).get("id"),
             "homeGoals": m.get("homeScore") if (started or finished) else None,
             "awayGoals": m.get("awayScore") if (started or finished) else None,
             "started": started or finished,
@@ -631,40 +636,30 @@ JPL_POINTS = {
 
 
 def track_events(state):
-    """Diff this reading against the last one and log what changed.
+    """Rebuild the whole event list from the current stats each run.
 
-    First run of a gameweek backfills whatever already happened, so the ticker
-    is never empty; Pro League carries real minutes, FPL does not, so those are
-    stamped with the match clock when spotted and left blank when backfilled.
+    An earlier version diffed against the previous reading, which meant any hiccup
+    in the stored counters left events that had already happened permanently
+    missing from the ticker. Deriving the full list every time is idempotent and
+    self-healing; the only thing carried between runs is when each event was first
+    seen, which is what stamps a live FPL event with the match clock.
     """
     gw = (state.get("fpl") or {}).get("gw")
     week = (state.get("pro") or {}).get("week")
     key = "gw%s-wk%s" % (gw, week)
 
-    book = {"key": key, "counters": {}, "log": []}
+    book = {"key": key, "firstSeen": {}}
     if os.path.exists(EVENTS):
         try:
             loaded = json.load(open(EVENTS))
             if loaded.get("key") == key:
-                book = loaded
+                book = {"key": key, "firstSeen": loaded.get("firstSeen") or {}}
         except ValueError:
             pass
 
-    # Entries logged before events carried an absolute time fall back to their
-    # detection timestamp, which is "now" for everything backfilled in one pass —
-    # that floats a Friday goal above today's. Drop them; they re-derive below.
-    kept = [e for e in book["log"] if e.get("at")]
-    if len(kept) != len(book["log"]):
-        # everything dropped has to come back with a real time, so forget what
-        # we had counted and let the backfill below re-derive it
-        book["counters"] = {}
-    book["log"] = kept
-
-    first_run = not book["counters"]
-    counters = book["counters"]
+    first_seen = book["firstSeen"]
     now = datetime.now(timezone.utc).isoformat(timespec="seconds")
 
-    # who owns whom, so an event can name the teams it moves
     owners = {}
     for t in state["fpl"]["teams"] + ((state.get("pro") or {}).get("teams") or []):
         for p in t.get("squad", []):
@@ -675,55 +670,56 @@ def track_events(state):
                 "bench": p.get("bench", False),
             })
 
-    seen, fresh = {}, []
+    log, seen_players = [], set()
     for t in state["fpl"]["teams"] + ((state.get("pro") or {}).get("teams") or []):
         for p in t.get("squad", []):
             k = player_key(t, p)
-            if k in seen:
+            if k in seen_players:
                 continue
-            seen[k] = True
-            before = counters.get(k, {})
-            after = {kind: count_of(p, field) for kind, field, _, _ in KINDS}
-            counters[k] = after
+            seen_players.add(k)
 
-            if before == after:
-                continue
             for kind, field, label, identifier in KINDS:
-                gained = after[kind] - before.get(kind, 0)
-                if gained <= 0:
+                count = count_of(p, field)
+                if count <= 0:
                     continue
                 minutes = (p.get("minuteLog") or {}).get(kind) or []
-                for i in range(gained):
-                    index = before.get(kind, 0) + i
-                    minute = (minutes[index] if index < len(minutes)
-                              else (None if first_run else p.get("matchMinute")))
-                    fresh.append({
-                        "ts": now,
-                        "at": happened_at(p.get("kickoff"), minute, now),
-                        "backfilled": first_run,
+                # bonus is one line for the running total, everything else one per occurrence
+                occurrences = 1 if kind == "bonus" else count
+                for i in range(occurrences):
+                    eid = "%s:%s:%s:%s" % (k, kind, i, count if kind == "bonus" else "")
+                    fresh = eid not in first_seen
+                    if fresh:
+                        first_seen[eid] = now
+                    minute = (minutes[i] if i < len(minutes)
+                              else (p.get("matchMinute") if fresh and p.get("state") == "live" else None))
+                    log.append({
+                        "id": eid,
+                        "ts": first_seen[eid],
+                        "backfilled": False,
                         "kind": kind,
-                        "label": label if kind != "bonus" else
-                                 ("%s bonus point%s" % (gained, "" if gained == 1 else "s")),
+                        "label": ("%s bonus point%s" % (count, "" if count == 1 else "s"))
+                                 if kind == "bonus" else label,
                         "player": p["name"],
                         "club": p.get("club", ""),
                         "photo": p.get("photo"),
                         "opponent": p.get("opponent", ""),
                         "score": p.get("score"),
+                        "at": happened_at(p.get("kickoff"), minute, first_seen[eid]),
                         "minute": minute,
-                        "points": credit_for(t["game"], p, kind, identifier, after[kind],
-                                             gained if kind == "bonus" else 1),
+                        "points": credit_for(t["game"], p, kind, identifier, count,
+                                             count if kind == "bonus" else 1),
                         "teams": owners.get(k, []),
                     })
-                    if kind == "bonus":
-                        break  # one line for the whole bonus change
 
-    log = fresh + book["log"]
-    log.sort(key=lambda e: e.get("at") or e["ts"], reverse=True)
-    book["log"] = log[:60]
-    book["key"] = key
+    log.sort(key=lambda e: e["at"], reverse=True)
+    log = log[:60]
+
+    # forget first-seen stamps for events that no longer exist
+    live_ids = {e["id"] for e in log}
+    book["firstSeen"] = {k: v for k, v in first_seen.items() if k in live_ids}
     with open(EVENTS, "w") as fh:
         json.dump(book, fh, indent=1)
-    return book["log"]
+    return log
 
 
 def happened_at(kickoff, minute, fallback):
