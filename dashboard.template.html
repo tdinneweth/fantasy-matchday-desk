@@ -1582,9 +1582,16 @@
 
   /* live updates: a published data file when the page is hosted, the artifact
      database when it runs as an artifact. Whichever is there wins. */
-  function accept(next) {
+  var fromFeed = false;   // has a live reading replaced the one baked in at build time
+
+  function accept(next, feed) {
     if (!next || !next.updatedAt) return;
-    if (state && state.updatedAt && next.updatedAt < state.updatedAt) return;
+    // The reading baked in at build time can carry a newer stamp than the feed
+    // (the CDN serving it runs a minute or so behind), so it must never block a
+    // live reading — only feed-against-feed comparisons guard ordering.
+    if (feed ? (fromFeed && next.updatedAt < state.updatedAt)
+             : (state && state.updatedAt && next.updatedAt < state.updatedAt)) return;
+    if (feed) fromFeed = true;
     state = next;
     render();
   }
@@ -1593,7 +1600,7 @@
     var pull = function () {
       fetch(DATA_URL + (DATA_URL.indexOf("?") < 0 ? "?" : "&") + "t=" + Date.now(), { cache: "no-store" })
         .then(function (r) { return r.ok ? r.json() : null; })
-        .then(accept)
+        .then(function (next) { accept(next, true); })
         .catch(function () { /* keep showing the last good reading */ });
     };
     pull();
@@ -1604,7 +1611,7 @@
     var db = await window.claude?.use?.("db");
     if (!db) return;
     db.doc("live/state").onSnapshot(function (snap) {
-      if (snap.exists) accept(snap.data());
+      if (snap.exists) accept(snap.data(), true);
     }, function () { /* keep showing the last good reading */ });
   })();
 </script>

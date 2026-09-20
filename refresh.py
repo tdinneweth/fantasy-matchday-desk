@@ -406,11 +406,15 @@ def pro_team(cfg, week, headers, clubs):
         except Exception:
             week_move = None
 
+    # the feed sometimes answers with squads and season totals but no weekStat;
+    # starters plus the captain's double reproduce it exactly, so derive it
+    computed = sum(s["points"] * (2 if s["captain"] else 1) for s in starters)
+
     return {
         "game": "PRO",
         "id": tid,
         "name": team.get("name") or cfg.get("label", "?"),
-        "gwPoints": wk.get("points"),
+        "gwPoints": wk.get("points") if wk.get("points") is not None else computed,
         "gwRank": wk.get("rank"),
         "weekMove": week_move,
         "overallMove": remember_rank(tid, week, team.get("rank")),
