@@ -14,6 +14,8 @@ import os
 parser = argparse.ArgumentParser()
 parser.add_argument("--data-url", default="", help="poll this JSON for live readings")
 parser.add_argument("--out", default="dashboard.html")
+parser.add_argument("--standalone", action="store_true",
+                    help="wrap in a full document; the artifact runtime supplies its own")
 args = parser.parse_args()
 
 here = os.path.dirname(os.path.abspath(__file__))
@@ -33,6 +35,25 @@ if os.path.isdir(photo_dir):
 out = tpl.replace("/*__SNAPSHOT__*/ null", json.dumps(state, separators=(",", ":")))
 out = out.replace("/*__PHOTOS__*/ {}", json.dumps(photos, separators=(",", ":")))
 out = out.replace('/*__DATA_URL__*/ ""', json.dumps(args.data_url))
+
+if args.standalone:
+    # The artifact runtime wraps the fragment in a document with a charset and a
+    # viewport meta. Nothing does that on GitHub Pages, and without the viewport
+    # mobile Safari lays the page out at 980px and shrinks it to fit, so none of
+    # the responsive breakpoints ever fire.
+    head, marker, body = out.partition('<div class="wrap">')
+    out = (
+        '<!doctype html>\n<html lang="en">\n<head>\n'
+        '<meta charset="utf-8">\n'
+        '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
+        '<meta name="color-scheme" content="light dark">\n'
+        '<meta name="description" content="Live gameweek points for four fantasy teams.">\n'
+        '<style>img{max-width:100%}[hidden]{display:none!important}</style>\n'
+        + head
+        + '</head>\n<body>\n'
+        + marker + body
+        + '\n</body>\n</html>\n'
+    )
 
 dest = args.out if os.path.isabs(args.out) else os.path.join(here, args.out)
 os.makedirs(os.path.dirname(dest) or ".", exist_ok=True)

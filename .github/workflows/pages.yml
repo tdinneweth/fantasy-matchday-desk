@@ -39,6 +39,7 @@ jobs:
       - name: Build
         run: |
           ./build.py \
+            --standalone \
             --out site/index.html \
             --data-url "https://raw.githubusercontent.com/${{ github.repository }}/data/state.json"
 

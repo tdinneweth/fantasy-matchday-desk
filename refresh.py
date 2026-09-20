@@ -547,6 +547,11 @@ def track_events(state):
         except ValueError:
             pass
 
+    # Entries logged before events carried an absolute time fall back to their
+    # detection timestamp, which is "now" for everything backfilled in one pass —
+    # that floats a Friday goal above today's. Drop them; they re-derive below.
+    book["log"] = [e for e in book["log"] if e.get("at")]
+
     first_run = not book["counters"]
     counters = book["counters"]
     now = datetime.now(timezone.utc).isoformat(timespec="seconds")
@@ -649,7 +654,9 @@ def credit_for(game, player, kind, identifier, total, gained):
         if identifier not in credit or not total:
             return None
         if kind == "bonus":
-            return credit[identifier]
+            # a bonus point is worth exactly one point, so a climb from 1 to 2
+            # is +1 — not the new total
+            return gained
         return round(credit[identifier] / total) * gained
 
     value = JPL_POINTS.get(kind)
