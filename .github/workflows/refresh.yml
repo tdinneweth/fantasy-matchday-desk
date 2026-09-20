@@ -58,5 +58,7 @@ jobs:
             else
               echo "collector failed on pass $i" >&2
             fi
-            [ "$i" -lt 5 ] && sleep 60
+            # not `[ $i -lt 5 ] && sleep 60` — on the last pass that tests false
+            # and becomes the step's exit status, failing an otherwise good run
+            if [ "$i" -lt 5 ]; then sleep 60; fi
           done
