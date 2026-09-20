@@ -410,14 +410,64 @@
   .panel.onpitch > header { background: var(--live-soft); border-bottom-color: transparent; }
   .panel.onpitch h2 { color: var(--live); }
 
-  .grid {
+  .board {
     display: grid;
-    grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
     gap: 16px;
     align-items: start;
+    grid-template-columns: minmax(0, 1fr);
   }
 
-  @media (max-width: 860px) { .grid { grid-template-columns: minmax(0, 1fr); } }
+  @media (min-width: 861px) {
+    .token { width: 96px; }
+    .shirt { width: 60px; height: 60px; }
+    .token .nm { font-size: 12.5px; max-width: 96px; }
+    .token .op { font-size: 9.5px; }
+    .badge { min-width: 25px; height: 23px; line-height: 23px; font-size: 15px; }
+    .arm { width: 21px; height: 21px; line-height: 19px; font-size: 10px; }
+    .pitch { padding: 20px 14px 16px; gap: 18px; }
+    .pitch::after { width: 118px; height: 118px; margin: -59px 0 0 -59px; }
+    .benchstrip .token { width: 80px; }
+    .benchstrip .shirt { width: 46px; height: 46px; }
+
+    .board {
+      grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+    }
+
+    /* a full slate: the live tiles take the whole width and run several across,
+       everything else falls in underneath */
+    .board[data-live="many"] {
+      grid-template-areas:
+        "live    live"
+        "squads  squads"
+        "ticker  matches";
+    }
+
+    /* a handful playing: live and ticker side by side, the usual reading order */
+    .board[data-live="few"] {
+      grid-template-areas:
+        "live    ticker"
+        "squads  squads"
+        "matches matches";
+    }
+
+    /* nothing on: the live panel shrinks to a one-line notice and the squad,
+       the ticker and the fixtures take the room it was holding */
+    .board[data-live="none"] {
+      grid-template-areas:
+        "live    live"
+        "squads  squads"
+        "ticker  matches";
+    }
+
+    .p-live { grid-area: live; }
+    .p-ticker { grid-area: ticker; }
+    .p-squads { grid-area: squads; }
+    .p-matches { grid-area: matches; }
+
+    .board[data-live="none"] .p-live > header { border-bottom: none; }
+    .board[data-live="none"] .p-live .empty { padding: 0 16px 12px; }
+    .board[data-live="many"] .ticker { max-height: 420px; }
+  }
 
   /* ---------- on the pitch ---------- */
 
@@ -832,9 +882,24 @@
 
   .squad { padding: 4px 0 8px; }
 
+  .drivers { display: flex; flex-wrap: wrap; gap: 4px; justify-content: flex-end; }
+
+  .dv {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10px;
+    padding: 1px 5px;
+    border-radius: 3px;
+    background: var(--sunken);
+    color: var(--ink-2);
+    white-space: nowrap;
+  }
+
+  .dv b { font-weight: 600; color: var(--ink); }
+  .dv.neg b { color: var(--bad); }
+
   .row {
     display: grid;
-    grid-template-columns: 34px minmax(0, 1fr) auto 42px 34px;
+    grid-template-columns: 34px minmax(0, 1.1fr) minmax(0, 1.4fr) 42px 34px;
     align-items: center;
     gap: 9px;
     padding: 7px 16px 7px 13px;
@@ -933,14 +998,60 @@
 
   .fx {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) 44px;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) 44px 52px;
     align-items: center;
     gap: 8px;
     padding: 9px 16px;
     font-size: 13px;
+    cursor: pointer;
+    list-style: none;
   }
 
-  .fx + .fx { border-top: 1px solid var(--line-soft); }
+  .fx::-webkit-details-marker { display: none; }
+  .fxwrap + .fxwrap { border-top: 1px solid var(--line-soft); }
+  .fxwrap[open] { background: var(--sunken); }
+  .fxwrap[open] .fx { border-bottom: 1px solid var(--line-soft); }
+  .fx:hover { background: var(--sunken); }
+  .fx:focus-visible { outline: 2px solid var(--live); outline-offset: -2px; }
+
+  .mineflag {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 9.5px;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    text-align: right;
+  }
+
+  .fxline { display: flex; gap: 10px; padding: 10px 16px 4px; }
+
+  .fxk {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 9.5px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    flex: none;
+    padding-top: 3px;
+    width: 86px;
+  }
+
+  .fxv { display: flex; flex-wrap: wrap; gap: 4px; }
+
+  .fxmine { display: flex; flex-direction: column; padding: 6px 0 10px; }
+
+  .fxp {
+    display: grid;
+    grid-template-columns: 30px minmax(0, 1fr) minmax(0, 1.3fr) 34px;
+    align-items: center;
+    gap: 9px;
+    padding: 6px 16px;
+  }
+
+  .fxp .who b { font-size: 13px; font-weight: 600; display: block; }
+  .fxp .who span { font-family: "IBM Plex Mono", monospace; font-size: 9.5px; color: var(--ink-3); }
+  .fxp .mug { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; object-position: top center; background: var(--sunken); }
+  .fxp .mug.initials { display: grid; place-items: center; font-family: "Anton", sans-serif; font-size: 12px; color: var(--ink-3); }
   .fx.playing { background: var(--live-soft); }
   .fx .away { text-align: left; }
   .fx .home { text-align: right; }
@@ -1034,7 +1145,13 @@
     .benchstrip .token { width: 54px; }
     .benchstrip .shirt { width: 32px; height: 32px; }
 
-    .row { grid-template-columns: 30px minmax(0, 1fr) auto 36px 30px; padding: 7px 12px 7px 9px; }
+    .row { grid-template-columns: 26px minmax(0, 1fr) 32px 28px; padding: 7px 12px 7px 9px; }
+    .row .drivers { display: none; }
+    .fx { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) 40px; padding: 9px 12px; }
+    .mineflag { display: none; }
+    .fxp { grid-template-columns: 26px minmax(0, 1fr) 30px; padding: 6px 12px; }
+    .fxp .drivers { display: none; }
+    .fxk { width: 64px; }
     .tabs { padding: 8px 10px; }
     .tab { font-size: 12px; padding: 5px 9px; }
   }
@@ -1060,8 +1177,8 @@
 
   <section class="teams" id="teams"></section>
 
-  <div class="grid">
-    <section class="panel" id="pitchpanel">
+  <div class="board" id="board" data-live="none">
+    <section class="panel p-live" id="pitchpanel">
       <header>
         <h2><i class="dot"></i> On the pitch</h2>
         <span class="filterbar">
@@ -1072,17 +1189,15 @@
       <div id="nowplaying"></div>
     </section>
 
-    <section class="panel">
+    <section class="panel p-ticker">
       <header>
         <h2>Point ticker</h2>
         <span class="chip" id="tkmeta"></span>
       </header>
       <div class="ticker" id="ticker"></div>
     </section>
-  </div>
 
-  <div class="grid">
-    <section class="panel">
+    <section class="panel p-squads">
       <header>
         <h2>Squads</h2>
         <div class="toggle">
@@ -1094,7 +1209,7 @@
       <div id="squadview"></div>
     </section>
 
-    <section class="panel">
+    <section class="panel p-matches">
       <header>
         <h2>Matches</h2>
         <span class="chip" id="fxmeta"></span>
@@ -1317,7 +1432,8 @@
   function renderNowPlaying(s) {
     var rows = livePlayers(s);
     var panel = el("pitchpanel");
-    panel.className = "panel" + (rows.length ? " onpitch" : "");
+    panel.className = "panel p-live" + (rows.length ? " onpitch" : "");
+    el("board").dataset.live = rows.length >= 4 ? "many" : (rows.length ? "few" : "none");
 
     if (!rows.length) {
       var next = [];
@@ -1334,6 +1450,7 @@
       return;
     }
 
+    el("board").dataset.live = rows.length >= 4 ? "many" : "few";
     el("nowplaying").innerHTML = '<div class="nowplaying">' + rows.map(npHtml).join("") + '</div>';
     var pts = rows.reduce(function (a, p) { return a + (p.points || 0); }, 0);
     el("npmeta").textContent = rows.length + (rows.length === 1 ? " player · " : " players · ") +
@@ -1425,10 +1542,23 @@
         '<span class="pos">' + esc(p.pos) + '</span>' +
         '<span class="who"><b>' + esc(p.name) + band + '</b><span>' + esc(p.club) +
           (p.opponent ? " · " + esc(p.opponent) : "") + '</span></span>' +
-        '<span class="events">' + eventsHtml(p).join("") + '</span>' +
+        '<span class="drivers">' + driversHtml(p) + '</span>' +
         '<span class="mins">' + esc(mins) + '</span>' +
         '<span class="pts' + (shown ? "" : " zero") + '">' + (shown || 0) + '</span>' +
       '</div>';
+  }
+
+  function driversHtml(p) {
+    var rows = (p.drivers || []).filter(function (d) { return d.points; });
+    if (!rows.length) {
+      // a reading published before the breakdown existed carries no drivers at
+      // all; say nothing rather than claim the player has not featured
+      return p.state === "upcoming" ? '<span class="dv">yet to play</span>' : "";
+    }
+    return rows.map(function (d) {
+      return '<span class="dv' + (d.points < 0 ? " neg" : "") + '">' + esc(d.label) +
+        ' <b>' + (d.points > 0 ? "+" : "") + d.points + '</b></span>';
+    }).join("");
   }
 
   function listHtml(t) {
@@ -1454,25 +1584,73 @@
 
   /* ---------- fixtures ---------- */
 
-  function fxRow(m) {
+  /* my players in a given match, whichever squad they sit in */
+  function mineIn(s, m) {
+    var seen = {}, out = [];
+    allTeams(s).forEach(function (t) {
+      (t.squad || []).forEach(function (p) {
+        if (p.club !== m.home && p.club !== m.away) return;
+        var key = p.name + "|" + p.club;
+        if (!seen[key]) {
+          seen[key] = { name: p.name, club: p.club, photo: p.photo, points: p.points,
+                        drivers: p.drivers || [], teams: [] };
+          out.push(seen[key]);
+        }
+        seen[key].teams.push(t.name + (p.captain ? " (C)" : "") + (p.bench ? " · bench" : ""));
+      });
+    });
+    return out.sort(function (a, b) { return b.points - a.points; });
+  }
+
+  function fxRow(m, s) {
     var playing = m.started && !m.finished;
     var clock = playing ? (m.minutes ? m.minutes + "'" : "live") : (m.finished ? "FT" : kickoff(m.kickoff));
     var score = m.homeGoals == null ? "v" : m.homeGoals + "–" + m.awayGoals;
-    return '' +
-      '<div class="fx' + (playing ? " playing" : "") + '">' +
+    var mine = mineIn(s, m);
+    var events = m.events || [];
+
+    var head = '' +
+      '<summary class="fx' + (playing ? " playing" : "") + '">' +
         '<span class="club home">' + esc(m.home) + '</span>' +
         '<span class="sc">' + esc(score) + '</span>' +
         '<span class="club away">' + esc(m.away) + '</span>' +
         '<span class="clock">' + esc(clock) + '</span>' +
-      '</div>';
+        '<span class="mineflag">' + (mine.length ? mine.length + " yours" : "") + '</span>' +
+      '</summary>';
+
+    var body = "";
+    if (events.length) {
+      body += '<div class="fxline"><span class="fxk">In the match</span><span class="fxv">' +
+        events.map(function (e) {
+          return '<span class="ev' + (e.kind === "goal" ? " g" : (e.kind === "red card" ? " rc" :
+                 (e.kind === "yellow card" ? " yc" : ""))) + '">' +
+            esc(e.player) + ' · ' + esc(e.kind) + (e.count > 1 ? " ×" + e.count : "") + '</span>';
+        }).join("") + '</span></div>';
+    }
+
+    if (mine.length) {
+      body += '<div class="fxmine">' + mine.map(function (p) {
+        return '<div class="fxp">' +
+          faceHtml(p, "mug") +
+          '<span class="who"><b>' + esc(p.name) + '</b><span>' + esc(p.teams.join(" · ")) + '</span></span>' +
+          '<span class="drivers">' + driversHtml(p) + '</span>' +
+          '<span class="pts' + (p.points ? "" : " zero") + '">' + (p.points || 0) + '</span>' +
+        '</div>';
+      }).join("") + '</div>';
+    } else {
+      body += '<p class="empty">Nobody of yours in this one.</p>';
+    }
+
+    return '<details class="fxwrap"' + (playing ? " open" : "") + '>' + head + body + '</details>';
   }
 
   function fixturesHtml(s) {
     var out = "";
     var pl = (s && s.fpl && s.fpl.matches) || [];
     var jpl = (s && s.pro && s.pro.matches) || [];
-    if (pl.length) out += '<div class="fxgroup">Premier League · GW ' + (s.fpl.gw || "") + '</div>' + pl.map(fxRow).join("");
-    if (jpl.length) out += '<div class="fxgroup">Pro League · week ' + (s.pro.week || "") + '</div>' + jpl.map(fxRow).join("");
+    var row = function (m) { return fxRow(m, s); };
+    if (pl.length) out += '<div class="fxgroup">Premier League · GW ' + (s.fpl.gw || "") + '</div>' + pl.map(row).join("");
+    if (jpl.length) out += '<div class="fxgroup">Pro League · week ' + (s.pro.week || "") + '</div>' + jpl.map(row).join("");
     return out || '<p class="empty">No matches scheduled in this window.</p>';
   }
 

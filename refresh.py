@@ -106,6 +106,58 @@ def remember_rank(team_id, week, rank):
 # Fantasy Premier League
 # --------------------------------------------------------------------------
 
+# how FPL's own stat identifiers read on screen
+FPL_DRIVERS = {
+    "minutes": "minutes", "goals_scored": "goals", "assists": "assists",
+    "clean_sheets": "clean sheet", "goals_conceded": "conceded",
+    "own_goals": "own goal", "penalties_saved": "pen save",
+    "penalties_missed": "pen miss", "yellow_cards": "yellow card",
+    "red_cards": "red card", "saves": "saves", "bonus": "bonus",
+    "defensive_contribution": "defensive work",
+}
+
+
+def fpl_drivers(credit):
+    rows = [{"label": FPL_DRIVERS.get(k, k.replace("_", " ")), "points": v}
+            for k, v in (credit or {}).items() if v]
+    rows.sort(key=lambda r: -abs(r["points"]))
+    return rows
+
+
+def pro_drivers(pos, detail, total):
+    """The Pro League feed gives no per-stat points, so price the components from
+    the published rules and let anything left over show as `other` — the rules
+    also award for duels, recoveries and headers, which the feed does not break out."""
+    minutes = detail.get("time", 0) or 0
+    conceded = len(detail.get("conceeded") or [])
+    goals = len(detail.get("goals") or [])
+    rows = []
+
+    def add(label, points):
+        if points:
+            rows.append({"label": label, "points": points})
+
+    if minutes:
+        add("minutes", 2 if minutes >= 60 else 1)
+    add("goals", goals * (JPL_POINTS["goal"].get(pos) or 0))
+    add("assists", len(detail.get("assists") or []) * 3)
+    if minutes >= 60 and not conceded:
+        add("clean sheet", {"GK": 4, "DEF": 4, "MID": 1}.get(pos, 0))
+    if conceded >= 2:
+        add("conceded", (conceded // 2) * {"GK": -2, "DEF": -1}.get(pos, 0))
+    add("yellow card", len(detail.get("yellow_cards") or []) * -2)
+    add("red card", len(detail.get("red_card") or []) * -4)
+    add("own goal", len(detail.get("own_goals") or []) * -2)
+    add("pen save", len(detail.get("penalty_saved") or []) * 5)
+    add("pen miss", len(detail.get("penalty_miss") or []) * -3)
+    saves = detail.get("saves", 0) or 0
+    add("saves", saves // 3)
+
+    add("other", (total or 0) - sum(r["points"] for r in rows))
+    rows.sort(key=lambda r: -abs(r["points"]))
+    return rows
+
+
 def fixture_state(fx):
     """Verified against the live feed: bonus is already inside total_points while a
     match is in play, so nothing here needs to re-derive it from bps."""
@@ -163,6 +215,7 @@ def fpl_team(entry, label, boot, live, fixtures, gw):
         row = {
             "id": el["id"],
             "credit": credit,
+            "drivers": fpl_drivers(credit),
             "name": el["web_name"],
             "photo": "fpl-%s.png" % el["code"],
             "score": score,
@@ -254,6 +307,10 @@ def fpl_block(cfg):
         for f in sorted(fixtures, key=lambda f: f.get("kickoff_time") or "")
     ]
 
+    detail = fpl_match_events(boot, live)
+    for m, f in zip(matches, sorted(fixtures, key=lambda f: f.get("kickoff_time") or "")):
+        m["events"] = detail.get(f["id"], [])
+
     teams = [fpl_team(t["entry"], t.get("label", ""), boot, live, fixtures, gw) for t in cfg]
     return {
         "gw": gw,
@@ -266,6 +323,46 @@ def fpl_block(cfg):
         "teams": teams,
         "anyLive": any(m["started"] and not m["finished"] for m in matches),
     }
+
+
+def fpl_match_events(boot, live):
+    """Scorers, cards and bonus per fixture — the live feed carries every player,
+    not just mine, so a match can be summarised properly."""
+    names = {e["id"]: e["web_name"] for e in boot["elements"]}
+    clubs = {t["id"]: t["short_name"] for t in boot["teams"]}
+    sides = {e["id"]: clubs[e["team"]] for e in boot["elements"]}
+
+    watch = [("goals_scored", "goal"), ("assists", "assist"), ("own_goals", "own goal"),
+             ("penalties_saved", "pen save"), ("penalties_missed", "pen miss"),
+             ("red_cards", "red card"), ("yellow_cards", "yellow card")]
+
+    out = {}
+    for el in live["elements"]:
+        stats = el["stats"]
+        for ex in el.get("explain", []):
+            fid = ex.get("fixture")
+            if fid is None:
+                continue
+            for key, label in watch:
+                count = stats.get(key, 0) or 0
+                if count:
+                    out.setdefault(fid, []).append({
+                        "kind": label,
+                        "player": names.get(el["id"], "?"),
+                        "club": sides.get(el["id"], ""),
+                        "count": count,
+                    })
+            if stats.get("bonus"):
+                out.setdefault(fid, []).append({
+                    "kind": "bonus", "player": names.get(el["id"], "?"),
+                    "club": sides.get(el["id"], ""), "count": stats["bonus"],
+                })
+
+    order = {"goal": 0, "assist": 1, "own goal": 2, "pen save": 3, "pen miss": 4,
+             "red card": 5, "yellow card": 6, "bonus": 7}
+    for rows in out.values():
+        rows.sort(key=lambda r: (order.get(r["kind"], 9), -r["count"], r["player"]))
+    return out
 
 
 # --------------------------------------------------------------------------
@@ -342,6 +439,7 @@ def pro_team(cfg, week, headers, clubs):
 
         cap = slot.get("cap", 0)
         portrait = p.get("portraitUrl") or ""
+        pos_name = {1: "GK", 2: "DEF", 3: "MID", 4: "FWD"}.get(p.get("positionId"), "?")
         squad.append({
             "id": p.get("id"),
             "credit": {},
@@ -355,6 +453,7 @@ def pro_team(cfg, week, headers, clubs):
                 "penaltyMiss": detail.get("penalty_miss") or [],
             },
             "name": p.get("short") or p.get("name") or "?",
+            "drivers": pro_drivers(pos_name, detail, (stat or {}).get("points", 0) or 0),
             "photo": ("pro-%s.png" % p.get("id")) if portrait and "dummy" not in portrait else None,
             "photoSource": portrait if "dummy" not in portrait else None,
             "pos": {1: "GK", 2: "DEF", 3: "MID", 4: "FWD"}.get(p.get("positionId"), "?"),
@@ -554,7 +653,12 @@ def track_events(state):
     # Entries logged before events carried an absolute time fall back to their
     # detection timestamp, which is "now" for everything backfilled in one pass —
     # that floats a Friday goal above today's. Drop them; they re-derive below.
-    book["log"] = [e for e in book["log"] if e.get("at")]
+    kept = [e for e in book["log"] if e.get("at")]
+    if len(kept) != len(book["log"]):
+        # everything dropped has to come back with a real time, so forget what
+        # we had counted and let the backfill below re-derive it
+        book["counters"] = {}
+    book["log"] = kept
 
     first_run = not book["counters"]
     counters = book["counters"]
