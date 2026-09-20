@@ -1,0 +1,13 @@
+{
+  "fpl": [
+    {"entry": 0, "label": "Cabo Merde"},
+    {"entry": 0, "label": "?"}
+  ],
+  "proleague": {
+    "token": "",
+    "teams": [
+      {"id": 0, "label": "Unsung Heroes"},
+      {"id": 0, "label": "All Work"}
+    ]
+  }
+}

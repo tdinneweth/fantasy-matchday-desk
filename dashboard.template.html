@@ -1,0 +1,1444 @@
+<title>Fantasy Matchday Desk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --ground: #e9ecf2;
+    --surface: #ffffff;
+    --sunken: #f3f5f9;
+    --line: #d7dce6;
+    --line-soft: #e6eaf1;
+    --ink: #151823;
+    --ink-2: #565d72;
+    --ink-3: #868da1;
+    --fpl: #4c1160;
+    --fpl-soft: #f1e4f6;
+    --jpl: #1f3bbf;
+    --jpl-soft: #e2e7fb;
+    --live: #d93b12;
+    --live-soft: #fce6df;
+    --good: #0b8457;
+    --bad: #c0392b;
+    --turf: #d8e3da;
+    --turf-2: #cfdcd2;
+    --turf-line: rgba(21, 24, 35, .16);
+    --turf-ink: #2b3a31;
+    --shadow: 0 1px 2px rgba(20, 24, 40, .06), 0 8px 24px -12px rgba(20, 24, 40, .18);
+    --radius: 14px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0c0f15;
+      --surface: #151a23;
+      --sunken: #1b212c;
+      --line: #28303d;
+      --line-soft: #202632;
+      --ink: #eef1f7;
+      --ink-2: #9aa3b6;
+      --ink-3: #6d7688;
+      --fpl: #c88cf0;
+      --fpl-soft: #2c1b38;
+      --jpl: #8ea3ff;
+      --jpl-soft: #1a2245;
+      --live: #ff6b3d;
+      --live-soft: #33180f;
+      --good: #34d399;
+      --bad: #f87171;
+      --turf: #16211a;
+      --turf-2: #121b16;
+      --turf-line: rgba(232, 240, 235, .14);
+      --turf-ink: #cfe0d5;
+      --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 12px 28px -16px rgba(0, 0, 0, .7);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #0c0f15;
+    --surface: #151a23;
+    --sunken: #1b212c;
+    --line: #28303d;
+    --line-soft: #202632;
+    --ink: #eef1f7;
+    --ink-2: #9aa3b6;
+    --ink-3: #6d7688;
+    --fpl: #c88cf0;
+    --fpl-soft: #2c1b38;
+    --jpl: #8ea3ff;
+    --jpl-soft: #1a2245;
+    --live: #ff6b3d;
+    --live-soft: #33180f;
+    --good: #34d399;
+    --bad: #f87171;
+    --turf: #16211a;
+    --turf-2: #121b16;
+    --turf-line: rgba(232, 240, 235, .14);
+    --turf-ink: #cfe0d5;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 12px 28px -16px rgba(0, 0, 0, .7);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: "Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 15px;
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 20px 16px 56px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  /* ---------- header ---------- */
+
+  .masthead {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px 20px;
+    padding-bottom: 14px;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  h1 {
+    font-family: "Anton", "Archivo Black", sans-serif;
+    font-weight: 400;
+    font-size: clamp(28px, 6vw, 40px);
+    letter-spacing: .01em;
+    text-transform: uppercase;
+    margin: 0;
+    line-height: .95;
+    text-wrap: balance;
+  }
+
+  .masthead .meta {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11.5px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 4px 10px 4px 8px;
+    border-radius: 999px;
+    background: var(--sunken);
+    border: 1px solid var(--line);
+    color: var(--ink-2);
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: .01em;
+    font-size: 12px;
+  }
+
+  .status.is-live {
+    background: var(--live-soft);
+    border-color: transparent;
+    color: var(--live);
+  }
+
+  .status.is-stale { color: var(--ink-3); }
+
+  .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+    flex: none;
+  }
+
+  .status.is-live .dot { animation: pulse 1.6s ease-in-out infinite; }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: .35; transform: scale(.7); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .status.is-live .dot,
+    .token.live .shirt { animation: none; }
+  }
+
+  /* ---------- team cards ---------- */
+
+  .teams {
+    display: grid;
+    gap: 12px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (max-width: 560px) { .teams { grid-template-columns: minmax(0, 1fr); } }
+  @media (min-width: 1000px) { .teams { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+
+  .card {
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 14px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .card::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 3px;
+    background: var(--accent);
+  }
+
+  .card.fpl { --accent: var(--fpl); --accent-soft: var(--fpl-soft); }
+  .card.pro { --accent: var(--jpl); --accent-soft: var(--jpl-soft); }
+  .card.muted { opacity: .72; }
+  .card.on { border-color: var(--ink); }
+
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .league {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 3px 7px;
+    border-radius: 5px;
+    display: inline-block;
+  }
+
+  .team-name {
+    font-family: "Anton", sans-serif;
+    font-weight: 400;
+    font-size: 21px;
+    letter-spacing: .015em;
+    text-transform: uppercase;
+    margin: 6px 0 0;
+    line-height: 1.05;
+  }
+
+  .score {
+    font-family: "Anton", sans-serif;
+    font-size: 52px;
+    line-height: .82;
+    letter-spacing: -.01em;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+
+  .score small {
+    display: block;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 9.5px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-top: 7px;
+  }
+
+  .score.none { font-size: 30px; color: var(--ink-3); }
+
+  .progress { display: flex; gap: 2px; height: 4px; }
+  .progress i { display: block; border-radius: 2px; background: var(--seg); }
+  .progress .done { --seg: var(--ink-3); }
+  .progress .now { --seg: var(--live); }
+  .progress .todo { --seg: var(--line); }
+
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    border-top: 1px solid var(--line-soft);
+    padding-top: 10px;
+  }
+
+  .fact .k {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 9.5px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    display: block;
+  }
+
+  .fact .v {
+    font-size: 15px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ranks {
+    display: grid;
+    gap: 6px;
+    border-top: 1px solid var(--line-soft);
+    padding-top: 10px;
+  }
+
+  .rk {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: 4px 8px;
+  }
+
+  .rk .k {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 9.5px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  .rk .v {
+    font-size: 15px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+
+  .rk.season .v { font-size: 17px; }
+  .rk.week .k, .rk.week .v { color: var(--ink-2); }
+  .rk.week .v { font-size: 13.5px; }
+
+  .move {
+    grid-column: 1 / -1;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .02em;
+  }
+
+  .move.up { color: var(--good); }
+  .move.down { color: var(--bad); }
+  .move.flat { color: var(--ink-3); }
+  .move .basis { color: var(--ink-3); font-weight: 400; }
+
+  .chip-row { display: flex; flex-wrap: wrap; gap: 5px; }
+
+  .chip {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: var(--sunken);
+    color: var(--ink-2);
+    border: 1px solid var(--line-soft);
+  }
+
+  .chip.hot { background: var(--live-soft); color: var(--live); border-color: transparent; }
+
+  /* ---------- panels ---------- */
+
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+
+  .panel > header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  .panel h2 {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .panel.onpitch { border-color: var(--live); }
+  .panel.onpitch > header { background: var(--live-soft); border-bottom-color: transparent; }
+  .panel.onpitch h2 { color: var(--live); }
+
+  .grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+    gap: 16px;
+    align-items: start;
+  }
+
+  @media (max-width: 860px) { .grid { grid-template-columns: minmax(0, 1fr); } }
+
+  /* ---------- on the pitch ---------- */
+
+  .nowplaying {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1px;
+    background: var(--line-soft);
+  }
+
+  /* ---------- point ticker ---------- */
+
+  .ticker {
+    display: flex;
+    flex-direction: column;
+    max-height: 520px;
+    overflow-y: auto;
+  }
+
+  .tk {
+    display: grid;
+    grid-template-columns: 34px 30px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 9px;
+    padding: 9px 14px 9px 11px;
+    border-left: 3px solid transparent;
+  }
+
+  .tk + .tk { border-top: 1px solid var(--line-soft); }
+  .tk.recent { border-left-color: var(--live); background: var(--live-soft); }
+
+  .tk .clock {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10.5px;
+    font-weight: 600;
+    color: var(--ink-3);
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .tk.recent .clock { color: var(--live); }
+
+  .tk .mug {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: top center;
+    background: var(--sunken);
+    display: block;
+  }
+
+  .tk .mug.initials {
+    display: grid;
+    place-items: center;
+    font-family: "Anton", sans-serif;
+    font-size: 11px;
+    color: var(--ink-3);
+  }
+
+  .tk .what { min-width: 0; }
+
+  .tk .what b {
+    font-size: 13.5px;
+    font-weight: 600;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .tk .what span {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10px;
+    color: var(--ink-3);
+    letter-spacing: .03em;
+  }
+
+  .tk .swing {
+    font-family: "Anton", sans-serif;
+    font-size: 18px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .tk .swing.plus { color: var(--good); }
+  .tk .swing.minus { color: var(--bad); }
+  .tk .swing.unknown { font-size: 12px; color: var(--ink-3); font-family: "IBM Plex Mono", monospace; }
+
+  .tk .for {
+    grid-column: 3 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 4px;
+  }
+
+  .np {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr) 40px;
+    align-items: start;
+    gap: 11px;
+    padding: 11px 14px;
+    background: var(--surface);
+  }
+
+  .face {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: top center;
+    background: var(--sunken);
+    border: 1px solid var(--line);
+    display: block;
+  }
+
+  .face.initials {
+    display: grid;
+    place-items: center;
+    font-family: "Anton", sans-serif;
+    font-size: 15px;
+    color: var(--ink-3);
+    letter-spacing: .02em;
+  }
+
+  .np-main { min-width: 0; }
+
+  .np-main b {
+    font-size: 14.5px;
+    font-weight: 600;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .np-sub {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10.5px;
+    color: var(--ink-3);
+    letter-spacing: .03em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 1px;
+  }
+
+  .np-sub .sc { color: var(--ink); font-weight: 600; }
+  .np-sub .min { color: var(--live); font-weight: 600; }
+
+  .np-events {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 6px;
+  }
+
+  .np-events:empty { display: none; }
+
+  .np-owners { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; }
+
+  .owner {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 9.5px;
+    letter-spacing: .04em;
+    padding: 1px 5px;
+    border-radius: 3px;
+    background: var(--accent-soft, var(--sunken));
+    color: var(--accent, var(--ink-2));
+    white-space: nowrap;
+  }
+
+  .owner.fpl { --accent: var(--fpl); --accent-soft: var(--fpl-soft); }
+  .owner.pro { --accent: var(--jpl); --accent-soft: var(--jpl-soft); }
+  .owner.sub { opacity: .55; }
+
+  .np-right { text-align: right; }
+
+  .np-pts {
+    font-family: "Anton", sans-serif;
+    font-size: 26px;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .np-pts.zero { color: var(--ink-3); }
+
+  .events { display: flex; gap: 4px; justify-content: flex-end; flex-wrap: wrap; }
+
+  .ev {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 1px 5px;
+    border-radius: 3px;
+    background: var(--sunken);
+    color: var(--ink-2);
+    white-space: nowrap;
+  }
+
+  .ev.g { background: var(--good); color: #fff; }
+  .ev.yc { background: #e2b100; color: #2a2100; }
+  .ev.rc { background: #cc2b1d; color: #fff; }
+
+  /* ---------- pitch ---------- */
+
+  .toggle { display: flex; gap: 4px; }
+
+  .toggle button,
+  .tab {
+    font: inherit;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+    padding: 5px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--ink-2);
+    cursor: pointer;
+  }
+
+  .toggle button:hover, .tab:hover { border-color: var(--ink-3); color: var(--ink); }
+  .toggle button[aria-pressed="true"],
+  .tab[aria-selected="true"] {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--surface);
+  }
+
+  .toggle button:focus-visible, .tab:focus-visible { outline: 2px solid var(--live); outline-offset: 2px; }
+
+  .tabs {
+    display: flex;
+    gap: 4px;
+    padding: 10px 12px;
+    overflow-x: auto;
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  .tab { font-size: 12.5px; padding: 6px 11px; }
+
+  .pitch {
+    position: relative;
+    background:
+      repeating-linear-gradient(180deg, var(--turf) 0 42px, var(--turf-2) 42px 84px);
+    padding: 16px 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    color: var(--turf-ink);
+  }
+
+  .pitch::before {
+    content: "";
+    position: absolute;
+    inset: 8px 12px;
+    border: 1px solid var(--turf-line);
+    border-radius: 3px;
+    pointer-events: none;
+  }
+
+  .pitch::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 92px;
+    height: 92px;
+    margin: -46px 0 0 -46px;
+    border: 1px solid var(--turf-line);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .line {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    z-index: 1;
+  }
+
+  .token {
+    width: 74px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    text-align: center;
+  }
+
+  .shirt {
+    position: relative;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: 2px solid var(--surface);
+    background: var(--surface);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .22);
+  }
+
+  .shirt img, .shirt .initials {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+  }
+
+  .shirt .initials {
+    display: grid;
+    place-items: center;
+    font-family: "Anton", sans-serif;
+    font-size: 15px;
+    color: var(--ink-3);
+    background: var(--sunken);
+  }
+
+  .token.live .shirt {
+    border-color: var(--live);
+    animation: halo 2.4s ease-in-out infinite;
+  }
+
+  @keyframes halo {
+    0%, 100% { box-shadow: 0 2px 6px rgba(0, 0, 0, .22); }
+    50% { box-shadow: 0 2px 6px rgba(0, 0, 0, .22), 0 0 0 4px var(--live-soft); }
+  }
+
+  .token.upcoming .shirt { opacity: .55; }
+
+  .badge {
+    position: absolute;
+    right: -6px;
+    bottom: -5px;
+    min-width: 22px;
+    padding: 0 4px;
+    height: 20px;
+    border-radius: 10px;
+    background: var(--ink);
+    color: var(--surface);
+    font-family: "Anton", sans-serif;
+    font-size: 13px;
+    line-height: 20px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+    border: 2px solid var(--surface);
+  }
+
+  .token.live .badge { background: var(--live); }
+
+  .arm {
+    position: absolute;
+    left: -6px;
+    top: -4px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--surface);
+    color: var(--ink);
+    border: 1px solid var(--ink);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 9px;
+    font-weight: 600;
+    line-height: 16px;
+    text-align: center;
+  }
+
+  .token .nm {
+    font-size: 11.5px;
+    font-weight: 600;
+    line-height: 1.15;
+    max-width: 74px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .token .op {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 9px;
+    letter-spacing: .03em;
+    opacity: .75;
+  }
+
+  .benchstrip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 14px;
+    border-top: 1px solid var(--line-soft);
+    overflow-x: auto;
+  }
+
+  .benchstrip .lbl {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 9.5px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    flex: none;
+  }
+
+  .benchstrip .token { width: 62px; }
+  .benchstrip .shirt { width: 36px; height: 36px; }
+  .benchstrip .badge { height: 17px; line-height: 17px; font-size: 11px; min-width: 19px; }
+
+  /* ---------- squad list ---------- */
+
+  .squad { padding: 4px 0 8px; }
+
+  .row {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr) auto 42px 34px;
+    align-items: center;
+    gap: 9px;
+    padding: 7px 16px 7px 13px;
+    border-left: 3px solid transparent;
+  }
+
+  .row + .row { border-top: 1px solid var(--line-soft); }
+  .row.live { border-left-color: var(--live); background: var(--live-soft); }
+  .row.benched { color: var(--ink-3); }
+
+  .pos {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    color: var(--ink-3);
+    text-align: center;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 2px 0;
+  }
+
+  .who { min-width: 0; }
+
+  .who b {
+    font-weight: 600;
+    font-size: 14px;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .who span {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10.5px;
+    color: var(--ink-3);
+    letter-spacing: .04em;
+  }
+
+  .armband {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 9px;
+    font-weight: 600;
+    background: var(--ink);
+    color: var(--surface);
+    border-radius: 3px;
+    padding: 1px 4px;
+    margin-left: 5px;
+    vertical-align: 1px;
+  }
+
+  .mins {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-3);
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .pts {
+    font-family: "Anton", sans-serif;
+    font-size: 19px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .pts.zero { color: var(--ink-3); }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 11px 16px 6px;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 9.5px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  .divider::after { content: ""; flex: 1; height: 1px; background: var(--line-soft); }
+
+  /* ---------- fixtures ---------- */
+
+  .fixtures { display: flex; flex-direction: column; }
+
+  .fxgroup {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 9.5px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    padding: 10px 16px 4px;
+  }
+
+  .fx {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) 44px;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 16px;
+    font-size: 13px;
+  }
+
+  .fx + .fx { border-top: 1px solid var(--line-soft); }
+  .fx.playing { background: var(--live-soft); }
+  .fx .away { text-align: left; }
+  .fx .home { text-align: right; }
+
+  .fx .club {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .04em;
+  }
+
+  .fx .sc {
+    font-family: "Anton", sans-serif;
+    font-size: 17px;
+    letter-spacing: .03em;
+    font-variant-numeric: tabular-nums;
+    padding: 0 4px;
+  }
+
+  .fx .clock {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10px;
+    letter-spacing: .04em;
+    text-align: right;
+    color: var(--ink-3);
+  }
+
+  .fx.playing .clock { color: var(--live); font-weight: 600; }
+
+  .empty { padding: 16px; color: var(--ink-2); font-size: 13px; margin: 0; }
+
+  footer {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10.5px;
+    letter-spacing: .05em;
+    color: var(--ink-3);
+    text-align: center;
+    text-transform: uppercase;
+  }
+</style>
+
+<div class="wrap">
+  <header class="masthead">
+    <h1>Fantasy Matchday Desk</h1>
+    <div class="meta">
+      <span id="gwline">&nbsp;</span>
+      <span class="status" id="status"><i class="dot"></i><span id="statustext">Loading</span></span>
+    </div>
+  </header>
+
+  <section class="teams" id="teams"></section>
+
+  <div class="grid">
+    <section class="panel" id="pitchpanel">
+      <header>
+        <h2><i class="dot"></i> On the pitch</h2>
+        <span class="chip" id="npmeta"></span>
+      </header>
+      <div id="nowplaying"></div>
+    </section>
+
+    <section class="panel">
+      <header>
+        <h2>Point ticker</h2>
+        <span class="chip" id="tkmeta"></span>
+      </header>
+      <div class="ticker" id="ticker"></div>
+    </section>
+  </div>
+
+  <div class="grid">
+    <section class="panel">
+      <header>
+        <h2>Squads</h2>
+        <div class="toggle">
+          <button id="viewpitch" aria-pressed="true">Pitch</button>
+          <button id="viewlist" aria-pressed="false">List</button>
+        </div>
+      </header>
+      <div class="tabs" id="tabs" role="tablist"></div>
+      <div id="squadview"></div>
+    </section>
+
+    <section class="panel">
+      <header>
+        <h2>Matches</h2>
+        <span class="chip" id="fxmeta"></span>
+      </header>
+      <div class="fixtures" id="fixtures"></div>
+    </section>
+  </div>
+
+  <footer id="foot">&nbsp;</footer>
+</div>
+
+<script>
+  var SNAPSHOT = /*__SNAPSHOT__*/ null;
+  var PHOTOS = /*__PHOTOS__*/ {};
+
+  var state = SNAPSHOT;
+  var selected = 0;
+  var view = "pitch";
+  var el = function (id) { return document.getElementById(id); };
+  var esc = function (s) {
+    return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+    });
+  };
+
+  function allTeams(s) {
+    var out = [];
+    if (s && s.fpl && s.fpl.teams) out = out.concat(s.fpl.teams);
+    if (s && s.pro && s.pro.teams) out = out.concat(s.pro.teams);
+    return out;
+  }
+
+  function num(v) { return v == null ? "–" : Number(v).toLocaleString("en-GB"); }
+
+  function ago(iso) {
+    if (!iso) return "never";
+    var secs = Math.max(0, Math.round((Date.now() - new Date(iso).getTime()) / 1000));
+    if (secs < 60) return secs + " sec ago";
+    if (secs < 3600) return Math.round(secs / 60) + " min ago";
+    if (secs < 86400) return Math.round(secs / 3600) + " hr ago";
+    return Math.round(secs / 86400) + " days ago";
+  }
+
+  function kickoff(iso) {
+    if (!iso) return "";
+    return new Date(iso).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+  }
+
+  function initials(name) {
+    return String(name || "?").replace(/[^A-Za-zÀ-ÿ ]/g, "").split(" ")
+      .filter(Boolean).slice(0, 2).map(function (w) { return w[0]; }).join("").toUpperCase() || "?";
+  }
+
+  function faceHtml(p, cls) {
+    var src = p.photo && PHOTOS[p.photo];
+    if (src) return '<img class="' + cls + '" src="' + src + '" alt="">';
+    return '<div class="' + cls + ' initials">' + esc(initials(p.name)) + '</div>';
+  }
+
+  function eventsHtml(p) {
+    var ev = [];
+    if (p.goals) ev.push('<span class="ev g">' + p.goals + (p.goals > 1 ? " goals" : " goal") + '</span>');
+    if (p.assists) ev.push('<span class="ev">' + p.assists + (p.assists > 1 ? " assists" : " assist") + '</span>');
+    if (p.cleanSheet) ev.push('<span class="ev">clean sheet</span>');
+    if (p.bonus) ev.push('<span class="ev">+' + p.bonus + ' bonus</span>');
+    if (p.red) ev.push('<span class="ev rc">red</span>');
+    else if (p.yellow) ev.push('<span class="ev yc">yellow</span>');
+    return ev;
+  }
+
+  /* ---------- team cards ---------- */
+
+  function moveHtml(m, blank) {
+    if (!m) return '<span class="move flat">' + esc(blank) + '</span>';
+    var dir = m.delta > 0 ? "up" : (m.delta < 0 ? "down" : "flat");
+    if (m.delta === 0) return '<span class="move flat">unchanged since ' + esc(m.basis) + '</span>';
+    return '<span class="move ' + dir + '">' + (m.delta > 0 ? "▲" : "▼") + " " +
+      num(Math.abs(m.delta)) + ' <span class="basis">' +
+      (m.delta > 0 ? "places up" : "places down") + ' since ' + esc(m.basis) + '</span></span>';
+  }
+
+  function ranksHtml(t) {
+    return '' +
+      '<div class="ranks">' +
+        '<div class="rk season">' +
+          '<span class="k">Overall rank</span>' +
+          '<span class="v">' + num(t.overallRank) + '</span>' +
+          moveHtml(t.overallMove, t.game === "PRO" ? "tracking from this week" : "no history yet") +
+        '</div>' +
+        '<div class="rk week">' +
+          '<span class="k">Week rank</span>' +
+          '<span class="v">' + num(t.gwRank) + '</span>' +
+          moveHtml(t.weekMove, "no previous week") +
+        '</div>' +
+      '</div>';
+  }
+
+  function cardHtml(t, index) {
+    var live = t.playersLive || 0;
+    var done = t.playersPlayed || 0;
+    var todo = t.playersLeft || 0;
+    var total = Math.max(1, done + live + todo);
+    var chips = [];
+
+    if (t.unavailable) chips.push('<span class="chip">sign-in needed</span>');
+    if (t.chip) chips.push('<span class="chip hot">' + esc(t.chip) + '</span>');
+    if (t.hit) chips.push('<span class="chip hot">-' + t.hit + ' hit</span>');
+    if (live) chips.push('<span class="chip hot">' + live + ' on the pitch</span>');
+    else if (todo) chips.push('<span class="chip">' + todo + ' still to play</span>');
+    else if (!t.unavailable) chips.push('<span class="chip">all played</span>');
+
+    var score = t.gwPoints == null
+      ? '<div class="score none">–<small>no data</small></div>'
+      : '<div class="score">' + t.gwPoints + '<small>this week</small></div>';
+
+    return '' +
+      '<article class="card ' + (t.game === "FPL" ? "fpl" : "pro") + (t.unavailable ? " muted" : "") +
+        (index === selected ? " on" : "") + '" data-i="' + index + '">' +
+        '<div class="card-top">' +
+          '<div>' +
+            '<span class="league">' + (t.game === "FPL" ? "Premier League" : "Pro League") + '</span>' +
+            '<h3 class="team-name">' + esc(t.name) + '</h3>' +
+          '</div>' + score +
+        '</div>' +
+        '<div class="progress" role="presentation">' +
+          '<i class="done" style="flex:' + done + '"></i>' +
+          '<i class="now" style="flex:' + live + '"></i>' +
+          '<i class="todo" style="flex:' + (total - done - live) + '"></i>' +
+        '</div>' +
+        '<div class="chip-row">' + chips.join("") + '</div>' +
+        '<div class="facts">' +
+          '<div class="fact"><span class="k">Season pts</span><span class="v">' + num(t.totalPoints) + '</span></div>' +
+          '<div class="fact"><span class="k">Bench pts</span><span class="v">' +
+            (t.benchPoints == null ? "–" : t.benchPoints) + '</span></div>' +
+        '</div>' +
+        ranksHtml(t) +
+      '</article>';
+  }
+
+  /* ---------- on the pitch ---------- */
+
+  function livePlayers(s) {
+    var byKey = {};
+    allTeams(s).forEach(function (t) {
+      (t.squad || []).forEach(function (p) {
+        if (p.state !== "live") return;
+        var key = p.name + "|" + p.club;
+        var row = byKey[key];
+        if (!row) {
+          row = byKey[key] = Object.assign({}, p, { owners: [] });
+        }
+        // a captain's doubled score belongs to the team, not the player
+        row.owners.push({
+          team: t.name,
+          game: t.game,
+          bench: p.bench,
+          captain: p.captain,
+          multiplier: p.multiplier,
+        });
+      });
+    });
+    return Object.keys(byKey).map(function (k) { return byKey[k]; })
+      .sort(function (a, b) { return (b.points - a.points) || a.name.localeCompare(b.name); });
+  }
+
+  function npHtml(p) {
+    var minute = p.matchMinute != null ? p.matchMinute + "'" : "live";
+    var owners = p.owners.map(function (o) {
+      return '<span class="owner ' + (o.game === "FPL" ? "fpl" : "pro") + (o.bench ? " sub" : "") + '">' +
+        esc(o.team) + (o.captain ? " (C)" : "") + (o.bench ? " · bench" : "") + '</span>';
+    }).join("");
+
+    return '' +
+      '<div class="np">' +
+        faceHtml(p, "face") +
+        '<div class="np-main">' +
+          '<b>' + esc(p.name) + '</b>' +
+          '<div class="np-sub">' +
+            '<span>' + esc(p.pos) + ' · ' + esc(p.club) + '</span>' +
+            (p.opponent ? '<span>' + esc(p.opponent) + '</span>' : "") +
+            (p.score ? '<span class="sc">' + esc(p.score) + '</span>' : "") +
+            '<span class="min">' + esc(minute) + '</span>' +
+            '<span>' + (p.minutes || 0) + ' min played</span>' +
+          '</div>' +
+          '<div class="np-events">' + eventsHtml(p).join("") + '</div>' +
+          '<div class="np-owners">' + owners + '</div>' +
+        '</div>' +
+        '<div class="np-right">' +
+          '<span class="np-pts' + (p.points ? "" : " zero") + '">' + (p.points || 0) + '</span>' +
+        '</div>' +
+      '</div>';
+  }
+
+  function renderNowPlaying(s) {
+    var rows = livePlayers(s);
+    var panel = el("pitchpanel");
+    panel.className = "panel" + (rows.length ? " onpitch" : "");
+
+    if (!rows.length) {
+      var next = [];
+      ((s && s.fpl && s.fpl.matches) || []).concat((s && s.pro && s.pro.matches) || [])
+        .forEach(function (m) { if (!m.started && m.kickoff) next.push(m); });
+      next.sort(function (a, b) { return a.kickoff < b.kickoff ? -1 : 1; });
+      el("nowplaying").innerHTML = '<p class="empty">Nobody from your squads is on the pitch right now.' +
+        (next.length ? " Next kickoff " + esc(kickoff(next[0].kickoff)) + " — " +
+          esc(next[0].home) + " v " + esc(next[0].away) + "." : "") + '</p>';
+      el("npmeta").textContent = "quiet";
+      return;
+    }
+
+    el("nowplaying").innerHTML = '<div class="nowplaying">' + rows.map(npHtml).join("") + '</div>';
+    var pts = rows.reduce(function (a, p) { return a + (p.points || 0); }, 0);
+    el("npmeta").textContent = rows.length + (rows.length === 1 ? " player · " : " players · ") + pts + " pts on the field";
+  }
+
+  function tickerHtml(s) {
+    var rows = (s && s.ticker) || [];
+    if (!rows.length) {
+      return '<p class="empty">No scoring events yet. Goals, assists, cards and bonus will appear ' +
+        'here as they land, with what each one is worth to you.</p>';
+    }
+
+    var now = Date.now();
+    return rows.map(function (e) {
+      var fresh = !e.backfilled && (now - new Date(e.ts).getTime()) < 15 * 60 * 1000;
+      var swing = e.points == null
+        ? '<span class="swing unknown">?</span>'
+        : '<span class="swing ' + (e.points > 0 ? "plus" : (e.points < 0 ? "minus" : "")) + '">' +
+          (e.points > 0 ? "+" : "") + e.points + '</span>';
+
+      var teams = (e.teams || []).map(function (t) {
+        return '<span class="owner ' + (t.game === "FPL" ? "fpl" : "pro") + (t.bench ? " sub" : "") + '">' +
+          esc(t.team) + (t.multiplier > 1 ? " ×" + t.multiplier : "") + (t.bench ? " · bench" : "") +
+          '</span>';
+      }).join("");
+
+      return '' +
+        '<div class="tk' + (fresh ? " recent" : "") + '">' +
+          '<span class="clock">' + (e.minute != null ? e.minute + "'" : "—") + '</span>' +
+          faceHtml({ photo: e.photo, name: e.player }, "mug") +
+          '<span class="what"><b>' + esc(e.player) + '</b><span>' + esc(e.label) +
+            (e.club ? " · " + esc(e.club) : "") + '</span></span>' +
+          swing +
+          '<span class="for">' + teams + '</span>' +
+        '</div>';
+    }).join("");
+  }
+
+  /* ---------- pitch view ---------- */
+
+  function tokenHtml(p) {
+    var shown = p.multiplier > 1 ? p.points * p.multiplier : p.points;
+    var band = p.captain ? '<span class="arm">C</span>' : (p.vice ? '<span class="arm">V</span>' : "");
+    var sub = p.state === "upcoming" ? (kickoff(p.kickoff) || p.opponent) : (p.opponent || "");
+    return '' +
+      '<div class="token ' + esc(p.state) + '">' +
+        '<div class="shirt">' + faceHtml(p, "") + band +
+          '<span class="badge">' + (shown || 0) + '</span>' +
+        '</div>' +
+        '<span class="nm">' + esc(p.name) + '</span>' +
+        '<span class="op">' + esc(sub) + '</span>' +
+      '</div>';
+  }
+
+  function pitchHtml(t) {
+    if (!t.squad || !t.squad.length) return '<p class="empty">No squad data yet.</p>';
+    var starters = t.squad.filter(function (p) { return !p.bench; });
+    var bench = t.squad.filter(function (p) { return p.bench; });
+    var lines = ["GK", "DEF", "MID", "FWD"].map(function (pos) {
+      var row = starters.filter(function (p) { return p.pos === pos; });
+      return row.length ? '<div class="line">' + row.map(tokenHtml).join("") + '</div>' : "";
+    }).join("");
+
+    var shape = ["DEF", "MID", "FWD"].map(function (pos) {
+      return starters.filter(function (p) { return p.pos === pos; }).length;
+    }).join("-");
+
+    return '<div class="pitch" data-shape="' + shape + '">' + lines + '</div>' +
+      (bench.length
+        ? '<div class="benchstrip"><span class="lbl">Bench</span>' + bench.map(tokenHtml).join("") + '</div>'
+        : "");
+  }
+
+  /* ---------- squad list ---------- */
+
+  function rowHtml(p) {
+    var band = p.captain ? '<span class="armband">C</span>' : (p.vice ? '<span class="armband">V</span>' : "");
+    var mins = p.state === "upcoming" ? (kickoff(p.kickoff) || "–") : (p.minutes || 0) + "'";
+    var shown = p.multiplier > 1 ? p.points * p.multiplier : p.points;
+
+    return '' +
+      '<div class="row' + (p.state === "live" ? " live" : "") + (p.bench ? " benched" : "") + '">' +
+        '<span class="pos">' + esc(p.pos) + '</span>' +
+        '<span class="who"><b>' + esc(p.name) + band + '</b><span>' + esc(p.club) +
+          (p.opponent ? " · " + esc(p.opponent) : "") + '</span></span>' +
+        '<span class="events">' + eventsHtml(p).join("") + '</span>' +
+        '<span class="mins">' + esc(mins) + '</span>' +
+        '<span class="pts' + (shown ? "" : " zero") + '">' + (shown || 0) + '</span>' +
+      '</div>';
+  }
+
+  function listHtml(t) {
+    if (!t.squad || !t.squad.length) return '<p class="empty">No squad data yet.</p>';
+    var start = t.squad.filter(function (p) { return !p.bench; });
+    var bench = t.squad.filter(function (p) { return p.bench; });
+    var html = '<div class="squad">' + start.map(rowHtml).join("");
+    if (bench.length) {
+      html += '<div class="divider">Bench · ' + (t.benchPoints || 0) + ' pt' +
+        (t.benchPoints === 1 ? "" : "s") + '</div>' + bench.map(rowHtml).join("");
+    }
+    return html + '</div>';
+  }
+
+  function squadHtml(t) {
+    if (!t) return '<p class="empty">No team selected.</p>';
+    if (t.unavailable) {
+      return '<p class="empty">Fantasy Pro League needs a signed-in session before it will hand over ' +
+        esc(t.name) + '&rsquo;s points.</p>';
+    }
+    return view === "pitch" ? pitchHtml(t) : listHtml(t);
+  }
+
+  /* ---------- fixtures ---------- */
+
+  function fxRow(m) {
+    var playing = m.started && !m.finished;
+    var clock = playing ? (m.minutes ? m.minutes + "'" : "live") : (m.finished ? "FT" : kickoff(m.kickoff));
+    var score = m.homeGoals == null ? "v" : m.homeGoals + "–" + m.awayGoals;
+    return '' +
+      '<div class="fx' + (playing ? " playing" : "") + '">' +
+        '<span class="club home">' + esc(m.home) + '</span>' +
+        '<span class="sc">' + esc(score) + '</span>' +
+        '<span class="club away">' + esc(m.away) + '</span>' +
+        '<span class="clock">' + esc(clock) + '</span>' +
+      '</div>';
+  }
+
+  function fixturesHtml(s) {
+    var out = "";
+    var pl = (s && s.fpl && s.fpl.matches) || [];
+    var jpl = (s && s.pro && s.pro.matches) || [];
+    if (pl.length) out += '<div class="fxgroup">Premier League · GW ' + (s.fpl.gw || "") + '</div>' + pl.map(fxRow).join("");
+    if (jpl.length) out += '<div class="fxgroup">Pro League · week ' + (s.pro.week || "") + '</div>' + jpl.map(fxRow).join("");
+    return out || '<p class="empty">No matches scheduled in this window.</p>';
+  }
+
+  /* ---------- render ---------- */
+
+  function render() {
+    var s = state;
+    var teams = allTeams(s);
+    if (selected >= teams.length) selected = 0;
+
+    el("teams").innerHTML = teams.map(cardHtml).join("");
+    renderNowPlaying(s);
+
+    el("tabs").innerHTML = teams.map(function (t, i) {
+      return '<button class="tab" role="tab" aria-selected="' + (i === selected) + '" data-i="' + i + '">' +
+        esc(t.name) + '</button>';
+    }).join("");
+
+    el("squadview").innerHTML = squadHtml(teams[selected]);
+    el("viewpitch").setAttribute("aria-pressed", view === "pitch");
+    el("viewlist").setAttribute("aria-pressed", view === "list");
+
+    el("ticker").innerHTML = tickerHtml(s);
+    var evs = (s && s.ticker) || [];
+    var swing = evs.reduce(function (a, e) { return a + (e.points || 0); }, 0);
+    el("tkmeta").textContent = evs.length
+      ? evs.length + " events" + (swing ? " · " + (swing > 0 ? "+" : "") + swing + " pts" : "")
+      : "watching";
+
+    el("fixtures").innerHTML = fixturesHtml(s);
+
+    var mm = ((s && s.fpl && s.fpl.matches) || []).concat((s && s.pro && s.pro.matches) || []);
+    var liveCount = mm.filter(function (m) { return m.started && !m.finished; }).length;
+    el("fxmeta").textContent = liveCount ? liveCount + " in play" : mm.length + " scheduled";
+
+    el("gwline").textContent = s && s.fpl
+      ? "GW " + s.fpl.gw + (s.fpl.average != null ? " · avg " + s.fpl.average : "") +
+        (s.pro && s.pro.week ? " · JPL week " + s.pro.week : "")
+      : "";
+
+    tick();
+  }
+
+  function tick() {
+    var s = state;
+    var box = el("status");
+    var stale = s && s.updatedAt && (Date.now() - new Date(s.updatedAt).getTime()) > 4 * 60 * 1000;
+    box.className = "status" + (s && s.live && !stale ? " is-live" : "") + (stale ? " is-stale" : "");
+    el("statustext").textContent = !s
+      ? "No data yet"
+      : (s.live && !stale ? "Live · " : "Updated ") + ago(s.updatedAt);
+    el("foot").textContent = s && s.updatedAt
+      ? "Points refresh automatically while matches are on · last reading " +
+        new Date(s.updatedAt).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })
+      : "Waiting for the first reading";
+  }
+
+  function pick(i) {
+    selected = i;
+    render();
+  }
+
+  el("tabs").addEventListener("click", function (e) {
+    var b = e.target.closest(".tab");
+    if (b) pick(Number(b.dataset.i));
+  });
+
+  el("teams").addEventListener("click", function (e) {
+    var c = e.target.closest(".card");
+    if (c) pick(Number(c.dataset.i));
+  });
+
+  el("viewpitch").addEventListener("click", function () { view = "pitch"; render(); });
+  el("viewlist").addEventListener("click", function () { view = "list"; render(); });
+
+  render();
+  setInterval(tick, 1000);
+
+  /* live updates from the refresher */
+  (async function () {
+    var db = await window.claude?.use?.("db");
+    if (!db) return;
+    db.doc("live/state").onSnapshot(function (snap) {
+      if (!snap.exists) return;
+      var next = snap.data();
+      if (!next || !next.updatedAt) return;
+      if (state && state.updatedAt && next.updatedAt < state.updatedAt) return;
+      state = next;
+      render();
+    }, function () { /* keep showing the last good reading */ });
+  })();
+</script>

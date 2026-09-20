@@ -1,0 +1,24 @@
+{
+  "fpl": [
+    {
+      "entry": 952321,
+      "label": "Cabo Merde"
+    },
+    {
+      "entry": 1676775,
+      "label": "Work Squad"
+    }
+  ],
+  "proleague": {
+    "teams": [
+      {
+        "id": 88109,
+        "label": "Unsung Heroes"
+      },
+      {
+        "id": 92278,
+        "label": "All Work"
+      }
+    ]
+  }
+}
