@@ -589,9 +589,12 @@
 
   .cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    /* four across or two by two, never a lopsided 3 + 1 */
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 16px;
   }
+
+  @media (min-width: 1180px) { .cards { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 
   .card {
     position: relative;
