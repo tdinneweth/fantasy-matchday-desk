@@ -6,3 +6,4 @@ ranks-history.json
 dashboard.html
 site/
 new-events.json
+__pycache__/

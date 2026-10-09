@@ -255,12 +255,49 @@ def fpl_team(entry, label, boot, live, fixtures, gw):
     hit = hist.get("event_transfers_cost", 0)
 
     overall_move = week_move = None
+    rows = []
     try:
         rows = get(f"{FPL}/entry/{entry}/history/", cache_seconds=300).get("current") or []
         overall_move = delta_of(rows, "overall_rank")
         week_move = delta_of(rows, "rank")
     except Exception:
         pass
+
+    # one row per gameweek played, for the season charts
+    history = [{
+        "w": r["event"],
+        "pts": r.get("points"),
+        "total": r.get("total_points"),
+        "rank": r.get("rank"),
+        "overall": r.get("overall_rank"),
+        "bench": r.get("points_on_bench"),
+    } for r in rows]
+    latest = rows[-1] if rows else {}
+
+    try:
+        moves = get(f"{FPL}/entry/{entry}/transfers/", cache_seconds=600) or []
+    except Exception:
+        moves = []
+
+    def side(element_id, cost):
+        el = elements.get(element_id) or {}
+        club = clubs.get(el.get("team")) or {}
+        return {
+            "name": el.get("web_name", "?"),
+            "pos": POS.get(el.get("element_type"), "?"),
+            "club": club.get("short_name", ""),
+            "badge": "fpl-club-%s.png" % club["code"] if club else None,
+            "photo": "fpl-%s.png" % el["code"] if el else None,
+            "price": cost / 10 if cost is not None else None,
+        }
+
+    transfers = [{
+        "w": m.get("event"),
+        "at": m.get("time"),
+        "in": side(m.get("element_in"), m.get("element_in_cost")),
+        "out": side(m.get("element_out"), m.get("element_out_cost")),
+    } for m in sorted(moves, key=lambda m: m.get("time") or "", reverse=True)]
+
     return {
         "game": "FPL",
         "id": entry,
@@ -275,8 +312,13 @@ def fpl_team(entry, label, boot, live, fixtures, gw):
         "overallMove": overall_move,
         "weekMove": week_move,
         "chip": picks.get("active_chip"),
-        "transfers": hist.get("event_transfers", 0),
+        "transfersMade": hist.get("event_transfers", 0),
         "autoSubs": len(picks.get("automatic_subs") or []),
+        # FPL counts money in tenths of a million
+        "value": (latest.get("value") or 0) / 10 or None,
+        "bank": (latest["bank"] / 10) if latest.get("bank") is not None else None,
+        "history": history,
+        "transfers": transfers,
         "squad": squad,
         "playersPlayed": sum(1 for r in squad if not r["bench"] and r["state"] == "done"),
         "playersLive": sum(1 for r in squad if not r["bench"] and r["state"] == "live"),
@@ -297,7 +339,44 @@ def fpl_block(cfg):
     clubs = {t["id"]: t["short_name"] for t in boot["teams"]}
 
     badge = {t["id"]: "fpl-club-%s.png" % t["code"] for t in boot["teams"]}
-    matches = [
+    ordered = sorted(fixtures, key=lambda f: f.get("kickoff_time") or "")
+    matches = fpl_fixture_rows(ordered, clubs, badge)
+
+    detail = fpl_match_events(boot, live)
+    for m, f in zip(matches, ordered):
+        m["events"] = detail.get(f["id"], [])
+
+    # once a gameweek is over, the next one's fixtures are what matters
+    nxt = next((e for e in events if e.get("is_next")), None)
+    upcoming = []
+    if nxt and cur.get("finished"):
+        try:
+            later = get(f"{FPL}/fixtures/?event={nxt['id']}", cache_seconds=600)
+            upcoming = fpl_fixture_rows(
+                sorted(later, key=lambda f: f.get("kickoff_time") or ""), clubs, badge)
+        except Exception:
+            upcoming = []
+
+    teams = [fpl_team(t["entry"], t.get("label", ""), boot, live, fixtures, gw) for t in cfg]
+    return {
+        "gw": gw,
+        "name": cur["name"],
+        "deadline": cur.get("deadline_time"),
+        "finished": bool(cur.get("finished")),
+        "average": cur.get("average_entry_score"),
+        "highest": cur.get("highest_score"),
+        "averages": {str(e["id"]): e.get("average_entry_score") for e in events
+                     if e.get("finished") or e.get("is_current")},
+        "next": {"gw": nxt["id"], "deadline": nxt.get("deadline_time")} if nxt else None,
+        "upcoming": upcoming,
+        "matches": matches,
+        "teams": teams,
+        "anyLive": any(m["started"] and not m["finished"] for m in matches),
+    }
+
+
+def fpl_fixture_rows(fixtures, clubs, badge):
+    return [
         {
             "home": clubs[f["team_h"]],
             "away": clubs[f["team_a"]],
@@ -310,25 +389,8 @@ def fpl_block(cfg):
             "finished": bool(f.get("finished") or f.get("finished_provisional")),
             "kickoff": f.get("kickoff_time"),
         }
-        for f in sorted(fixtures, key=lambda f: f.get("kickoff_time") or "")
+        for f in fixtures
     ]
-
-    detail = fpl_match_events(boot, live)
-    for m, f in zip(matches, sorted(fixtures, key=lambda f: f.get("kickoff_time") or "")):
-        m["events"] = detail.get(f["id"], [])
-
-    teams = [fpl_team(t["entry"], t.get("label", ""), boot, live, fixtures, gw) for t in cfg]
-    return {
-        "gw": gw,
-        "name": cur["name"],
-        "deadline": cur.get("deadline_time"),
-        "finished": bool(cur.get("finished")),
-        "average": cur.get("average_entry_score"),
-        "highest": cur.get("highest_score"),
-        "matches": matches,
-        "teams": teams,
-        "anyLive": any(m["started"] and not m["finished"] for m in matches),
-    }
 
 
 def fpl_match_events(boot, live):
@@ -553,6 +615,10 @@ def pro_team(cfg, week, headers, clubs):
         except Exception:
             week_move = None
 
+    history, transfers = pro_history(tid, week, headers, payload, clubs)
+    if history and history[-1]["w"] == week:
+        history[-1]["overall"] = team.get("rank")
+
     # the feed sometimes answers with squads and season totals but no weekStat;
     # starters plus the captain's double reproduce it exactly, so derive it
     computed = sum(s["points"] * (2 if s["captain"] else 1) for s in starters)
@@ -568,7 +634,10 @@ def pro_team(cfg, week, headers, clubs):
         "totalPoints": team.get("points"),
         "overallRank": team.get("rank"),
         "benchPoints": sum(s["points"] for s in squad if s["bench"]),
-        "transfers": team.get("transfers", 0),
+        "value": team.get("value"),
+        "bank": team.get("budget"),
+        "history": history,
+        "transfers": transfers,
         "chip": next((c for c in ("tripleCaptain", "freeHit", "wildCard")
                       if team.get(c) == week), None),
         "squad": squad,
@@ -578,6 +647,68 @@ def pro_team(cfg, week, headers, clubs):
     }
 
 
+def pro_history(tid, week, headers, current, clubs):
+    """Points and week rank per round, plus every transfer made.
+
+    There is no history endpoint, so each played week is read on its own. Past
+    weeks never change once confirmed, so they are cached for a day. Overall rank
+    per week only exists from the record this script keeps (ranks-history.json).
+    """
+    book = {}
+    if os.path.exists(RANKS):
+        try:
+            book = json.load(open(RANKS)).get(str(tid), {})
+        except ValueError:
+            book = {}
+
+    try:
+        directory = {p["id"]: p for p in get(f"{PRO}/players?{PRO_Q}", cache_seconds=86400)["players"]}
+    except Exception:
+        directory = {}
+
+    def side(pid, price):
+        p = directory.get(pid) or {}
+        portrait = p.get("portraitUrl") or ""
+        real = portrait and "dummy" not in portrait
+        return {
+            "name": p.get("short") or p.get("name") or "?",
+            "pos": {1: "GK", 2: "DEF", 3: "MID", 4: "FWD"}.get(p.get("positionId"), "?"),
+            "club": clubs.get(p.get("clubId"), ""),
+            "badge": "pro-club-%s.png" % p["clubId"] if p.get("clubId") else None,
+            "photo": ("pro-%s.png" % pid) if real else None,
+            "photoSource": portrait if real else None,
+            "price": price,
+        }
+
+    history, moves, total = [], {}, 0
+    for w in range(1, week + 1):
+        if w == week:
+            payload = current
+        else:
+            try:
+                payload = get(f"{PRO}/team/{tid}/points/{w}?{PRO_Q}", headers=headers,
+                              cache_seconds=86400)
+            except Exception:
+                continue
+        if not isinstance(payload, dict) or not payload.get("team"):
+            continue
+        stat = next((s for s in payload.get("weekStat") or [] if s.get("weekId") == w), None)
+        if stat:
+            total += stat.get("points") or 0
+            history.append({"w": w, "pts": stat.get("points"), "total": total,
+                            "rank": stat.get("rank"), "overall": book.get(str(w))})
+        for m in payload.get("transfers") or []:
+            moves[m.get("id")] = m
+
+    transfers = [{
+        "w": m.get("weekId"),
+        "at": m.get("datetime"),
+        "in": side(m.get("inId"), m.get("inValue")),
+        "out": side(m.get("outId"), m.get("outValue")),
+    } for m in sorted(moves.values(), key=lambda m: m.get("datetime") or "", reverse=True)]
+    return history, transfers
+
+
 def pro_block(cfg):
     teams_cfg = (cfg or {}).get("teams") or []
     if not teams_cfg:
@@ -585,15 +716,37 @@ def pro_block(cfg):
 
     info = get(f"{PRO}/matches/deadline-info?{PRO_Q}", cache_seconds=300)
     week = info["deadlineInfo"]["displayWeek"]
-    out = {"week": week, "deadline": info["deadlineInfo"].get("deadlineDate"),
-           "teams": [], "matches": []}
+    deadline = info["deadlineInfo"].get("deadlineDate")
+    out = {"week": week, "deadline": deadline, "teams": [], "matches": []}
+    if deadline and deadline > datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S"):
+        out["next"] = {"week": week, "deadline": deadline}
+
+    token = (cfg or {}).get("token") or pro_token()
+    headers = {"Authorization": f"Bearer {token}"} if token else {}
+
+    # Between rounds the feed answers the coming week with "No points available"
+    # until its deadline passes, which left both cards blank for days. Score the
+    # last round that has points instead; the fixtures still look ahead to the next.
+    points_week = week
+    if token and week > 1:
+        try:
+            probe = get(f"{PRO}/team/{teams_cfg[0]['id']}/points/{week}?{PRO_Q}", headers=headers)
+            if not (isinstance(probe, dict) and probe.get("team")):
+                points_week = week - 1
+        except Exception:
+            pass   # a network hiccup is not "no points"; never step back mid-round on one
+    if points_week != week:
+        out["week"] = points_week
+        try:
+            out["upcoming"] = pro_matches(week)
+        except Exception:
+            out["upcoming"] = []
 
     try:
-        out["matches"] = pro_matches(week)
+        out["matches"] = pro_matches(points_week)
     except Exception as exc:
         out["matchError"] = str(exc)
 
-    token = (cfg or {}).get("token") or pro_token()
     if not token:
         out["error"] = "no session token"
         out["teams"] = [
@@ -603,12 +756,12 @@ def pro_block(cfg):
         ]
         return out
 
-    headers = {"Authorization": f"Bearer {token}"}
     try:
         clubs = {c["id"]: c["short"] for c in get(f"{PRO}/clubs?{PRO_Q}", cache_seconds=3600)["clubs"]}
     except Exception:
         clubs = {}
 
+    week = points_week
     try:
         scorers = pro_scorers(week, headers)
     except Exception as exc:

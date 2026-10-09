@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Inline the newest reading and the player portraits into dashboard.html.
+"""Inline the newest reading (and, for the artifact, the player portraits) into the page.
 
-Both go inline on purpose. The reading, so the page is never blank on open;
-the portraits, because the artifact runtime does not serve published files at
-their own paths and its CSP drops inline onerror handlers, so a src-and-fallback
-approach silently renders nothing.
+The reading goes inline so the page is never blank on open. Portraits go inline
+only in the artifact build: its runtime does not serve published files at their
+own paths and its CSP blocks remote images. The --standalone build for GitHub
+Pages has no such CSP, so it loads them from the games' image hosts instead.
 """
 import argparse
 import base64
@@ -33,8 +33,14 @@ if os.path.isdir(photo_dir):
             photos[name] = "data:image/png;base64," + base64.b64encode(fh.read()).decode()
 
 out = tpl.replace("/*__SNAPSHOT__*/ null", json.dumps(state, separators=(",", ":")))
+if args.standalone:
+    # A hosted page has no CSP in the way, so it loads portraits and crests from
+    # the games' own image hosts. That keeps it ~1 MB lighter, and a player
+    # transferred in mid-season gets a face without anyone re-running photos.py.
+    photos = {}
 badges = {k: v for k, v in photos.items() if "-club-" in k}
 faces = {k: v for k, v in photos.items() if "-club-" not in k}
+out = out.replace("/*__REMOTE__*/ false", "true" if args.standalone else "false")
 out = out.replace("/*__PHOTOS__*/ {}", json.dumps(faces, separators=(",", ":")))
 out = out.replace("/*__BADGES__*/ {}", json.dumps(badges, separators=(",", ":")))
 out = out.replace('/*__DATA_URL__*/ ""', json.dumps(args.data_url))
@@ -44,7 +50,7 @@ if args.standalone:
     # viewport meta. Nothing does that on GitHub Pages, and without the viewport
     # mobile Safari lays the page out at 980px and shrinks it to fit, so none of
     # the responsive breakpoints ever fire.
-    head, marker, body = out.partition('<div class="wrap">')
+    head, marker, body = out.partition('<div class="app" id="app">')
     out = (
         '<!doctype html>\n<html lang="en">\n<head>\n'
         '<meta charset="utf-8">\n'
@@ -58,7 +64,7 @@ if args.standalone:
         '<meta name="apple-mobile-web-app-title" content="Matchday">\n'
         '<meta name="apple-mobile-web-app-capable" content="yes">\n'
         '<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">\n'
-        '<meta name="theme-color" content="#111621">\n'
+        '<meta name="theme-color" content="#0a0a0b">\n'
         '<style>img{max-width:100%}[hidden]{display:none!important}</style>\n'
         + head
         + '</head>\n<body>\n'
