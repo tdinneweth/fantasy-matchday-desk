@@ -1,0 +1,4684 @@
+{
+ "updatedAt": "2026-10-10T20:41:19+00:00",
+ "fpl": {
+  "gw": 6,
+  "name": "Gameweek 6",
+  "deadline": "2026-10-10T10:00:00Z",
+  "finished": false,
+  "average": 37,
+  "highest": 114,
+  "averages": {
+   "1": 50,
+   "2": 81,
+   "3": 51,
+   "4": 69,
+   "5": 48,
+   "6": 37
+  },
+  "next": {
+   "gw": 7,
+   "deadline": "2026-10-17T10:00:00Z"
+  },
+  "upcoming": [],
+  "matches": [
+   {
+    "home": "ARS",
+    "away": "LEE",
+    "homeBadge": "fpl-club-3.png",
+    "awayBadge": "fpl-club-2.png",
+    "homeGoals": 2,
+    "awayGoals": 1,
+    "minutes": 90,
+    "started": true,
+    "finished": true,
+    "kickoff": "2026-10-10T11:30:00Z",
+    "events": [
+     {
+      "kind": "goal",
+      "player": "Bruno G.",
+      "club": "ARS",
+      "count": 1
+     },
+     {
+      "kind": "goal",
+      "player": "Calafiori",
+      "club": "ARS",
+      "count": 1
+     },
+     {
+      "kind": "goal",
+      "player": "Justin",
+      "club": "LEE",
+      "count": 1
+     },
+     {
+      "kind": "assist",
+      "player": "Gudmundsson",
+      "club": "LEE",
+      "count": 1
+     },
+     {
+      "kind": "assist",
+      "player": "Rice",
+      "club": "ARS",
+      "count": 1
+     },
+     {
+      "kind": "assist",
+      "player": "White",
+      "club": "ARS",
+      "count": 1
+     },
+     {
+      "kind": "yellow card",
+      "player": "Ampadu",
+      "club": "LEE",
+      "count": 1
+     },
+     {
+      "kind": "yellow card",
+      "player": "Justin",
+      "club": "LEE",
+      "count": 1
+     },
+     {
+      "kind": "yellow card",
+      "player": "Muharemovi\u0107",
+      "club": "LEE",
+      "count": 1
+     },
+     {
+      "kind": "yellow card",
+      "player": "Tanaka",
+      "club": "LEE",
+      "count": 1
+     },
+     {
+      "kind": "yellow card",
+      "player": "\u00d8degaard",
+      "club": "ARS",
+      "count": 1
+     },
+     {
+      "kind": "bonus",
+      "player": "Bruno G.",
+      "club": "ARS",
+      "count": 3
+     },
+     {
+      "kind": "bonus",
+      "player": "Rice",
+      "club": "ARS",
+      "count": 2
+     },
+     {
+      "kind": "bonus",
+      "player": "Calafiori",
+      "club": "ARS",
+      "count": 1
+     }
+    ]
+   },
+   {
+    "home": "AVL",
+    "away": "BRE",
+    "homeBadge": "fpl-club-7.png",
+    "awayBadge": "fpl-club-94.png",
+    "homeGoals": 2,
+    "awayGoals": 2,
+    "minutes": 90,
+    "started": true,
+    "finished": true,
+    "kickoff": "2026-10-10T14:00:00Z",
+    "events": [
+     {
+      "kind": "goal",
+      "player": "Ajer",
+      "club": "BRE",
+      "count": 1
+     },
+     {
+      "kind": "goal",
+      "player": "McGinn",
+      "club": "AVL",
+      "count": 1
+     },
+     {
+      "kind": "goal",
+      "player": "N.Jackson",
+      "club": "AVL",
+      "count": 1
+     },
+     {
+      "kind": "goal",
+      "player": "Yarmoliuk",
+      "club": "BRE",
+      "count": 1
+     },
+     {
+      "kind": "assist",
+      "player": "Anthony",
+      "club": "BRE",
+      "count": 1
+     },
+     {
+      "kind": "assist",
+      "player": "Buend\u00eda",
+      "club": "AVL",
+      "count": 1
+     },
+     {
+      "kind": "assist",
+      "player": "Manzambi",
+      "club": "AVL",
+      "count": 1
+     },
+     {
+      "kind": "assist",
+      "player": "Thiago",
+      "club": "BRE",
+      "count": 1
+     },
+     {
+      "kind": "yellow card",
+      "player": "Ajer",
+      "club": "BRE",
+      "count": 1
+     },
+     {
+      "kind": "yellow card",
+      "player": "Buend\u00eda",
+      "club": "AVL",
+      "count": 1
+     },
+     {
+      "kind": "yellow card",
+      "player": "Cash",
+      "club": "AVL",
+      "count": 1
+     },
+     {
+      "kind": "yellow card",
+      "player": "Janelt",
+      "club": "BRE",
+      "count": 1
+     },
+     {
+      "kind": "yellow card",
+      "player": "Kayode",
+      "club": "BRE",
+      "count": 1
+     },
+     {
+      "kind": "yellow card",
+      "player": "Thiago",
+      "club": "BRE",
+      "count": 1
+     },
+     {
+      "kind": "yellow card",
+      "player": "Wilson",
+      "club": "BRE",
+      "count": 1
+     },
+     {
+      "kind": "bonus",
+      "player": "McGinn",
+      "club": "AVL",
+      "count": 3
+     },
+     {
+      "kind": "bonus",
+      "player": "N.Jackson",
+      "club": "AVL",
+      "count": 3
+     },
+     {
+      "kind": "bonus",
+      "player": "Yarmoliuk",
+      "club": "BRE",
+      "count": 1
+     }
+    ]
+   },
+   {
+    "home": "CHE",
+    "away": "BOU",
+    "homeBadge": "fpl-club-8.png",
+    "awayBadge": "fpl-club-91.png",
+    "homeGoals": 5,
+    "awayGoals": 1,
+    "minutes": 90,
+    "started": true,
+    "finished": true,
+    "kickoff": "2026-10-10T14:00:00Z",
+    "events": [
+     {
+      "kind": "goal",
+      "player": "Henderson",
+      "club": "CHE",
+      "count": 2
+     },
+     {
+      "kind": "goal",
+      "player": "Jo\u00e3o Pedro",
+      "club": "CHE",
+      "count": 2
+     },
+     {
+      "kind": "goal",
+      "player": "Evanilson",
+      "club": "BOU",
+      "count": 1
+     },
+     {
+      "kind": "goal",
+      "player": "Rogers",
+      "club": "CHE",
+      "count": 1
+     },
+     {
+      "kind": "assist",
+      "player": "Palmer",
+      "club": "CHE",
+      "count": 2
+     },
+     {
+      "kind": "assist",
+      "player": "Chavarria",
+      "club": "CHE",
+      "count": 1
+     },
+     {
+      "kind": "assist",
+      "player": "Henderson",
+      "club": "CHE",
+      "count": 1
+     },
+     {
+      "kind": "assist",
+      "player": "Neto",
+      "club": "CHE",
+      "count": 1
+     },
+     {
+      "kind": "yellow card",
+      "player": "Adams",
+      "club": "BOU",
+      "count": 1
+     },
+     {
+      "kind": "yellow card",
+      "player": "Christie",
+      "club": "BOU",
+      "count": 1
+     },
+     {
+      "kind": "yellow card",
+      "player": "Tavernier",
+      "club": "BOU",
+      "count": 1
+     },
+     {
+      "kind": "yellow card",
+      "player": "Truffert",
+      "club": "BOU",
+      "count": 1
+     },
+     {
+      "kind": "bonus",
+      "player": "Henderson",
+      "club": "CHE",
+      "count": 3
+     },
+     {
+      "kind": "bonus",
+      "player": "Jo\u00e3o Pedro",
+      "club": "CHE",
+      "count": 2
+     },
+     {
+      "kind": "bonus",
+      "player": "Evanilson",
+      "club": "BOU",
+      "count": 1
+     }
+    ]
+   },
+   {
+    "home": "IPS",
+    "away": "FUL",
+    "homeBadge": "fpl-club-40.png",
+    "awayBadge": "fpl-club-54.png",
+    "homeGoals": 2,
+    "awayGoals": 1,
+    "minutes": 90,
+    "started": true,
+    "finished": true,
+    "kickoff": "2026-10-10T14:00:00Z",
+    "events": [
+     {
+      "kind": "goal",
+      "player": "O'Shea",
+      "club": "IPS",
+      "count": 1
+     },
+     {
+      "kind": "goal",
+      "player": "Ouattara",
+      "club": "IPS",
+      "count": 1
+     },
+     {
+      "kind": "goal",
+      "player": "Sessegnon",
+      "club": "FUL",
+      "count": 1
+     },
+     {
+      "kind": "assist",
+      "player": "Clarke",
+      "club": "IPS",
+      "count": 1
+     },
+     {
+      "kind": "yellow card",
+      "player": "Bassey",
+      "club": "FUL",
+      "count": 1
+     },
+     {
+      "kind": "yellow card",
+      "player": "Davis",
+      "club": "IPS",
+      "count": 1
+     },
+     {
+      "kind": "yellow card",
+      "player": "King",
+      "club": "FUL",
+      "count": 1
+     },
+     {
+      "kind": "yellow card",
+      "player": "Smith Rowe",
+      "club": "FUL",
+      "count": 1
+     },
+     {
+      "kind": "yellow card",
+      "player": "Walton",
+      "club": "IPS",
+      "count": 1
+     },
+     {
+      "kind": "yellow card",
+      "player": "\u00c1ngel",
+      "club": "FUL",
+      "count": 1
+     },
+     {
+      "kind": "bonus",
+      "player": "O'Shea",
+      "club": "IPS",
+      "count": 3
+     },
+     {
+      "kind": "bonus",
+      "player": "Ouattara",
+      "club": "IPS",
+      "count": 2
+     },
+     {
+      "kind": "bonus",
+      "player": "Iwobi",
+      "club": "FUL",
+      "count": 1
+     }
+    ]
+   },
+   {
+    "home": "SUN",
+    "away": "BHA",
+    "homeBadge": "fpl-club-56.png",
+    "awayBadge": "fpl-club-36.png",
+    "homeGoals": 0,
+    "awayGoals": 2,
+    "minutes": 90,
+    "started": true,
+    "finished": true,
+    "kickoff": "2026-10-10T14:00:00Z",
+    "events": [
+     {
+      "kind": "goal",
+      "player": "De Cuyper",
+      "club": "BHA",
+      "count": 1
+     },
+     {
+      "kind": "goal",
+      "player": "Hadjam",
+      "club": "BHA",
+      "count": 1
+     },
+     {
+      "kind": "assist",
+      "player": "Georginio",
+      "club": "BHA",
+      "count": 1
+     },
+     {
+      "kind": "assist",
+      "player": "Gro\u00df",
+      "club": "BHA",
+      "count": 1
+     },
+     {
+      "kind": "red card",
+      "player": "Struijk",
+      "club": "BHA",
+      "count": 1
+     },
+     {
+      "kind": "yellow card",
+      "player": "Boscagli",
+      "club": "BHA",
+      "count": 1
+     },
+     {
+      "kind": "bonus",
+      "player": "De Cuyper",
+      "club": "BHA",
+      "count": 3
+     },
+     {
+      "kind": "bonus",
+      "player": "Verbruggen",
+      "club": "BHA",
+      "count": 2
+     },
+     {
+      "kind": "bonus",
+      "player": "F.Kad\u0131o\u011flu",
+      "club": "BHA",
+      "count": 1
+     },
+     {
+      "kind": "bonus",
+      "player": "Sadiki",
+      "club": "SUN",
+      "count": 1
+     }
+    ]
+   },
+   {
+    "home": "MUN",
+    "away": "TOT",
+    "homeBadge": "fpl-club-1.png",
+    "awayBadge": "fpl-club-6.png",
+    "homeGoals": 1,
+    "awayGoals": 1,
+    "minutes": 90,
+    "started": true,
+    "finished": true,
+    "kickoff": "2026-10-10T16:30:00Z",
+    "events": [
+     {
+      "kind": "goal",
+      "player": "Mbeumo",
+      "club": "MUN",
+      "count": 1
+     },
+     {
+      "kind": "goal",
+      "player": "Solanke",
+      "club": "TOT",
+      "count": 1
+     },
+     {
+      "kind": "assist",
+      "player": "Cunha",
+      "club": "MUN",
+      "count": 1
+     },
+     {
+      "kind": "assist",
+      "player": "Tonali",
+      "club": "TOT",
+      "count": 1
+     },
+     {
+      "kind": "red card",
+      "player": "Bentancur",
+      "club": "TOT",
+      "count": 1
+     },
+     {
+      "kind": "yellow card",
+      "player": "B.Fernandes",
+      "club": "MUN",
+      "count": 1
+     },
+     {
+      "kind": "yellow card",
+      "player": "Dalot",
+      "club": "MUN",
+      "count": 1
+     },
+     {
+      "kind": "yellow card",
+      "player": "Gallagher",
+      "club": "TOT",
+      "count": 1
+     },
+     {
+      "kind": "yellow card",
+      "player": "Gray",
+      "club": "TOT",
+      "count": 1
+     },
+     {
+      "kind": "yellow card",
+      "player": "Martinez",
+      "club": "MUN",
+      "count": 1
+     },
+     {
+      "kind": "yellow card",
+      "player": "Shaw",
+      "club": "MUN",
+      "count": 1
+     },
+     {
+      "kind": "yellow card",
+      "player": "Van Hecke",
+      "club": "TOT",
+      "count": 1
+     },
+     {
+      "kind": "bonus",
+      "player": "Cunha",
+      "club": "MUN",
+      "count": 3
+     },
+     {
+      "kind": "bonus",
+      "player": "Tonali",
+      "club": "TOT",
+      "count": 2
+     },
+     {
+      "kind": "bonus",
+      "player": "Mbeumo",
+      "club": "MUN",
+      "count": 1
+     },
+     {
+      "kind": "bonus",
+      "player": "Solanke",
+      "club": "TOT",
+      "count": 1
+     }
+    ]
+   },
+   {
+    "home": "CRY",
+    "away": "NFO",
+    "homeBadge": "fpl-club-31.png",
+    "awayBadge": "fpl-club-17.png",
+    "homeGoals": null,
+    "awayGoals": null,
+    "minutes": 0,
+    "started": false,
+    "finished": false,
+    "kickoff": "2026-10-11T13:00:00Z",
+    "events": []
+   },
+   {
+    "home": "HUL",
+    "away": "EVE",
+    "homeBadge": "fpl-club-88.png",
+    "awayBadge": "fpl-club-11.png",
+    "homeGoals": null,
+    "awayGoals": null,
+    "minutes": 0,
+    "started": false,
+    "finished": false,
+    "kickoff": "2026-10-11T13:00:00Z",
+    "events": []
+   },
+   {
+    "home": "LIV",
+    "away": "MCI",
+    "homeBadge": "fpl-club-14.png",
+    "awayBadge": "fpl-club-43.png",
+    "homeGoals": null,
+    "awayGoals": null,
+    "minutes": 0,
+    "started": false,
+    "finished": false,
+    "kickoff": "2026-10-11T15:30:00Z",
+    "events": []
+   },
+   {
+    "home": "COV",
+    "away": "NEW",
+    "homeBadge": "fpl-club-9.png",
+    "awayBadge": "fpl-club-4.png",
+    "homeGoals": null,
+    "awayGoals": null,
+    "minutes": 0,
+    "started": false,
+    "finished": false,
+    "kickoff": "2026-10-12T19:00:00Z",
+    "events": []
+   }
+  ],
+  "teams": [
+   {
+    "game": "FPL",
+    "id": 952321,
+    "name": "Cabo Merde",
+    "manager": "Tom Dinneweth",
+    "gwPoints": 42,
+    "hit": 0,
+    "benchPoints": 4,
+    "totalPoints": 362,
+    "overallRank": 2771288,
+    "gwRank": 4215102,
+    "overallMove": {
+     "from": 2682011,
+     "to": 2771288,
+     "delta": -89277,
+     "basis": "GW5"
+    },
+    "weekMove": {
+     "from": 7519011,
+     "to": 4215102,
+     "delta": 3303909,
+     "basis": "GW5"
+    },
+    "chip": null,
+    "transfersMade": 1,
+    "autoSubs": 0,
+    "value": 100.3,
+    "bank": 0.4,
+    "history": [
+     {
+      "w": 1,
+      "pts": 45,
+      "total": 45,
+      "rank": 5859118,
+      "overall": 5859109,
+      "bench": 5
+     },
+     {
+      "w": 2,
+      "pts": 87,
+      "total": 132,
+      "rank": 3559888,
+      "overall": 4321804,
+      "bench": 14
+     },
+     {
+      "w": 3,
+      "pts": 57,
+      "total": 189,
+      "rank": 3062890,
+      "overall": 3652481,
+      "bench": 7
+     },
+     {
+      "w": 4,
+      "pts": 89,
+      "total": 278,
+      "rank": 1045998,
+      "overall": 2118566,
+      "bench": 8
+     },
+     {
+      "w": 5,
+      "pts": 42,
+      "total": 320,
+      "rank": 7519011,
+      "overall": 2682011,
+      "bench": 9
+     },
+     {
+      "w": 6,
+      "pts": 42,
+      "total": 362,
+      "rank": 4215102,
+      "overall": 2771288,
+      "bench": 4
+     }
+    ],
+    "transfers": [
+     {
+      "w": 6,
+      "at": "2026-10-09T22:22:00.757838Z",
+      "in": {
+       "name": "Castagne",
+       "pos": "DEF",
+       "club": "FUL",
+       "badge": "fpl-club-54.png",
+       "photo": "fpl-166477.png",
+       "price": 4.5
+      },
+      "out": {
+       "name": "Ballard",
+       "pos": "DEF",
+       "club": "SUN",
+       "badge": "fpl-club-56.png",
+       "photo": "fpl-223827.png",
+       "price": 4.9
+      }
+     },
+     {
+      "w": 5,
+      "at": "2026-09-18T12:31:40.120715Z",
+      "in": {
+       "name": "Tavernier",
+       "pos": "MID",
+       "club": "BOU",
+       "badge": "fpl-club-91.png",
+       "photo": "fpl-201658.png",
+       "price": 6.1
+      },
+      "out": {
+       "name": "Elanga",
+       "pos": "MID",
+       "club": "NEW",
+       "badge": "fpl-club-4.png",
+       "photo": "fpl-449434.png",
+       "price": 6.1
+      }
+     },
+     {
+      "w": 4,
+      "at": "2026-09-11T09:24:01.421237Z",
+      "in": {
+       "name": "Rogers",
+       "pos": "MID",
+       "club": "CHE",
+       "badge": "fpl-club-8.png",
+       "photo": "fpl-244850.png",
+       "price": 7.6
+      },
+      "out": {
+       "name": "Tzolis",
+       "pos": "MID",
+       "club": "ARS",
+       "badge": "fpl-club-3.png",
+       "photo": "fpl-439509.png",
+       "price": 6.4
+      }
+     },
+     {
+      "w": 4,
+      "at": "2026-09-11T09:24:01.420707Z",
+      "in": {
+       "name": "Elanga",
+       "pos": "MID",
+       "club": "NEW",
+       "badge": "fpl-club-4.png",
+       "photo": "fpl-449434.png",
+       "price": 6.1
+      },
+      "out": {
+       "name": "E.Le F\u00e9e",
+       "pos": "MID",
+       "club": "SUN",
+       "badge": "fpl-club-56.png",
+       "photo": "fpl-484420.png",
+       "price": 5.9
+      }
+     },
+     {
+      "w": 4,
+      "at": "2026-09-11T09:24:01.410813Z",
+      "in": {
+       "name": "Mitchell",
+       "pos": "DEF",
+       "club": "CRY",
+       "badge": "fpl-club-31.png",
+       "photo": "fpl-244723.png",
+       "price": 4.5
+      },
+      "out": {
+       "name": "Palestra",
+       "pos": "DEF",
+       "club": "CHE",
+       "badge": "fpl-club-8.png",
+       "photo": "fpl-620109.png",
+       "price": 5.4
+      }
+     }
+    ],
+    "squad": [
+     {
+      "id": 1,
+      "credit": {
+       "minutes": 2,
+       "saves": 1
+      },
+      "drivers": [
+       {
+        "label": "minutes",
+        "points": 2
+       },
+       {
+        "label": "saves",
+        "points": 1
+       }
+      ],
+      "name": "Raya",
+      "photo": "fpl-154561.png",
+      "score": "2-1",
+      "matchMinute": 90,
+      "pos": "GK",
+      "club": "ARS",
+      "opponent": "LEE (H)",
+      "points": 3,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": false,
+      "bench": false,
+      "minutes": 90,
+      "state": "done",
+      "kickoff": "2026-10-10T11:30:00Z",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 18
+     },
+     {
+      "id": 204,
+      "credit": {
+       "minutes": 0
+      },
+      "drivers": [],
+      "name": "Mitchell",
+      "photo": "fpl-244723.png",
+      "score": null,
+      "matchMinute": null,
+      "pos": "DEF",
+      "club": "CRY",
+      "opponent": "NFO (H)",
+      "points": 0,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": false,
+      "bench": false,
+      "minutes": 0,
+      "state": "upcoming",
+      "kickoff": "2026-10-11T13:00:00Z",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 0
+     },
+     {
+      "id": 4,
+      "credit": {
+       "minutes": 2
+      },
+      "drivers": [
+       {
+        "label": "minutes",
+        "points": 2
+       }
+      ],
+      "name": "Gabriel",
+      "photo": "fpl-226597.png",
+      "score": "2-1",
+      "matchMinute": 90,
+      "pos": "DEF",
+      "club": "ARS",
+      "opponent": "LEE (H)",
+      "points": 2,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": false,
+      "bench": false,
+      "minutes": 90,
+      "state": "done",
+      "kickoff": "2026-10-10T11:30:00Z",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 7
+     },
+     {
+      "id": 334,
+      "credit": {
+       "minutes": 2,
+       "goals_conceded": -1,
+       "yellow_cards": -1,
+       "defensive_contribution": 2
+      },
+      "drivers": [
+       {
+        "label": "minutes",
+        "points": 2
+       },
+       {
+        "label": "defensive work",
+        "points": 2
+       },
+       {
+        "label": "conceded",
+        "points": -1
+       },
+       {
+        "label": "yellow card",
+        "points": -1
+       }
+      ],
+      "name": "Muharemovi\u0107",
+      "photo": "fpl-522047.png",
+      "score": "2-1",
+      "matchMinute": 90,
+      "pos": "DEF",
+      "club": "LEE",
+      "opponent": "ARS (A)",
+      "points": 2,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": false,
+      "bench": false,
+      "minutes": 90,
+      "state": "done",
+      "kickoff": "2026-10-10T11:30:00Z",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 1,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 4
+     },
+     {
+      "id": 427,
+      "credit": {
+       "minutes": 2,
+       "goals_scored": 5,
+       "bonus": 1
+      },
+      "drivers": [
+       {
+        "label": "goals",
+        "points": 5
+       },
+       {
+        "label": "minutes",
+        "points": 2
+       },
+       {
+        "label": "bonus",
+        "points": 1
+       }
+      ],
+      "name": "Mbeumo",
+      "photo": "fpl-446008.png",
+      "score": "1-1",
+      "matchMinute": 90,
+      "pos": "MID",
+      "club": "MUN",
+      "opponent": "TOT (H)",
+      "points": 8,
+      "bonus": 1,
+      "multiplier": 1,
+      "captain": false,
+      "vice": false,
+      "bench": false,
+      "minutes": 90,
+      "state": "done",
+      "kickoff": "2026-10-10T16:30:00Z",
+      "goals": 1,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 28
+     },
+     {
+      "id": 426,
+      "credit": {
+       "minutes": 2,
+       "yellow_cards": -1
+      },
+      "drivers": [
+       {
+        "label": "minutes",
+        "points": 2
+       },
+       {
+        "label": "yellow card",
+        "points": -1
+       }
+      ],
+      "name": "B.Fernandes",
+      "photo": "fpl-141746.png",
+      "score": "1-1",
+      "matchMinute": 90,
+      "pos": "MID",
+      "club": "MUN",
+      "opponent": "TOT (H)",
+      "points": 1,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": true,
+      "bench": false,
+      "minutes": 90,
+      "state": "done",
+      "kickoff": "2026-10-10T16:30:00Z",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 1,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 10
+     },
+     {
+      "id": 40,
+      "credit": {
+       "minutes": 2,
+       "goals_scored": 5,
+       "defensive_contribution": 2
+      },
+      "drivers": [
+       {
+        "label": "goals",
+        "points": 5
+       },
+       {
+        "label": "minutes",
+        "points": 2
+       },
+       {
+        "label": "defensive work",
+        "points": 2
+       }
+      ],
+      "name": "Rogers",
+      "photo": "fpl-244850.png",
+      "score": "5-1",
+      "matchMinute": 90,
+      "pos": "MID",
+      "club": "CHE",
+      "opponent": "BOU (H)",
+      "points": 9,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": false,
+      "bench": false,
+      "minutes": 83,
+      "state": "done",
+      "kickoff": "2026-10-10T14:00:00Z",
+      "goals": 1,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 39
+     },
+     {
+      "id": 94,
+      "credit": {
+       "minutes": 1
+      },
+      "drivers": [
+       {
+        "label": "minutes",
+        "points": 1
+       }
+      ],
+      "name": "Schade",
+      "photo": "fpl-513418.png",
+      "score": "2-2",
+      "matchMinute": 90,
+      "pos": "MID",
+      "club": "BRE",
+      "opponent": "AVL (A)",
+      "points": 1,
+      "bonus": 0,
+      "multiplier": 2,
+      "captain": true,
+      "vice": false,
+      "bench": false,
+      "minutes": 51,
+      "state": "done",
+      "kickoff": "2026-10-10T14:00:00Z",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 4
+     },
+     {
+      "id": 68,
+      "credit": {
+       "minutes": 2,
+       "yellow_cards": -1
+      },
+      "drivers": [
+       {
+        "label": "minutes",
+        "points": 2
+       },
+       {
+        "label": "yellow card",
+        "points": -1
+       }
+      ],
+      "name": "Tavernier",
+      "photo": "fpl-201658.png",
+      "score": "5-1",
+      "matchMinute": 90,
+      "pos": "MID",
+      "club": "BOU",
+      "opponent": "CHE (A)",
+      "points": 1,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": false,
+      "bench": false,
+      "minutes": 72,
+      "state": "done",
+      "kickoff": "2026-10-10T14:00:00Z",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 1,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 5
+     },
+     {
+      "id": 165,
+      "credit": {
+       "minutes": 2,
+       "goals_scored": 8,
+       "bonus": 2
+      },
+      "drivers": [
+       {
+        "label": "goals",
+        "points": 8
+       },
+       {
+        "label": "minutes",
+        "points": 2
+       },
+       {
+        "label": "bonus",
+        "points": 2
+       }
+      ],
+      "name": "Jo\u00e3o Pedro",
+      "photo": "fpl-475168.png",
+      "score": "5-1",
+      "matchMinute": 90,
+      "pos": "FWD",
+      "club": "CHE",
+      "opponent": "BOU (H)",
+      "points": 12,
+      "bonus": 2,
+      "multiplier": 1,
+      "captain": false,
+      "vice": false,
+      "bench": false,
+      "minutes": 71,
+      "state": "done",
+      "kickoff": "2026-10-10T14:00:00Z",
+      "goals": 2,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 61
+     },
+     {
+      "id": 346,
+      "credit": {
+       "minutes": 2
+      },
+      "drivers": [
+       {
+        "label": "minutes",
+        "points": 2
+       }
+      ],
+      "name": "Calvert-Lewin",
+      "photo": "fpl-177815.png",
+      "score": "2-1",
+      "matchMinute": 90,
+      "pos": "FWD",
+      "club": "LEE",
+      "opponent": "ARS (A)",
+      "points": 2,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": false,
+      "bench": false,
+      "minutes": 90,
+      "state": "done",
+      "kickoff": "2026-10-10T11:30:00Z",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 7
+     },
+     {
+      "id": 564,
+      "credit": {
+       "minutes": 0
+      },
+      "drivers": [],
+      "name": "Scherpen",
+      "photo": "fpl-240514.png",
+      "score": "2-1",
+      "matchMinute": 90,
+      "pos": "GK",
+      "club": "IPS",
+      "opponent": "FUL (H)",
+      "points": 0,
+      "bonus": 0,
+      "multiplier": 0,
+      "captain": false,
+      "vice": false,
+      "bench": true,
+      "minutes": 0,
+      "state": "done",
+      "kickoff": "2026-10-10T14:00:00Z",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 0
+     },
+     {
+      "id": 258,
+      "credit": {
+       "minutes": 0
+      },
+      "drivers": [],
+      "name": "Castagne",
+      "photo": "fpl-166477.png",
+      "score": "2-1",
+      "matchMinute": 90,
+      "pos": "DEF",
+      "club": "FUL",
+      "opponent": "IPS (A)",
+      "points": 0,
+      "bonus": 0,
+      "multiplier": 0,
+      "captain": false,
+      "vice": false,
+      "bench": true,
+      "minutes": 0,
+      "state": "done",
+      "kickoff": "2026-10-10T14:00:00Z",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 0
+     },
+     {
+      "id": 379,
+      "credit": {
+       "minutes": 0
+      },
+      "drivers": [],
+      "name": "Isak",
+      "photo": "fpl-219168.png",
+      "score": null,
+      "matchMinute": null,
+      "pos": "FWD",
+      "club": "LIV",
+      "opponent": "MCI (H)",
+      "points": 0,
+      "bonus": 0,
+      "multiplier": 0,
+      "captain": false,
+      "vice": false,
+      "bench": true,
+      "minutes": 0,
+      "state": "upcoming",
+      "kickoff": "2026-10-11T15:30:00Z",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 0
+     },
+     {
+      "id": 31,
+      "credit": {
+       "minutes": 2,
+       "defensive_contribution": 2
+      },
+      "drivers": [
+       {
+        "label": "minutes",
+        "points": 2
+       },
+       {
+        "label": "defensive work",
+        "points": 2
+       }
+      ],
+      "name": "Konsa",
+      "photo": "fpl-199798.png",
+      "score": "2-1",
+      "matchMinute": 90,
+      "pos": "DEF",
+      "club": "ARS",
+      "opponent": "LEE (H)",
+      "points": 4,
+      "bonus": 0,
+      "multiplier": 0,
+      "captain": false,
+      "vice": false,
+      "bench": true,
+      "minutes": 90,
+      "state": "done",
+      "kickoff": "2026-10-10T11:30:00Z",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 17
+     }
+    ],
+    "playersPlayed": 10,
+    "playersLive": 0,
+    "playersLeft": 1
+   },
+   {
+    "game": "FPL",
+    "id": 1676775,
+    "name": "Work Squad",
+    "manager": "Tom Dinneweth",
+    "gwPoints": 34,
+    "hit": 0,
+    "benchPoints": 3,
+    "totalPoints": 303,
+    "overallRank": 6892592,
+    "gwRank": 6108746,
+    "overallMove": {
+     "from": 7088994,
+     "to": 6892592,
+     "delta": 196402,
+     "basis": "GW5"
+    },
+    "weekMove": {
+     "from": 7861017,
+     "to": 6108746,
+     "delta": 1752271,
+     "basis": "GW5"
+    },
+    "chip": "wildcard",
+    "transfersMade": 0,
+    "autoSubs": 0,
+    "value": 100.0,
+    "bank": 0.0,
+    "history": [
+     {
+      "w": 1,
+      "pts": 63,
+      "total": 63,
+      "rank": 1282719,
+      "overall": 1282717,
+      "bench": 8
+     },
+     {
+      "w": 2,
+      "pts": 66,
+      "total": 129,
+      "rank": 7831950,
+      "overall": 4821999,
+      "bench": 0
+     },
+     {
+      "w": 3,
+      "pts": 52,
+      "total": 181,
+      "rank": 4898915,
+      "overall": 4732666,
+      "bench": 3
+     },
+     {
+      "w": 4,
+      "pts": 47,
+      "total": 228,
+      "rank": 9956418,
+      "overall": 6683112,
+      "bench": 18
+     },
+     {
+      "w": 5,
+      "pts": 41,
+      "total": 269,
+      "rank": 7861017,
+      "overall": 7088994,
+      "bench": 16
+     },
+     {
+      "w": 6,
+      "pts": 34,
+      "total": 303,
+      "rank": 6108746,
+      "overall": 6892592,
+      "bench": 3
+     }
+    ],
+    "transfers": [
+     {
+      "w": 6,
+      "at": "2026-10-09T22:18:39.776562Z",
+      "in": {
+       "name": "Barry",
+       "pos": "FWD",
+       "club": "EVE",
+       "badge": "fpl-club-11.png",
+       "photo": "fpl-586309.png",
+       "price": 5.7
+      },
+      "out": {
+       "name": "Igor Jesus",
+       "pos": "FWD",
+       "club": "NFO",
+       "badge": "fpl-club-17.png",
+       "photo": "fpl-482973.png",
+       "price": 5.8
+      }
+     },
+     {
+      "w": 6,
+      "at": "2026-10-09T22:18:39.776452Z",
+      "in": {
+       "name": "Kostoulas",
+       "pos": "FWD",
+       "club": "BHA",
+       "badge": "fpl-club-36.png",
+       "photo": "fpl-647850.png",
+       "price": 5.6
+      },
+      "out": {
+       "name": "Walle Egeli",
+       "pos": "FWD",
+       "club": "IPS",
+       "badge": "fpl-club-40.png",
+       "photo": "fpl-557012.png",
+       "price": 4.5
+      }
+     },
+     {
+      "w": 6,
+      "at": "2026-10-09T22:18:39.776354Z",
+      "in": {
+       "name": "Manzambi",
+       "pos": "MID",
+       "club": "AVL",
+       "badge": "fpl-club-7.png",
+       "photo": "fpl-614071.png",
+       "price": 5.9
+      },
+      "out": {
+       "name": "Tzolis",
+       "pos": "MID",
+       "club": "ARS",
+       "badge": "fpl-club-3.png",
+       "photo": "fpl-439509.png",
+       "price": 6.3
+      }
+     },
+     {
+      "w": 6,
+      "at": "2026-10-09T22:18:39.776253Z",
+      "in": {
+       "name": "Tavernier",
+       "pos": "MID",
+       "club": "BOU",
+       "badge": "fpl-club-91.png",
+       "photo": "fpl-201658.png",
+       "price": 6.1
+      },
+      "out": {
+       "name": "Szoboszlai",
+       "pos": "MID",
+       "club": "LIV",
+       "badge": "fpl-club-14.png",
+       "photo": "fpl-424876.png",
+       "price": 6.9
+      }
+     },
+     {
+      "w": 6,
+      "at": "2026-10-09T22:18:39.776139Z",
+      "in": {
+       "name": "Rogers",
+       "pos": "MID",
+       "club": "CHE",
+       "badge": "fpl-club-8.png",
+       "photo": "fpl-244850.png",
+       "price": 7.8
+      },
+      "out": {
+       "name": "Palmer",
+       "pos": "MID",
+       "club": "CHE",
+       "badge": "fpl-club-8.png",
+       "photo": "fpl-244851.png",
+       "price": 9.6
+      }
+     },
+     {
+      "w": 6,
+      "at": "2026-10-09T22:18:39.776034Z",
+      "in": {
+       "name": "Saka",
+       "pos": "MID",
+       "club": "ARS",
+       "badge": "fpl-club-3.png",
+       "photo": "fpl-223340.png",
+       "price": 9.6
+      },
+      "out": {
+       "name": "\u00d8degaard",
+       "pos": "MID",
+       "club": "ARS",
+       "badge": "fpl-club-3.png",
+       "photo": "fpl-184029.png",
+       "price": 6.6
+      }
+     },
+     {
+      "w": 6,
+      "at": "2026-10-09T22:18:39.775925Z",
+      "in": {
+       "name": "Egan",
+       "pos": "DEF",
+       "club": "HUL",
+       "badge": "fpl-club-88.png",
+       "photo": "fpl-108416.png",
+       "price": 4.1
+      },
+      "out": {
+       "name": "N.Williams",
+       "pos": "DEF",
+       "club": "NFO",
+       "badge": "fpl-club-17.png",
+       "photo": "fpl-215136.png",
+       "price": 5.0
+      }
+     },
+     {
+      "w": 6,
+      "at": "2026-10-09T22:18:39.775793Z",
+      "in": {
+       "name": "Gvardiol",
+       "pos": "DEF",
+       "club": "MCI",
+       "badge": "fpl-club-43.png",
+       "photo": "fpl-477424.png",
+       "price": 5.7
+      },
+      "out": {
+       "name": "Truffert",
+       "pos": "DEF",
+       "club": "BOU",
+       "badge": "fpl-club-91.png",
+       "photo": "fpl-494521.png",
+       "price": 5.4
+      }
+     },
+     {
+      "w": 6,
+      "at": "2026-10-09T22:18:39.775665Z",
+      "in": {
+       "name": "Trafford",
+       "pos": "GK",
+       "club": "LEE",
+       "badge": "fpl-club-2.png",
+       "photo": "fpl-432720.png",
+       "price": 5.0
+      },
+      "out": {
+       "name": "Verbruggen",
+       "pos": "GK",
+       "club": "BHA",
+       "badge": "fpl-club-36.png",
+       "photo": "fpl-489639.png",
+       "price": 4.5
+      }
+     },
+     {
+      "w": 6,
+      "at": "2026-10-09T22:18:39.775499Z",
+      "in": {
+       "name": "Tzolakis",
+       "pos": "GK",
+       "club": "HUL",
+       "badge": "fpl-club-88.png",
+       "photo": "fpl-473284.png",
+       "price": 4.7
+      },
+      "out": {
+       "name": "Kelleher",
+       "pos": "GK",
+       "club": "BRE",
+       "badge": "fpl-club-94.png",
+       "photo": "fpl-200720.png",
+       "price": 5.0
+      }
+     },
+     {
+      "w": 5,
+      "at": "2026-09-18T12:35:03.644414Z",
+      "in": {
+       "name": "Gibbs-White",
+       "pos": "MID",
+       "club": "NFO",
+       "badge": "fpl-club-17.png",
+       "photo": "fpl-222531.png",
+       "price": 8.0
+      },
+      "out": {
+       "name": "Buend\u00eda",
+       "pos": "MID",
+       "club": "AVL",
+       "badge": "fpl-club-7.png",
+       "photo": "fpl-195546.png",
+       "price": 5.9
+      }
+     },
+     {
+      "w": 4,
+      "at": "2026-09-10T16:07:49.479153Z",
+      "in": {
+       "name": "Vuskovic",
+       "pos": "DEF",
+       "club": "BHA",
+       "badge": "fpl-club-36.png",
+       "photo": "fpl-610799.png",
+       "price": 5.0
+      },
+      "out": {
+       "name": "Senesi",
+       "pos": "DEF",
+       "club": "TOT",
+       "badge": "fpl-club-6.png",
+       "photo": "fpl-221466.png",
+       "price": 5.9
+      }
+     },
+     {
+      "w": 4,
+      "at": "2026-09-06T18:46:00.977862Z",
+      "in": {
+       "name": "Hall",
+       "pos": "DEF",
+       "club": "NEW",
+       "badge": "fpl-club-4.png",
+       "photo": "fpl-487838.png",
+       "price": 5.1
+      },
+      "out": {
+       "name": "Palestra",
+       "pos": "DEF",
+       "club": "CHE",
+       "badge": "fpl-club-8.png",
+       "photo": "fpl-620109.png",
+       "price": 5.4
+      }
+     },
+     {
+      "w": 2,
+      "at": "2026-08-24T08:20:13.225079Z",
+      "in": {
+       "name": "Tzolis",
+       "pos": "MID",
+       "club": "ARS",
+       "badge": "fpl-club-3.png",
+       "photo": "fpl-439509.png",
+       "price": 6.5
+      },
+      "out": {
+       "name": "Wirtz",
+       "pos": "MID",
+       "club": "LIV",
+       "badge": "fpl-club-14.png",
+       "photo": "fpl-494595.png",
+       "price": 7.5
+      }
+     }
+    ],
+    "squad": [
+     {
+      "id": 572,
+      "credit": {
+       "minutes": 0
+      },
+      "drivers": [],
+      "name": "Tzolakis",
+      "photo": "fpl-473284.png",
+      "score": null,
+      "matchMinute": null,
+      "pos": "GK",
+      "club": "HUL",
+      "opponent": "EVE (H)",
+      "points": 0,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": false,
+      "bench": false,
+      "minutes": 0,
+      "state": "upcoming",
+      "kickoff": "2026-10-11T13:00:00Z",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 0
+     },
+     {
+      "id": 8,
+      "credit": {
+       "minutes": 2,
+       "goals_scored": 6,
+       "bonus": 1
+      },
+      "drivers": [
+       {
+        "label": "goals",
+        "points": 6
+       },
+       {
+        "label": "minutes",
+        "points": 2
+       },
+       {
+        "label": "bonus",
+        "points": 1
+       }
+      ],
+      "name": "Calafiori",
+      "photo": "fpl-466075.png",
+      "score": "2-1",
+      "matchMinute": 90,
+      "pos": "DEF",
+      "club": "ARS",
+      "opponent": "LEE (H)",
+      "points": 9,
+      "bonus": 1,
+      "multiplier": 1,
+      "captain": false,
+      "vice": false,
+      "bench": false,
+      "minutes": 81,
+      "state": "done",
+      "kickoff": "2026-10-10T11:30:00Z",
+      "goals": 1,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 22
+     },
+     {
+      "id": 449,
+      "credit": {
+       "minutes": 0
+      },
+      "drivers": [],
+      "name": "Hall",
+      "photo": "fpl-487838.png",
+      "score": null,
+      "matchMinute": null,
+      "pos": "DEF",
+      "club": "NEW",
+      "opponent": "COV (A)",
+      "points": 0,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": false,
+      "bench": false,
+      "minutes": 0,
+      "state": "upcoming",
+      "kickoff": "2026-10-12T19:00:00Z",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 0
+     },
+     {
+      "id": 504,
+      "credit": {
+       "minutes": 2,
+       "clean_sheets": 4,
+       "defensive_contribution": 2
+      },
+      "drivers": [
+       {
+        "label": "clean sheet",
+        "points": 4
+       },
+       {
+        "label": "minutes",
+        "points": 2
+       },
+       {
+        "label": "defensive work",
+        "points": 2
+       }
+      ],
+      "name": "Vuskovic",
+      "photo": "fpl-610799.png",
+      "score": "0-2",
+      "matchMinute": 90,
+      "pos": "DEF",
+      "club": "BHA",
+      "opponent": "SUN (A)",
+      "points": 8,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": false,
+      "bench": false,
+      "minutes": 90,
+      "state": "done",
+      "kickoff": "2026-10-10T14:00:00Z",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": true,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 21
+     },
+     {
+      "id": 12,
+      "credit": {
+       "minutes": 2
+      },
+      "drivers": [
+       {
+        "label": "minutes",
+        "points": 2
+       }
+      ],
+      "name": "Saka",
+      "photo": "fpl-223340.png",
+      "score": "2-1",
+      "matchMinute": 90,
+      "pos": "MID",
+      "club": "ARS",
+      "opponent": "LEE (H)",
+      "points": 2,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": false,
+      "bench": false,
+      "minutes": 90,
+      "state": "done",
+      "kickoff": "2026-10-10T11:30:00Z",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 9
+     },
+     {
+      "id": 53,
+      "credit": {
+       "minutes": 2,
+       "assists": 3
+      },
+      "drivers": [
+       {
+        "label": "assists",
+        "points": 3
+       },
+       {
+        "label": "minutes",
+        "points": 2
+       }
+      ],
+      "name": "Manzambi",
+      "photo": "fpl-614071.png",
+      "score": "2-2",
+      "matchMinute": 90,
+      "pos": "MID",
+      "club": "AVL",
+      "opponent": "BRE (H)",
+      "points": 5,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": false,
+      "bench": false,
+      "minutes": 85,
+      "state": "done",
+      "kickoff": "2026-10-10T14:00:00Z",
+      "goals": 0,
+      "assists": 1,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 23
+     },
+     {
+      "id": 480,
+      "credit": {
+       "minutes": 0
+      },
+      "drivers": [],
+      "name": "Gibbs-White",
+      "photo": "fpl-222531.png",
+      "score": null,
+      "matchMinute": null,
+      "pos": "MID",
+      "club": "NFO",
+      "opponent": "CRY (A)",
+      "points": 0,
+      "bonus": 0,
+      "multiplier": 2,
+      "captain": true,
+      "vice": false,
+      "bench": false,
+      "minutes": 0,
+      "state": "upcoming",
+      "kickoff": "2026-10-11T13:00:00Z",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 0
+     },
+     {
+      "id": 40,
+      "credit": {
+       "minutes": 2,
+       "goals_scored": 5,
+       "defensive_contribution": 2
+      },
+      "drivers": [
+       {
+        "label": "goals",
+        "points": 5
+       },
+       {
+        "label": "minutes",
+        "points": 2
+       },
+       {
+        "label": "defensive work",
+        "points": 2
+       }
+      ],
+      "name": "Rogers",
+      "photo": "fpl-244850.png",
+      "score": "5-1",
+      "matchMinute": 90,
+      "pos": "MID",
+      "club": "CHE",
+      "opponent": "BOU (H)",
+      "points": 9,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": false,
+      "bench": false,
+      "minutes": 83,
+      "state": "done",
+      "kickoff": "2026-10-10T14:00:00Z",
+      "goals": 1,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 39
+     },
+     {
+      "id": 138,
+      "credit": {
+       "minutes": 1
+      },
+      "drivers": [
+       {
+        "label": "minutes",
+        "points": 1
+       }
+      ],
+      "name": "Kostoulas",
+      "photo": "fpl-647850.png",
+      "score": "0-2",
+      "matchMinute": 90,
+      "pos": "FWD",
+      "club": "BHA",
+      "opponent": "SUN (A)",
+      "points": 1,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": false,
+      "bench": false,
+      "minutes": 59,
+      "state": "done",
+      "kickoff": "2026-10-10T14:00:00Z",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 9
+     },
+     {
+      "id": 249,
+      "credit": {
+       "minutes": 0
+      },
+      "drivers": [],
+      "name": "Barry",
+      "photo": "fpl-586309.png",
+      "score": null,
+      "matchMinute": null,
+      "pos": "FWD",
+      "club": "EVE",
+      "opponent": "HUL (A)",
+      "points": 0,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": false,
+      "bench": false,
+      "minutes": 0,
+      "state": "upcoming",
+      "kickoff": "2026-10-11T13:00:00Z",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 0
+     },
+     {
+      "id": 411,
+      "credit": {
+       "minutes": 0
+      },
+      "drivers": [],
+      "name": "Haaland",
+      "photo": "fpl-223094.png",
+      "score": null,
+      "matchMinute": null,
+      "pos": "FWD",
+      "club": "MCI",
+      "opponent": "LIV (A)",
+      "points": 0,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": true,
+      "bench": false,
+      "minutes": 0,
+      "state": "upcoming",
+      "kickoff": "2026-10-11T15:30:00Z",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 0
+     },
+     {
+      "id": 385,
+      "credit": {
+       "minutes": 2,
+       "goals_conceded": -1,
+       "saves": 1
+      },
+      "drivers": [
+       {
+        "label": "minutes",
+        "points": 2
+       },
+       {
+        "label": "conceded",
+        "points": -1
+       },
+       {
+        "label": "saves",
+        "points": 1
+       }
+      ],
+      "name": "Trafford",
+      "photo": "fpl-432720.png",
+      "score": "2-1",
+      "matchMinute": 90,
+      "pos": "GK",
+      "club": "LEE",
+      "opponent": "ARS (A)",
+      "points": 2,
+      "bonus": 0,
+      "multiplier": 0,
+      "captain": false,
+      "vice": false,
+      "bench": true,
+      "minutes": 90,
+      "state": "done",
+      "kickoff": "2026-10-10T11:30:00Z",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 15
+     },
+     {
+      "id": 68,
+      "credit": {
+       "minutes": 2,
+       "yellow_cards": -1
+      },
+      "drivers": [
+       {
+        "label": "minutes",
+        "points": 2
+       },
+       {
+        "label": "yellow card",
+        "points": -1
+       }
+      ],
+      "name": "Tavernier",
+      "photo": "fpl-201658.png",
+      "score": "5-1",
+      "matchMinute": 90,
+      "pos": "MID",
+      "club": "BOU",
+      "opponent": "CHE (A)",
+      "points": 1,
+      "bonus": 0,
+      "multiplier": 0,
+      "captain": false,
+      "vice": false,
+      "bench": true,
+      "minutes": 72,
+      "state": "done",
+      "kickoff": "2026-10-10T14:00:00Z",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 1,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 5
+     },
+     {
+      "id": 391,
+      "credit": {
+       "minutes": 0
+      },
+      "drivers": [],
+      "name": "Gvardiol",
+      "photo": "fpl-477424.png",
+      "score": null,
+      "matchMinute": null,
+      "pos": "DEF",
+      "club": "MCI",
+      "opponent": "LIV (A)",
+      "points": 0,
+      "bonus": 0,
+      "multiplier": 0,
+      "captain": false,
+      "vice": false,
+      "bench": true,
+      "minutes": 0,
+      "state": "upcoming",
+      "kickoff": "2026-10-11T15:30:00Z",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 0
+     },
+     {
+      "id": 277,
+      "credit": {
+       "minutes": 0
+      },
+      "drivers": [],
+      "name": "Egan",
+      "photo": "fpl-108416.png",
+      "score": null,
+      "matchMinute": null,
+      "pos": "DEF",
+      "club": "HUL",
+      "opponent": "EVE (H)",
+      "points": 0,
+      "bonus": 0,
+      "multiplier": 0,
+      "captain": false,
+      "vice": false,
+      "bench": true,
+      "minutes": 0,
+      "state": "upcoming",
+      "kickoff": "2026-10-11T13:00:00Z",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 0
+     }
+    ],
+    "playersPlayed": 6,
+    "playersLive": 0,
+    "playersLeft": 5
+   }
+  ],
+  "anyLive": false
+ },
+ "pro": {
+  "week": 8,
+  "deadline": "2026-10-23T18:45:00.000Z",
+  "teams": [
+   {
+    "game": "PRO",
+    "id": 88109,
+    "name": "Unsung Heroes",
+    "gwPoints": 25,
+    "gwRank": 16988,
+    "weekMove": {
+     "from": 17886,
+     "to": 16988,
+     "delta": 898,
+     "basis": "week 7"
+    },
+    "overallMove": {
+     "from": 490,
+     "to": 16672,
+     "delta": -16182,
+     "basis": "week 7"
+    },
+    "totalPoints": 25,
+    "overallRank": 16672,
+    "benchPoints": 9,
+    "value": 99,
+    "bank": 1,
+    "history": [
+     {
+      "w": 1,
+      "pts": 91,
+      "total": 91,
+      "rank": 89,
+      "overall": null
+     },
+     {
+      "w": 2,
+      "pts": 63,
+      "total": 154,
+      "rank": 2454,
+      "overall": null
+     },
+     {
+      "w": 3,
+      "pts": 76,
+      "total": 230,
+      "rank": 1298,
+      "overall": null
+     },
+     {
+      "w": 4,
+      "pts": 98,
+      "total": 328,
+      "rank": 1090,
+      "overall": null
+     },
+     {
+      "w": 5,
+      "pts": 42,
+      "total": 370,
+      "rank": 15491,
+      "overall": null
+     },
+     {
+      "w": 6,
+      "pts": 57,
+      "total": 427,
+      "rank": 4854,
+      "overall": null
+     },
+     {
+      "w": 7,
+      "pts": 40,
+      "total": 467,
+      "rank": 17886,
+      "overall": 490
+     },
+     {
+      "w": 8,
+      "pts": 25,
+      "total": 492,
+      "rank": 16988,
+      "overall": 16672
+     }
+    ],
+    "transfers": [
+     {
+      "w": 7,
+      "at": "2026-09-18T12:38:54.000Z",
+      "in": {
+       "name": "Romsaas",
+       "pos": "FWD",
+       "club": "CHA",
+       "badge": "pro-club-15.png",
+       "photo": "pro-79032.png",
+       "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/79032.png",
+       "price": 6.5
+      },
+      "out": {
+       "name": "Hedl",
+       "pos": "FWD",
+       "club": "ZWA",
+       "badge": "pro-club-9.png",
+       "photo": "pro-79048.png",
+       "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/79048.png",
+       "price": 6
+      }
+     },
+     {
+      "w": 6,
+      "at": "2026-09-08T08:24:27.000Z",
+      "in": {
+       "name": "Merlen",
+       "pos": "MID",
+       "club": "STV",
+       "badge": "pro-club-1.png",
+       "photo": "pro-79150.png",
+       "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/79150.png",
+       "price": 5.5
+      },
+      "out": {
+       "name": "Ake",
+       "pos": "MID",
+       "club": "ZWA",
+       "badge": "pro-club-9.png",
+       "photo": "pro-79245.png",
+       "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/79245.png",
+       "price": 5.5
+      }
+     },
+     {
+      "w": 5,
+      "at": "2026-09-04T17:08:26.000Z",
+      "in": {
+       "name": "Hedl",
+       "pos": "FWD",
+       "club": "ZWA",
+       "badge": "pro-club-9.png",
+       "photo": "pro-79048.png",
+       "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/79048.png",
+       "price": 6
+      },
+      "out": {
+       "name": "Bazdar",
+       "pos": "FWD",
+       "club": "STV",
+       "badge": "pro-club-1.png",
+       "photo": "pro-79548.png",
+       "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/79548.png",
+       "price": 5.5
+      }
+     },
+     {
+      "w": 4,
+      "at": "2026-08-28T11:02:02.000Z",
+      "in": {
+       "name": "Bazdar",
+       "pos": "FWD",
+       "club": "STV",
+       "badge": "pro-club-1.png",
+       "photo": "pro-79548.png",
+       "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/79548.png",
+       "price": 5.5
+      },
+      "out": {
+       "name": "Sakamoto",
+       "pos": "FWD",
+       "club": "WES",
+       "badge": "pro-club-11.png",
+       "photo": "pro-78956.png",
+       "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/78956.png",
+       "price": 7
+      }
+     },
+     {
+      "w": 4,
+      "at": "2026-08-28T11:02:02.000Z",
+      "in": {
+       "name": "Florucz",
+       "pos": "MID",
+       "club": "USG",
+       "badge": "pro-club-580.png",
+       "photo": "pro-79022.png",
+       "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/79022.png",
+       "price": 8.5
+      },
+      "out": {
+       "name": "Abid",
+       "pos": "MID",
+       "club": "STA",
+       "badge": "pro-club-4.png",
+       "photo": "pro-79033.png",
+       "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/79033.png",
+       "price": 7
+      }
+     }
+    ],
+    "chip": null,
+    "squad": [
+     {
+      "id": 12072,
+      "credit": {},
+      "minuteLog": {
+       "goal": [],
+       "assist": [],
+       "yellow": [],
+       "red": [],
+       "ownGoal": [],
+       "penaltySave": [],
+       "penaltyMiss": []
+      },
+      "name": "Koffi",
+      "drivers": [],
+      "photo": "pro-12072.png",
+      "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/12072.png",
+      "pos": "GK",
+      "club": "USG",
+      "opponent": "OHL (H)",
+      "points": 0,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": false,
+      "bench": false,
+      "minutes": 0,
+      "state": "upcoming",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 0,
+      "kickoff": "2026-10-11T14:00:00.000Z",
+      "score": null
+     },
+     {
+      "id": 79231,
+      "credit": {},
+      "minuteLog": {
+       "goal": [],
+       "assist": [],
+       "yellow": [],
+       "red": [],
+       "ownGoal": [],
+       "penaltySave": [],
+       "penaltyMiss": []
+      },
+      "name": "Van Den Kerkhof",
+      "drivers": [],
+      "photo": "pro-79231.png",
+      "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/79231.png",
+      "pos": "DEF",
+      "club": "CHA",
+      "opponent": "STA (A)",
+      "points": 0,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": false,
+      "bench": false,
+      "minutes": 0,
+      "state": "upcoming",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 0,
+      "kickoff": "2026-10-11T11:30:00.000Z",
+      "score": null
+     },
+     {
+      "id": 79274,
+      "credit": {},
+      "minuteLog": {
+       "goal": [],
+       "assist": [],
+       "yellow": [],
+       "red": [],
+       "ownGoal": [],
+       "penaltySave": [],
+       "penaltyMiss": []
+      },
+      "name": "Sylla",
+      "drivers": [],
+      "photo": "pro-79274.png",
+      "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/79274.png",
+      "pos": "DEF",
+      "club": "USG",
+      "opponent": "OHL (H)",
+      "points": 0,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": false,
+      "bench": false,
+      "minutes": 0,
+      "state": "upcoming",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 0,
+      "kickoff": "2026-10-11T14:00:00.000Z",
+      "score": null
+     },
+     {
+      "id": 78954,
+      "credit": {},
+      "minuteLog": {
+       "goal": [],
+       "assist": [],
+       "yellow": [],
+       "red": [],
+       "ownGoal": [],
+       "penaltySave": [],
+       "penaltyMiss": []
+      },
+      "name": "Maamar",
+      "drivers": [
+       {
+        "label": "minutes",
+        "points": 2
+       },
+       {
+        "label": "other",
+        "points": 1
+       }
+      ],
+      "photo": "pro-78954.png",
+      "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/78954.png",
+      "pos": "DEF",
+      "club": "AND",
+      "opponent": "CER (A)",
+      "points": 3,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": false,
+      "bench": false,
+      "minutes": 90,
+      "state": "done",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 0,
+      "kickoff": "2026-10-10T14:00:00.000Z",
+      "score": "1-2"
+     },
+     {
+      "id": 79550,
+      "credit": {},
+      "minuteLog": {
+       "goal": [
+        46
+       ],
+       "assist": [],
+       "yellow": [],
+       "red": [],
+       "ownGoal": [],
+       "penaltySave": [],
+       "penaltyMiss": []
+      },
+      "name": "Virgili",
+      "drivers": [
+       {
+        "label": "goals",
+        "points": 5
+       },
+       {
+        "label": "minutes",
+        "points": 2
+       }
+      ],
+      "photo": "pro-79550.png",
+      "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/79550.png",
+      "pos": "MID",
+      "club": "CLU",
+      "opponent": "LAL (A)",
+      "points": 7,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": false,
+      "bench": false,
+      "minutes": 86,
+      "state": "done",
+      "goals": 1,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 0,
+      "kickoff": "2026-10-10T16:15:00.000Z",
+      "score": "1-4"
+     },
+     {
+      "id": 1141,
+      "credit": {},
+      "minuteLog": {
+       "goal": [],
+       "assist": [],
+       "yellow": [],
+       "red": [],
+       "ownGoal": [],
+       "penaltySave": [],
+       "penaltyMiss": []
+      },
+      "name": "Heynen",
+      "drivers": [
+       {
+        "label": "minutes",
+        "points": 2
+       },
+       {
+        "label": "clean sheet",
+        "points": 1
+       }
+      ],
+      "photo": "pro-1141.png",
+      "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/1141.png",
+      "pos": "MID",
+      "club": "GNK",
+      "opponent": "KOR (H)",
+      "points": 3,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": true,
+      "bench": false,
+      "minutes": 90,
+      "state": "done",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": true,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 0,
+      "kickoff": "2026-10-10T18:45:00.000Z",
+      "score": "3-0"
+     },
+     {
+      "id": 79473,
+      "credit": {},
+      "minuteLog": {
+       "goal": [],
+       "assist": [],
+       "yellow": [],
+       "red": [],
+       "ownGoal": [],
+       "penaltySave": [],
+       "penaltyMiss": []
+      },
+      "name": "Mofokeng",
+      "drivers": [],
+      "photo": "pro-79473.png",
+      "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/79473.png",
+      "pos": "MID",
+      "club": "USG",
+      "opponent": "OHL (H)",
+      "points": 0,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": false,
+      "bench": false,
+      "minutes": 0,
+      "state": "upcoming",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 0,
+      "kickoff": "2026-10-11T14:00:00.000Z",
+      "score": null
+     },
+     {
+      "id": 79176,
+      "credit": {},
+      "minuteLog": {
+       "goal": [],
+       "assist": [],
+       "yellow": [],
+       "red": [],
+       "ownGoal": [],
+       "penaltySave": [],
+       "penaltyMiss": []
+      },
+      "name": "Forbs",
+      "drivers": [
+       {
+        "label": "minutes",
+        "points": 1
+       },
+       {
+        "label": "other",
+        "points": 1
+       }
+      ],
+      "photo": "pro-79176.png",
+      "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/79176.png",
+      "pos": "MID",
+      "club": "CLU",
+      "opponent": "LAL (A)",
+      "points": 2,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": false,
+      "bench": false,
+      "minutes": 58,
+      "state": "done",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": true,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 0,
+      "kickoff": "2026-10-10T16:15:00.000Z",
+      "score": "1-4"
+     },
+     {
+      "id": 79028,
+      "credit": {},
+      "minuteLog": {
+       "goal": [],
+       "assist": [],
+       "yellow": [],
+       "red": [],
+       "ownGoal": [],
+       "penaltySave": [],
+       "penaltyMiss": []
+      },
+      "name": "Sebaoui",
+      "drivers": [],
+      "photo": "pro-79028.png",
+      "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/79028.png",
+      "pos": "MID",
+      "club": "STV",
+      "opponent": "KVM (A)",
+      "points": 0,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": false,
+      "bench": false,
+      "minutes": 0,
+      "state": "upcoming",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 0,
+      "kickoff": "2026-10-11T17:15:00.000Z",
+      "score": null
+     },
+     {
+      "id": 79021,
+      "credit": {},
+      "minuteLog": {
+       "goal": [
+        53
+       ],
+       "assist": [],
+       "yellow": [],
+       "red": [],
+       "ownGoal": [],
+       "penaltySave": [],
+       "penaltyMiss": []
+      },
+      "name": "Tresoldi",
+      "drivers": [
+       {
+        "label": "goals",
+        "points": 4
+       },
+       {
+        "label": "minutes",
+        "points": 2
+       },
+       {
+        "label": "other",
+        "points": -1
+       }
+      ],
+      "photo": "pro-79021.png",
+      "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/79021.png",
+      "pos": "FWD",
+      "club": "CLU",
+      "opponent": "LAL (A)",
+      "points": 5,
+      "bonus": 0,
+      "multiplier": 2,
+      "captain": true,
+      "vice": false,
+      "bench": false,
+      "minutes": 81,
+      "state": "done",
+      "goals": 1,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 0,
+      "kickoff": "2026-10-10T16:15:00.000Z",
+      "score": "1-4"
+     },
+     {
+      "id": 78885,
+      "credit": {},
+      "minuteLog": {
+       "goal": [],
+       "assist": [],
+       "yellow": [],
+       "red": [],
+       "ownGoal": [],
+       "penaltySave": [],
+       "penaltyMiss": []
+      },
+      "name": "Scheidler",
+      "drivers": [],
+      "photo": "pro-78885.png",
+      "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/78885.png",
+      "pos": "FWD",
+      "club": "CHA",
+      "opponent": "STA (A)",
+      "points": 0,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": false,
+      "bench": false,
+      "minutes": 0,
+      "state": "upcoming",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 0,
+      "kickoff": "2026-10-11T11:30:00.000Z",
+      "score": null
+     },
+     {
+      "id": 78775,
+      "credit": {},
+      "minuteLog": {
+       "goal": [],
+       "assist": [],
+       "yellow": [],
+       "red": [],
+       "ownGoal": [],
+       "penaltySave": [],
+       "penaltyMiss": []
+      },
+      "name": "Kone",
+      "drivers": [],
+      "photo": "pro-78775.png",
+      "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/78775.png",
+      "pos": "GK",
+      "club": "CHA",
+      "opponent": "STA (A)",
+      "points": 0,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": false,
+      "bench": true,
+      "minutes": 0,
+      "state": "upcoming",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 0,
+      "kickoff": "2026-10-11T11:30:00.000Z",
+      "score": null
+     },
+     {
+      "id": 79082,
+      "credit": {},
+      "minuteLog": {
+       "goal": [],
+       "assist": [],
+       "yellow": [],
+       "red": [],
+       "ownGoal": [],
+       "penaltySave": [],
+       "penaltyMiss": []
+      },
+      "name": "Cappelle",
+      "drivers": [
+       {
+        "label": "minutes",
+        "points": 2
+       },
+       {
+        "label": "conceded",
+        "points": -1
+       }
+      ],
+      "photo": "pro-79082.png",
+      "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/79082.png",
+      "pos": "DEF",
+      "club": "ZWA",
+      "opponent": "GNT (H)",
+      "points": 1,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": false,
+      "bench": true,
+      "minutes": 90,
+      "state": "done",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 0,
+      "kickoff": "2026-10-10T18:45:00.000Z",
+      "score": "0-2"
+     },
+     {
+      "id": 78903,
+      "credit": {},
+      "minuteLog": {
+       "goal": [],
+       "assist": [],
+       "yellow": [],
+       "red": [],
+       "ownGoal": [],
+       "penaltySave": [],
+       "penaltyMiss": []
+      },
+      "name": "Araujo",
+      "drivers": [
+       {
+        "label": "clean sheet",
+        "points": 4
+       },
+       {
+        "label": "minutes",
+        "points": 2
+       }
+      ],
+      "photo": "pro-78903.png",
+      "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/78903.png",
+      "pos": "DEF",
+      "club": "GNT",
+      "opponent": "ZWA (A)",
+      "points": 6,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": false,
+      "bench": true,
+      "minutes": 90,
+      "state": "done",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": true,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 0,
+      "kickoff": "2026-10-10T18:45:00.000Z",
+      "score": "0-2"
+     },
+     {
+      "id": 79519,
+      "credit": {},
+      "minuteLog": {
+       "goal": [],
+       "assist": [],
+       "yellow": [],
+       "red": [],
+       "ownGoal": [],
+       "penaltySave": [],
+       "penaltyMiss": []
+      },
+      "name": "Isah",
+      "drivers": [
+       {
+        "label": "minutes",
+        "points": 2
+       }
+      ],
+      "photo": "pro-79519.png",
+      "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/79519.png",
+      "pos": "FWD",
+      "club": "LAL",
+      "opponent": "CLU (H)",
+      "points": 2,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": false,
+      "bench": true,
+      "minutes": 82,
+      "state": "done",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 0,
+      "kickoff": "2026-10-10T16:15:00.000Z",
+      "score": "1-4"
+     }
+    ],
+    "playersPlayed": 5,
+    "playersLive": 0,
+    "playersLeft": 6
+   },
+   {
+    "game": "PRO",
+    "id": 92278,
+    "name": "All Work",
+    "gwPoints": 46,
+    "gwRank": 1764,
+    "weekMove": {
+     "from": 5345,
+     "to": 1764,
+     "delta": 3581,
+     "basis": "week 7"
+    },
+    "overallMove": {
+     "from": 1488,
+     "to": 1777,
+     "delta": -289,
+     "basis": "week 7"
+    },
+    "totalPoints": 46,
+    "overallRank": 1777,
+    "benchPoints": 12,
+    "value": 96.5,
+    "bank": 3.5,
+    "history": [
+     {
+      "w": 1,
+      "pts": 56,
+      "total": 56,
+      "rank": 5106,
+      "overall": null
+     },
+     {
+      "w": 2,
+      "pts": 68,
+      "total": 124,
+      "rank": 1322,
+      "overall": null
+     },
+     {
+      "w": 3,
+      "pts": 57,
+      "total": 181,
+      "rank": 5581,
+      "overall": null
+     },
+     {
+      "w": 4,
+      "pts": 96,
+      "total": 277,
+      "rank": 1200,
+      "overall": null
+     },
+     {
+      "w": 5,
+      "pts": 43,
+      "total": 320,
+      "rank": 15024,
+      "overall": null
+     },
+     {
+      "w": 6,
+      "pts": 54,
+      "total": 374,
+      "rank": 6387,
+      "overall": null
+     },
+     {
+      "w": 7,
+      "pts": 58,
+      "total": 432,
+      "rank": 5345,
+      "overall": 1488
+     },
+     {
+      "w": 8,
+      "pts": 46,
+      "total": 478,
+      "rank": 1764,
+      "overall": 1777
+     }
+    ],
+    "transfers": [
+     {
+      "w": 7,
+      "at": "2026-09-18T12:41:28.000Z",
+      "in": {
+       "name": "Reyners",
+       "pos": "MID",
+       "club": "LOM",
+       "badge": "pro-club-772.png",
+       "photo": "pro-78750.png",
+       "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/78750.png",
+       "price": 5.5
+      },
+      "out": {
+       "name": "Muja",
+       "pos": "MID",
+       "club": "STV",
+       "badge": "pro-club-1.png",
+       "photo": null,
+       "photoSource": null,
+       "price": 6
+      }
+     },
+     {
+      "w": 6,
+      "at": "2026-09-06T18:43:06.000Z",
+      "in": {
+       "name": "Zeneli",
+       "pos": "MID",
+       "club": "USG",
+       "badge": "pro-club-580.png",
+       "photo": "pro-79275.png",
+       "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/79275.png",
+       "price": 6.5
+      },
+      "out": {
+       "name": "Balikwisha",
+       "pos": "MID",
+       "club": "OHL",
+       "badge": "pro-club-6.png",
+       "photo": "pro-65301.png",
+       "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/65301.png",
+       "price": 7
+      }
+     },
+     {
+      "w": 5,
+      "at": "2026-09-04T17:19:38.000Z",
+      "in": {
+       "name": "Ementa",
+       "pos": "FWD",
+       "club": "ZWA",
+       "badge": "pro-club-9.png",
+       "photo": "pro-79216.png",
+       "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/79216.png",
+       "price": 6.5
+      },
+      "out": {
+       "name": "?",
+       "pos": "?",
+       "club": "",
+       "badge": null,
+       "photo": null,
+       "photoSource": null,
+       "price": 6.5
+      }
+     },
+     {
+      "w": 3,
+      "at": "2026-08-19T09:24:03.000Z",
+      "in": {
+       "name": "Somers",
+       "pos": "MID",
+       "club": "ANT",
+       "badge": "pro-club-581.png",
+       "photo": "pro-73779.png",
+       "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/73779.png",
+       "price": 8
+      },
+      "out": {
+       "name": "?",
+       "pos": "?",
+       "club": "",
+       "badge": null,
+       "photo": null,
+       "photoSource": null,
+       "price": 8.5
+      }
+     },
+     {
+      "w": 3,
+      "at": "2026-08-19T09:23:01.000Z",
+      "in": {
+       "name": "Lee",
+       "pos": "DEF",
+       "club": "CLU",
+       "badge": "pro-club-2.png",
+       "photo": "pro-79534.png",
+       "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/79534.png",
+       "price": 6.5
+      },
+      "out": {
+       "name": "?",
+       "pos": "?",
+       "club": "",
+       "badge": null,
+       "photo": null,
+       "photoSource": null,
+       "price": 5
+      }
+     },
+     {
+      "w": 2,
+      "at": "2026-08-10T09:07:10.000Z",
+      "in": {
+       "name": "Frey",
+       "pos": "FWD",
+       "club": "ANT",
+       "badge": "pro-club-581.png",
+       "photo": "pro-79530.png",
+       "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/79530.png",
+       "price": 6.5
+      },
+      "out": {
+       "name": "Cvetkovic",
+       "pos": "FWD",
+       "club": "AND",
+       "badge": "pro-club-13.png",
+       "photo": "pro-79024.png",
+       "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/79024.png",
+       "price": 8.5
+      }
+     }
+    ],
+    "chip": null,
+    "squad": [
+     {
+      "id": 404,
+      "credit": {},
+      "minuteLog": {
+       "goal": [],
+       "assist": [],
+       "yellow": [],
+       "red": [],
+       "ownGoal": [],
+       "penaltySave": [],
+       "penaltyMiss": []
+      },
+      "name": "Coosemans",
+      "drivers": [
+       {
+        "label": "minutes",
+        "points": 2
+       },
+       {
+        "label": "saves",
+        "points": 2
+       }
+      ],
+      "photo": "pro-404.png",
+      "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/404.png",
+      "pos": "GK",
+      "club": "AND",
+      "opponent": "CER (A)",
+      "points": 4,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": false,
+      "bench": false,
+      "minutes": 90,
+      "state": "done",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 0,
+      "kickoff": "2026-10-10T14:00:00.000Z",
+      "score": "1-2"
+     },
+     {
+      "id": 79231,
+      "credit": {},
+      "minuteLog": {
+       "goal": [],
+       "assist": [],
+       "yellow": [],
+       "red": [],
+       "ownGoal": [],
+       "penaltySave": [],
+       "penaltyMiss": []
+      },
+      "name": "Van Den Kerkhof",
+      "drivers": [],
+      "photo": "pro-79231.png",
+      "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/79231.png",
+      "pos": "DEF",
+      "club": "CHA",
+      "opponent": "STA (A)",
+      "points": 0,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": false,
+      "bench": false,
+      "minutes": 0,
+      "state": "upcoming",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 0,
+      "kickoff": "2026-10-11T11:30:00.000Z",
+      "score": null
+     },
+     {
+      "id": 76561,
+      "credit": {},
+      "minuteLog": {
+       "goal": [],
+       "assist": [],
+       "yellow": [],
+       "red": [],
+       "ownGoal": [],
+       "penaltySave": [],
+       "penaltyMiss": []
+      },
+      "name": "Burgess",
+      "drivers": [
+       {
+        "label": "clean sheet",
+        "points": 4
+       },
+       {
+        "label": "minutes",
+        "points": 2
+       },
+       {
+        "label": "other",
+        "points": 2
+       }
+      ],
+      "photo": "pro-76561.png",
+      "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/76561.png",
+      "pos": "DEF",
+      "club": "GNT",
+      "opponent": "ZWA (A)",
+      "points": 8,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": false,
+      "bench": false,
+      "minutes": 90,
+      "state": "done",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": true,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 0,
+      "kickoff": "2026-10-10T18:45:00.000Z",
+      "score": "0-2"
+     },
+     {
+      "id": 99,
+      "credit": {},
+      "minuteLog": {
+       "goal": [],
+       "assist": [],
+       "yellow": [],
+       "red": [],
+       "ownGoal": [],
+       "penaltySave": [],
+       "penaltyMiss": []
+      },
+      "name": "Mechele",
+      "drivers": [
+       {
+        "label": "minutes",
+        "points": 2
+       },
+       {
+        "label": "other",
+        "points": 2
+       }
+      ],
+      "photo": "pro-99.png",
+      "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/99.png",
+      "pos": "DEF",
+      "club": "CLU",
+      "opponent": "LAL (A)",
+      "points": 4,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": false,
+      "bench": false,
+      "minutes": 90,
+      "state": "done",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 0,
+      "kickoff": "2026-10-10T16:15:00.000Z",
+      "score": "1-4"
+     },
+     {
+      "id": 79275,
+      "credit": {},
+      "minuteLog": {
+       "goal": [],
+       "assist": [],
+       "yellow": [],
+       "red": [],
+       "ownGoal": [],
+       "penaltySave": [],
+       "penaltyMiss": []
+      },
+      "name": "Zeneli",
+      "drivers": [],
+      "photo": "pro-79275.png",
+      "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/79275.png",
+      "pos": "MID",
+      "club": "USG",
+      "opponent": "OHL (H)",
+      "points": 0,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": false,
+      "bench": false,
+      "minutes": 0,
+      "state": "upcoming",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 0,
+      "kickoff": "2026-10-11T14:00:00.000Z",
+      "score": null
+     },
+     {
+      "id": 79150,
+      "credit": {},
+      "minuteLog": {
+       "goal": [],
+       "assist": [],
+       "yellow": [],
+       "red": [],
+       "ownGoal": [],
+       "penaltySave": [],
+       "penaltyMiss": []
+      },
+      "name": "Merlen",
+      "drivers": [],
+      "photo": "pro-79150.png",
+      "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/79150.png",
+      "pos": "MID",
+      "club": "STV",
+      "opponent": "KVM (A)",
+      "points": 0,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": false,
+      "bench": false,
+      "minutes": 0,
+      "state": "upcoming",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 0,
+      "kickoff": "2026-10-11T17:15:00.000Z",
+      "score": null
+     },
+     {
+      "id": 79550,
+      "credit": {},
+      "minuteLog": {
+       "goal": [
+        46
+       ],
+       "assist": [],
+       "yellow": [],
+       "red": [],
+       "ownGoal": [],
+       "penaltySave": [],
+       "penaltyMiss": []
+      },
+      "name": "Virgili",
+      "drivers": [
+       {
+        "label": "goals",
+        "points": 5
+       },
+       {
+        "label": "minutes",
+        "points": 2
+       }
+      ],
+      "photo": "pro-79550.png",
+      "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/79550.png",
+      "pos": "MID",
+      "club": "CLU",
+      "opponent": "LAL (A)",
+      "points": 7,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": true,
+      "bench": false,
+      "minutes": 86,
+      "state": "done",
+      "goals": 1,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 0,
+      "kickoff": "2026-10-10T16:15:00.000Z",
+      "score": "1-4"
+     },
+     {
+      "id": 1141,
+      "credit": {},
+      "minuteLog": {
+       "goal": [],
+       "assist": [],
+       "yellow": [],
+       "red": [],
+       "ownGoal": [],
+       "penaltySave": [],
+       "penaltyMiss": []
+      },
+      "name": "Heynen",
+      "drivers": [
+       {
+        "label": "minutes",
+        "points": 2
+       },
+       {
+        "label": "clean sheet",
+        "points": 1
+       }
+      ],
+      "photo": "pro-1141.png",
+      "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/1141.png",
+      "pos": "MID",
+      "club": "GNK",
+      "opponent": "KOR (H)",
+      "points": 3,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": false,
+      "bench": false,
+      "minutes": 90,
+      "state": "done",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": true,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 0,
+      "kickoff": "2026-10-10T18:45:00.000Z",
+      "score": "3-0"
+     },
+     {
+      "id": 79273,
+      "credit": {},
+      "minuteLog": {
+       "goal": [],
+       "assist": [],
+       "yellow": [],
+       "red": [],
+       "ownGoal": [],
+       "penaltySave": [],
+       "penaltyMiss": []
+      },
+      "name": "Biondic",
+      "drivers": [],
+      "photo": "pro-79273.png",
+      "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/79273.png",
+      "pos": "FWD",
+      "club": "USG",
+      "opponent": "OHL (H)",
+      "points": 0,
+      "bonus": 0,
+      "multiplier": 2,
+      "captain": true,
+      "vice": false,
+      "bench": false,
+      "minutes": 0,
+      "state": "upcoming",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 0,
+      "kickoff": "2026-10-11T14:00:00.000Z",
+      "score": null
+     },
+     {
+      "id": 79572,
+      "credit": {},
+      "minuteLog": {
+       "goal": [
+        86
+       ],
+       "assist": [],
+       "yellow": [],
+       "red": [],
+       "ownGoal": [],
+       "penaltySave": [],
+       "penaltyMiss": []
+      },
+      "name": "Bentayeb",
+      "drivers": [
+       {
+        "label": "goals",
+        "points": 4
+       },
+       {
+        "label": "minutes",
+        "points": 2
+       },
+       {
+        "label": "other",
+        "points": 1
+       }
+      ],
+      "photo": null,
+      "photoSource": null,
+      "pos": "FWD",
+      "club": "AND",
+      "opponent": "CER (A)",
+      "points": 7,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": false,
+      "bench": false,
+      "minutes": 90,
+      "state": "done",
+      "goals": 1,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 0,
+      "kickoff": "2026-10-10T14:00:00.000Z",
+      "score": "1-2"
+     },
+     {
+      "id": 79508,
+      "credit": {},
+      "minuteLog": {
+       "goal": [
+        63
+       ],
+       "assist": [],
+       "yellow": [],
+       "red": [],
+       "ownGoal": [],
+       "penaltySave": [],
+       "penaltyMiss": []
+      },
+      "name": "Durosinmi",
+      "drivers": [
+       {
+        "label": "goals",
+        "points": 4
+       },
+       {
+        "label": "minutes",
+        "points": 2
+       }
+      ],
+      "photo": "pro-79508.png",
+      "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/79508.png",
+      "pos": "FWD",
+      "club": "GNK",
+      "opponent": "KOR (H)",
+      "points": 6,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": false,
+      "bench": false,
+      "minutes": 76,
+      "state": "done",
+      "goals": 1,
+      "assists": 0,
+      "cleanSheet": true,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 0,
+      "kickoff": "2026-10-10T18:45:00.000Z",
+      "score": "3-0"
+     },
+     {
+      "id": 374,
+      "credit": {},
+      "minuteLog": {
+       "goal": [],
+       "assist": [],
+       "yellow": [],
+       "red": [],
+       "ownGoal": [],
+       "penaltySave": [],
+       "penaltyMiss": []
+      },
+      "name": "Roef",
+      "drivers": [
+       {
+        "label": "clean sheet",
+        "points": 4
+       },
+       {
+        "label": "minutes",
+        "points": 2
+       },
+       {
+        "label": "saves",
+        "points": 1
+       },
+       {
+        "label": "other",
+        "points": 1
+       }
+      ],
+      "photo": "pro-374.png",
+      "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/374.png",
+      "pos": "GK",
+      "club": "GNT",
+      "opponent": "ZWA (A)",
+      "points": 8,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": false,
+      "bench": true,
+      "minutes": 90,
+      "state": "done",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": true,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 0,
+      "kickoff": "2026-10-10T18:45:00.000Z",
+      "score": "0-2"
+     },
+     {
+      "id": 78781,
+      "credit": {},
+      "minuteLog": {
+       "goal": [],
+       "assist": [],
+       "yellow": [],
+       "red": [],
+       "ownGoal": [],
+       "penaltySave": [],
+       "penaltyMiss": []
+      },
+      "name": "Seys",
+      "drivers": [
+       {
+        "label": "minutes",
+        "points": 2
+       },
+       {
+        "label": "other",
+        "points": 2
+       }
+      ],
+      "photo": "pro-78781.png",
+      "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/78781.png",
+      "pos": "DEF",
+      "club": "CLU",
+      "opponent": "LAL (A)",
+      "points": 4,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": false,
+      "bench": true,
+      "minutes": 90,
+      "state": "done",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 0,
+      "kickoff": "2026-10-10T16:15:00.000Z",
+      "score": "1-4"
+     },
+     {
+      "id": 79274,
+      "credit": {},
+      "minuteLog": {
+       "goal": [],
+       "assist": [],
+       "yellow": [],
+       "red": [],
+       "ownGoal": [],
+       "penaltySave": [],
+       "penaltyMiss": []
+      },
+      "name": "Sylla",
+      "drivers": [],
+      "photo": "pro-79274.png",
+      "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/79274.png",
+      "pos": "DEF",
+      "club": "USG",
+      "opponent": "OHL (H)",
+      "points": 0,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": false,
+      "bench": true,
+      "minutes": 0,
+      "state": "upcoming",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 0,
+      "kickoff": "2026-10-11T14:00:00.000Z",
+      "score": null
+     },
+     {
+      "id": 76572,
+      "credit": {},
+      "minuteLog": {
+       "goal": [],
+       "assist": [],
+       "yellow": [],
+       "red": [],
+       "ownGoal": [],
+       "penaltySave": [],
+       "penaltyMiss": []
+      },
+      "name": "Nielsen",
+      "drivers": [],
+      "photo": "pro-76572.png",
+      "photoSource": "https://fanarena.s3.eu-west-1.amazonaws.com/players/76572.png",
+      "pos": "MID",
+      "club": "STA",
+      "opponent": "CHA (H)",
+      "points": 0,
+      "bonus": 0,
+      "multiplier": 1,
+      "captain": false,
+      "vice": false,
+      "bench": true,
+      "minutes": 0,
+      "state": "upcoming",
+      "goals": 0,
+      "assists": 0,
+      "cleanSheet": false,
+      "yellow": 0,
+      "red": 0,
+      "ownGoals": 0,
+      "penaltySaves": 0,
+      "penaltyMisses": 0,
+      "bps": 0,
+      "kickoff": "2026-10-11T11:30:00.000Z",
+      "score": null
+     }
+    ],
+    "playersPlayed": 7,
+    "playersLive": 0,
+    "playersLeft": 4
+   }
+  ],
+  "matches": [
+   {
+    "id": 43964,
+    "home": "BEV",
+    "away": "LOM",
+    "homeBadge": "pro-club-14.png",
+    "awayBadge": "pro-club-772.png",
+    "homeGoals": 1,
+    "awayGoals": 3,
+    "started": true,
+    "finished": true,
+    "kickoff": "2026-10-09T18:45:00.000Z"
+   },
+   {
+    "id": 43965,
+    "home": "CER",
+    "away": "AND",
+    "homeBadge": "pro-club-768.png",
+    "awayBadge": "pro-club-13.png",
+    "homeGoals": 1,
+    "awayGoals": 2,
+    "started": true,
+    "finished": true,
+    "kickoff": "2026-10-10T14:00:00.000Z"
+   },
+   {
+    "id": 43966,
+    "home": "LAL",
+    "away": "CLU",
+    "homeBadge": "pro-club-788.png",
+    "awayBadge": "pro-club-2.png",
+    "homeGoals": 1,
+    "awayGoals": 4,
+    "started": true,
+    "finished": true,
+    "kickoff": "2026-10-10T16:15:00.000Z"
+   },
+   {
+    "id": 43961,
+    "home": "GNK",
+    "away": "KOR",
+    "homeBadge": "pro-club-5.png",
+    "awayBadge": "pro-club-3.png",
+    "homeGoals": 3,
+    "awayGoals": 0,
+    "started": true,
+    "finished": true,
+    "kickoff": "2026-10-10T18:45:00.000Z"
+   },
+   {
+    "id": 43962,
+    "home": "ZWA",
+    "away": "GNT",
+    "homeBadge": "pro-club-9.png",
+    "awayBadge": "pro-club-12.png",
+    "homeGoals": 0,
+    "awayGoals": 2,
+    "started": true,
+    "finished": true,
+    "kickoff": "2026-10-10T18:45:00.000Z"
+   },
+   {
+    "id": 43959,
+    "home": "STA",
+    "away": "CHA",
+    "homeBadge": "pro-club-4.png",
+    "awayBadge": "pro-club-15.png",
+    "homeGoals": null,
+    "awayGoals": null,
+    "started": false,
+    "finished": false,
+    "kickoff": "2026-10-11T11:30:00.000Z"
+   },
+   {
+    "id": 43963,
+    "home": "USG",
+    "away": "OHL",
+    "homeBadge": "pro-club-580.png",
+    "awayBadge": "pro-club-6.png",
+    "homeGoals": null,
+    "awayGoals": null,
+    "started": false,
+    "finished": false,
+    "kickoff": "2026-10-11T14:00:00.000Z"
+   },
+   {
+    "id": 43958,
+    "home": "WES",
+    "away": "ANT",
+    "homeBadge": "pro-club-11.png",
+    "awayBadge": "pro-club-581.png",
+    "homeGoals": null,
+    "awayGoals": null,
+    "started": false,
+    "finished": false,
+    "kickoff": "2026-10-11T16:30:00.000Z"
+   },
+   {
+    "id": 43960,
+    "home": "KVM",
+    "away": "STV",
+    "homeBadge": "pro-club-8.png",
+    "awayBadge": "pro-club-1.png",
+    "homeGoals": null,
+    "awayGoals": null,
+    "started": false,
+    "finished": false,
+    "kickoff": "2026-10-11T17:15:00.000Z"
+   }
+  ],
+  "next": {
+   "week": 8,
+   "deadline": "2026-10-23T18:45:00.000Z"
+  }
+ },
+ "ticker": [
+  {
+   "id": "PRO:79508:goal:0:",
+   "ts": "2026-10-10T20:10:03+00:00",
+   "backfilled": false,
+   "kind": "goal",
+   "label": "goal",
+   "player": "Durosinmi",
+   "club": "GNK",
+   "photo": "pro-79508.png",
+   "opponent": "KOR (H)",
+   "score": "3-0",
+   "at": "2026-10-10T19:48:00+00:00",
+   "minute": 63,
+   "points": 4,
+   "teams": [
+    {
+     "team": "All Work",
+     "game": "PRO",
+     "multiplier": 1,
+     "bench": false
+    }
+   ]
+  },
+  {
+   "id": "PRO:79021:goal:0:",
+   "ts": "2026-10-10T17:30:30+00:00",
+   "backfilled": false,
+   "kind": "goal",
+   "label": "goal",
+   "player": "Tresoldi",
+   "club": "CLU",
+   "photo": "pro-79021.png",
+   "opponent": "LAL (A)",
+   "score": "1-4",
+   "at": "2026-10-10T17:08:00+00:00",
+   "minute": 53,
+   "points": 4,
+   "teams": [
+    {
+     "team": "Unsung Heroes",
+     "game": "PRO",
+     "multiplier": 2,
+     "bench": false
+    }
+   ]
+  },
+  {
+   "id": "PRO:79550:goal:0:",
+   "ts": "2026-10-10T17:02:48+00:00",
+   "backfilled": false,
+   "kind": "goal",
+   "label": "goal",
+   "player": "Virgili",
+   "club": "CLU",
+   "photo": "pro-79550.png",
+   "opponent": "LAL (A)",
+   "score": "1-4",
+   "at": "2026-10-10T17:01:00+00:00",
+   "minute": 46,
+   "points": 5,
+   "teams": [
+    {
+     "team": "Unsung Heroes",
+     "game": "PRO",
+     "multiplier": 1,
+     "bench": false
+    },
+    {
+     "team": "All Work",
+     "game": "PRO",
+     "multiplier": 1,
+     "bench": false
+    }
+   ]
+  },
+  {
+   "id": "FPL:427:goal:0:",
+   "ts": "2026-10-10T18:03:10+00:00",
+   "backfilled": false,
+   "kind": "goal",
+   "label": "goal",
+   "player": "Mbeumo",
+   "club": "MUN",
+   "photo": "fpl-446008.png",
+   "opponent": "TOT (H)",
+   "score": "1-1",
+   "at": "2026-10-10T16:30:00+00:00",
+   "minute": null,
+   "points": 5,
+   "teams": [
+    {
+     "team": "Cabo Merde",
+     "game": "FPL",
+     "multiplier": 1,
+     "bench": false
+    }
+   ]
+  },
+  {
+   "id": "FPL:427:bonus:0:1",
+   "ts": "2026-10-10T18:28:36+00:00",
+   "backfilled": false,
+   "kind": "bonus",
+   "label": "1 bonus point",
+   "player": "Mbeumo",
+   "club": "MUN",
+   "photo": "fpl-446008.png",
+   "opponent": "TOT (H)",
+   "score": "1-1",
+   "at": "2026-10-10T16:30:00+00:00",
+   "minute": null,
+   "points": 1,
+   "teams": [
+    {
+     "team": "Cabo Merde",
+     "game": "FPL",
+     "multiplier": 1,
+     "bench": false
+    }
+   ]
+  },
+  {
+   "id": "FPL:426:yellow:0:",
+   "ts": "2026-10-10T18:14:29+00:00",
+   "backfilled": false,
+   "kind": "yellow",
+   "label": "yellow card",
+   "player": "B.Fernandes",
+   "club": "MUN",
+   "photo": "fpl-141746.png",
+   "opponent": "TOT (H)",
+   "score": "1-1",
+   "at": "2026-10-10T16:30:00+00:00",
+   "minute": null,
+   "points": -1,
+   "teams": [
+    {
+     "team": "Cabo Merde",
+     "game": "FPL",
+     "multiplier": 1,
+     "bench": false
+    }
+   ]
+  },
+  {
+   "id": "PRO:79572:goal:0:",
+   "ts": "2026-10-10T15:46:48+00:00",
+   "backfilled": false,
+   "kind": "goal",
+   "label": "goal",
+   "player": "Bentayeb",
+   "club": "AND",
+   "photo": null,
+   "opponent": "CER (A)",
+   "score": "1-2",
+   "at": "2026-10-10T15:26:00+00:00",
+   "minute": 86,
+   "points": 4,
+   "teams": [
+    {
+     "team": "All Work",
+     "game": "PRO",
+     "multiplier": 1,
+     "bench": false
+    }
+   ]
+  },
+  {
+   "id": "FPL:40:goal:0:",
+   "ts": "2026-10-10T14:11:20+00:00",
+   "backfilled": false,
+   "kind": "goal",
+   "label": "goal",
+   "player": "Rogers",
+   "club": "CHE",
+   "photo": "fpl-244850.png",
+   "opponent": "BOU (H)",
+   "score": "5-1",
+   "at": "2026-10-10T14:00:00+00:00",
+   "minute": null,
+   "points": 5,
+   "teams": [
+    {
+     "team": "Cabo Merde",
+     "game": "FPL",
+     "multiplier": 1,
+     "bench": false
+    },
+    {
+     "team": "Work Squad",
+     "game": "FPL",
+     "multiplier": 1,
+     "bench": false
+    }
+   ]
+  },
+  {
+   "id": "FPL:68:yellow:0:",
+   "ts": "2026-10-10T14:14:06+00:00",
+   "backfilled": false,
+   "kind": "yellow",
+   "label": "yellow card",
+   "player": "Tavernier",
+   "club": "BOU",
+   "photo": "fpl-201658.png",
+   "opponent": "CHE (A)",
+   "score": "5-1",
+   "at": "2026-10-10T14:00:00+00:00",
+   "minute": null,
+   "points": -1,
+   "teams": [
+    {
+     "team": "Cabo Merde",
+     "game": "FPL",
+     "multiplier": 1,
+     "bench": false
+    },
+    {
+     "team": "Work Squad",
+     "game": "FPL",
+     "multiplier": 0,
+     "bench": true
+    }
+   ]
+  },
+  {
+   "id": "FPL:165:goal:0:",
+   "ts": "2026-10-10T15:08:05+00:00",
+   "backfilled": false,
+   "kind": "goal",
+   "label": "goal",
+   "player": "Jo\u00e3o Pedro",
+   "club": "CHE",
+   "photo": "fpl-475168.png",
+   "opponent": "BOU (H)",
+   "score": "5-1",
+   "at": "2026-10-10T14:00:00+00:00",
+   "minute": null,
+   "points": 4,
+   "teams": [
+    {
+     "team": "Cabo Merde",
+     "game": "FPL",
+     "multiplier": 1,
+     "bench": false
+    }
+   ]
+  },
+  {
+   "id": "FPL:165:goal:1:",
+   "ts": "2026-10-10T15:28:52+00:00",
+   "backfilled": false,
+   "kind": "goal",
+   "label": "goal",
+   "player": "Jo\u00e3o Pedro",
+   "club": "CHE",
+   "photo": "fpl-475168.png",
+   "opponent": "BOU (H)",
+   "score": "5-1",
+   "at": "2026-10-10T14:00:00+00:00",
+   "minute": null,
+   "points": 4,
+   "teams": [
+    {
+     "team": "Cabo Merde",
+     "game": "FPL",
+     "multiplier": 1,
+     "bench": false
+    }
+   ]
+  },
+  {
+   "id": "FPL:165:bonus:0:2",
+   "ts": "2026-10-10T15:32:59+00:00",
+   "backfilled": false,
+   "kind": "bonus",
+   "label": "2 bonus points",
+   "player": "Jo\u00e3o Pedro",
+   "club": "CHE",
+   "photo": "fpl-475168.png",
+   "opponent": "BOU (H)",
+   "score": "5-1",
+   "at": "2026-10-10T14:00:00+00:00",
+   "minute": null,
+   "points": 2,
+   "teams": [
+    {
+     "team": "Cabo Merde",
+     "game": "FPL",
+     "multiplier": 1,
+     "bench": false
+    }
+   ]
+  },
+  {
+   "id": "FPL:53:assist:0:",
+   "ts": "2026-10-10T15:41:14+00:00",
+   "backfilled": false,
+   "kind": "assist",
+   "label": "assist",
+   "player": "Manzambi",
+   "club": "AVL",
+   "photo": "fpl-614071.png",
+   "opponent": "BRE (H)",
+   "score": "2-2",
+   "at": "2026-10-10T14:00:00+00:00",
+   "minute": null,
+   "points": 3,
+   "teams": [
+    {
+     "team": "Work Squad",
+     "game": "FPL",
+     "multiplier": 1,
+     "bench": false
+    }
+   ]
+  },
+  {
+   "id": "FPL:334:yellow:0:",
+   "ts": "2026-10-10T12:52:39+00:00",
+   "backfilled": false,
+   "kind": "yellow",
+   "label": "yellow card",
+   "player": "Muharemovi\u0107",
+   "club": "LEE",
+   "photo": "fpl-522047.png",
+   "opponent": "ARS (A)",
+   "score": "2-1",
+   "at": "2026-10-10T11:30:00+00:00",
+   "minute": null,
+   "points": -1,
+   "teams": [
+    {
+     "team": "Cabo Merde",
+     "game": "FPL",
+     "multiplier": 1,
+     "bench": false
+    }
+   ]
+  },
+  {
+   "id": "FPL:8:goal:0:",
+   "ts": "2026-10-10T12:54:05+00:00",
+   "backfilled": false,
+   "kind": "goal",
+   "label": "goal",
+   "player": "Calafiori",
+   "club": "ARS",
+   "photo": "fpl-466075.png",
+   "opponent": "LEE (H)",
+   "score": "2-1",
+   "at": "2026-10-10T11:30:00+00:00",
+   "minute": null,
+   "points": 6,
+   "teams": [
+    {
+     "team": "Work Squad",
+     "game": "FPL",
+     "multiplier": 1,
+     "bench": false
+    }
+   ]
+  },
+  {
+   "id": "FPL:8:bonus:0:1",
+   "ts": "2026-10-10T13:06:37+00:00",
+   "backfilled": false,
+   "kind": "bonus",
+   "label": "1 bonus point",
+   "player": "Calafiori",
+   "club": "ARS",
+   "photo": "fpl-466075.png",
+   "opponent": "LEE (H)",
+   "score": "2-1",
+   "at": "2026-10-10T11:30:00+00:00",
+   "minute": null,
+   "points": 1,
+   "teams": [
+    {
+     "team": "Work Squad",
+     "game": "FPL",
+     "multiplier": 1,
+     "bench": false
+    }
+   ]
+  }
+ ],
+ "live": false,
+ "nextKickoff": "2026-10-11T11:30:00+00:00"
+}
