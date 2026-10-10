@@ -1,8 +1,12 @@
 name: Refresh points
 
-# GitHub's cron floor is 5 minutes, so each run loops internally and publishes
-# a reading every minute. Times are UTC; this covers roughly 12:00-24:00 in
-# Brussels on the days both leagues play.
+# GitHub drops most runs of a 5-minute cron: on Friday 9 October it fired twice
+# between 10:00 and 22:00, and neither landed during a match. So a run does not
+# take a fixed handful of readings and leave; it stays up, reading every minute
+# while a match is on and sleeping through the gaps between kickoffs, and only
+# exits once nothing is live or due within three hours. Any one trigger before a
+# matchday's first kickoff is then enough to cover the day. Times are UTC; this
+# covers roughly 12:00-24:00 in Brussels on the days both leagues play.
 on:
   schedule:
     - cron: "*/5 10-22 * * 5,6,0,1"
@@ -14,10 +18,12 @@ concurrency:
 
 permissions:
   contents: write
+  actions: write   # to start a successor run before this one hits the job time limit
 
 jobs:
   refresh:
     runs-on: ubuntu-latest
+    timeout-minutes: 355
     steps:
       - uses: actions/checkout@v4
 
@@ -36,14 +42,21 @@ jobs:
         env:
           PROLEAGUE_TOKEN: ${{ secrets.PROLEAGUE_TOKEN }}
           NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -u
           git config --global user.email "actions@github.com"
           git config --global user.name "Matchday refresher"
           remote="https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"
 
-          for i in 1 2 3 4 5; do
+          # Jobs are killed at six hours. Stop short of that and hand over.
+          stop_at=$(( $(date +%s) + 340 * 60 ))
+          fails=0
+          pass=0
+          while :; do
+            pass=$((pass + 1))
             if ./refresh.py; then
+              fails=0
               ./notify.py || echo "notifier failed, carrying on" >&2
               rm -rf data-branch/.git data-branch
               mkdir -p data-branch
@@ -56,11 +69,28 @@ jobs:
                 git commit -q -m "reading $(date -u +%FT%TZ)"
                 git push -q -f "$remote" data
               )
-              echo "published reading $i"
+              echo "published reading $pass"
             else
-              echo "collector failed on pass $i" >&2
+              fails=$((fails + 1))
+              echo "collector failed on pass $pass" >&2
+              if [ "$fails" -ge 5 ]; then
+                echo "five failures in a row, giving up until the next trigger" >&2
+                break
+              fi
             fi
-            # not `[ $i -lt 5 ] && sleep 60` — on the last pass that tests false
-            # and becomes the step's exit status, failing an otherwise good run
-            if [ "$i" -lt 5 ]; then sleep 60; fi
+
+            nap=$(./refresh.py --pace) || nap=60
+            if [ "$nap" = stop ]; then
+              echo "nothing live or kicking off within three hours"
+              break
+            fi
+            if [ $(( $(date +%s) + nap )) -ge "$stop_at" ]; then
+              # the successor queues behind this run in the concurrency group and
+              # starts the moment it ends; no point trusting the cron to do it
+              gh workflow run refresh.yml --ref "$GITHUB_REF_NAME" \
+                && echo "handed over to a fresh run" \
+                || echo "could not start a successor run" >&2
+              break
+            fi
+            sleep "$nap"
           done

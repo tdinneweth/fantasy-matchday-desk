@@ -7,6 +7,7 @@ urllib/requests.
 Usage:
     ./refresh.py            # write state.json, print a one-line summary
     ./refresh.py --gate     # same, but print NOOP and skip writing when nothing is live
+    ./refresh.py --pace     # seconds to wait before the next reading, or "stop"
 """
 
 import json
@@ -988,9 +989,58 @@ def credit_for(game, player, kind, identifier, total, gained):
     return value
 
 
+def kickoff_time(stamp):
+    try:
+        return datetime.fromisoformat(stamp.replace("Z", "+00:00"))
+    except (AttributeError, ValueError):
+        return None
+
+
+def next_kickoff(state):
+    """Earliest kickoff in either game that is not under way yet, this round or the
+    next. A match the feed has not flagged as started stays in, even past its
+    kickoff time, so the collector keeps watching until it does."""
+    fpl, pro = state.get("fpl") or {}, state.get("pro") or {}
+    pending = [kickoff_time(m.get("kickoff"))
+               for m in ((fpl.get("matches") or []) + (fpl.get("upcoming") or [])
+                         + (pro.get("matches") or []) + (pro.get("upcoming") or []))
+               if not m.get("started")]
+    # a postponed match can keep its old kickoff and never start; let it go
+    stale = datetime.now(timezone.utc) - WATCH_AHEAD
+    pending = [k for k in pending if k and k > stale]
+    return min(pending).isoformat(timespec="seconds") if pending else None
+
+
+# The gap between kickoffs that the collector waits through rather than exiting.
+# Three hours spans every gap inside a matchday in both leagues.
+WATCH_AHEAD = timedelta(hours=3)
+
+
+def pace():
+    """How long the publisher should sleep before the next reading: a minute while
+    anything is live, up to the next kickoff when one is close, otherwise "stop".
+    No reading at all means no pass has worked yet, so try again in a minute."""
+    if not os.path.exists(STATE):
+        return 60
+    with open(STATE) as fh:
+        state = json.load(fh)
+    if state.get("live"):
+        return 60
+    kickoff = kickoff_time(state.get("nextKickoff"))
+    if kickoff is None:
+        return "stop"
+    until = kickoff - datetime.now(timezone.utc)
+    if until > WATCH_AHEAD:
+        return "stop"
+    return int(min(300, max(60, until.total_seconds())))
+
+
 # --------------------------------------------------------------------------
 
 def main():
+    if "--pace" in sys.argv:
+        print(pace())
+        return 0
     if not os.path.exists(CONFIG):
         print(f"missing {CONFIG} — copy config.example.json and fill in the ids", file=sys.stderr)
         return 2
@@ -1009,10 +1059,17 @@ def main():
         state["ticker"] = []
         state["tickerError"] = str(exc)
 
+    # Pro League "started" is only the kickoff time passing, so a postponed match
+    # would read as live for good, and keep the collector up with it. No match
+    # runs three hours past its kickoff.
+    stale = datetime.now(timezone.utc) - WATCH_AHEAD
     live = state["fpl"]["anyLive"] or any(
-        m.get("started") and not m.get("finished") for m in ((state["pro"] or {}).get("matches") or [])
+        m.get("started") and not m.get("finished")
+        and (kickoff_time(m.get("kickoff")) or stale) > stale
+        for m in ((state["pro"] or {}).get("matches") or [])
     )
     state["live"] = live
+    state["nextKickoff"] = next_kickoff(state)
 
     if "--gate" in sys.argv and not live:
         print("NOOP")
