@@ -134,7 +134,8 @@ def pro_drivers(pos, detail, total):
     credited for every player in our squads, and for the full player list.
     Several differ from the published rules table: only keepers and defenders
     lose points for goals conceded, saves earn rather than cost, interceptions
-    pay only midfielders and forwards, and big chances created pay nothing.
+    pay nothing, and a big chance created pays only from the second. While a
+    match is on the feed reports no minutes, and pays none, until it ends.
     """
     minutes = detail.get("time", 0) or 0
     conceded = len(detail.get("conceeded") or [])
@@ -156,7 +157,7 @@ def pro_drivers(pos, detail, total):
     if minutes >= 60 and not conceded:
         add("clean sheet", {"GK": 4, "DEF": 4, "MID": 1}.get(pos, 0))
     if pos in ("GK", "DEF") and conceded >= 2:
-        add("%d goals conceded" % conceded, -(conceded // 2))
+        add("%d goals conceded" % conceded, (conceded // 2) * {"GK": -2, "DEF": -1}[pos])
     add(count("yellow card", len(detail.get("yellow_cards") or [])),
         len(detail.get("yellow_cards") or []) * JPL_POINTS["yellow"])
     add("red card", len(detail.get("red_card") or []) * JPL_POINTS["red"])
@@ -182,9 +183,9 @@ def pro_drivers(pos, detail, total):
     clearances = detail.get("headClearance", 0) or 0
     if clearances >= 4:
         add("%d headed clearances" % clearances, 1)
-    interceptions = detail.get("interception", 0) or 0
-    if pos in ("MID", "FWD") and interceptions >= 2:
-        add("%d interceptions" % interceptions, 1)
+    chances = detail.get("bigChanceCreated", 0) or 0
+    if chances >= 2:
+        add("%d big chances created" % chances, 1)
     off_target = detail.get("shotOffTarget", 0) or 0
     if off_target >= 3:
         add("%d shots off target" % off_target, -1)

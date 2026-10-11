@@ -21,21 +21,15 @@ for week in (5, 6, 7):
             "duelWon": n("statDuelWon"), "duelLost": n("statDuelLost"), "ballRecovery": n("statBallRecovery"),
             "headClearance": n("statHeadClearance"), "interception": n("statInterception"),
             "shotOffTarget": n("statShotOffTarget"), "errorLeadToGoal": n("statErrorLeadToGoal"),
+            "bigChanceCreated": n("statBigChanceCreated"), "dispossessed": n("statDispossessed"),
         }
         pos = POS.get(row.get("positionId"), "?")
         drivers = r.pro_drivers(pos, detail, row.get("total"))
         adj = sum(d["points"] for d in drivers if d["label"] == "game adjustment")
-        ok[(pos, adj)] += 1
-        if adj and len(bad) < 25:
+        ok[(week, pos, adj)] += 1
+        if adj and len(bad) < 40:
             bad.append((week, pos, row.get("total"), json.dumps(detail, separators=(",", ":")), drivers))
 print("ADJ", sorted(ok.items()))
 for b in bad:
     print("MISS", b)
 
-cfg = json.load(open(r.CONFIG))["proleague"]
-for t in cfg["teams"]:
-    payload = r.get(f"{r.PRO}/team/{t['id']}/points/8?{r.PRO_Q}", headers=headers)
-    for p in payload.get("players") or []:
-        for s in p.get("stats") or []:
-            if s.get("weekId") == 8:
-                print("LIVE", p.get("short"), "points", s.get("points"), "value", s.get("value"))
