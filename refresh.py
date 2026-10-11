@@ -127,35 +127,73 @@ def fpl_drivers(credit):
 
 
 def pro_drivers(pos, detail, total):
-    """The Pro League feed gives no per-stat points, so price the components from
-    the published rules and let anything left over show as `other` — the rules
-    also award for duels, recoveries and headers, which the feed does not break out."""
+    """The Pro League feed gives no per-stat points, so price each stat it records.
+
+    The rules were worked out from three confirmed rounds (weeks 5 to 7), where
+    the game publishes every player's total: these reproduce the total it
+    credited for every player in our squads, and for the full player list.
+    Several differ from the published rules table: only keepers and defenders
+    lose points for goals conceded, saves earn rather than cost, interceptions
+    pay only midfielders and forwards, and big chances created pay nothing.
+    """
     minutes = detail.get("time", 0) or 0
     conceded = len(detail.get("conceeded") or [])
     goals = len(detail.get("goals") or [])
+    assists = len(detail.get("assists") or [])
     rows = []
 
     def add(label, points):
         if points:
             rows.append({"label": label, "points": points})
 
+    def count(label, n):
+        return label if n == 1 else "%s (%d)" % (label, n)
+
     if minutes:
-        add("minutes", 2 if minutes >= 60 else 1)
-    add("goals", goals * (JPL_POINTS["goal"].get(pos) or 0))
-    add("assists", len(detail.get("assists") or []) * 3)
+        add("played %d min" % minutes, 2 if minutes >= 60 else 1)
+    add(count("goal", goals), goals * (JPL_POINTS["goal"].get(pos) or 0))
+    add(count("assist", assists), assists * JPL_POINTS["assist"])
     if minutes >= 60 and not conceded:
         add("clean sheet", {"GK": 4, "DEF": 4, "MID": 1}.get(pos, 0))
-    if conceded >= 2:
-        add("conceded", (conceded // 2) * {"GK": -2, "DEF": -1}.get(pos, 0))
-    add("yellow card", len(detail.get("yellow_cards") or []) * -2)
-    add("red card", len(detail.get("red_card") or []) * -4)
-    add("own goal", len(detail.get("own_goals") or []) * -2)
-    add("pen save", len(detail.get("penalty_saved") or []) * 5)
-    add("pen miss", len(detail.get("penalty_miss") or []) * -3)
+    if pos in ("GK", "DEF") and conceded >= 2:
+        add("%d goals conceded" % conceded, -(conceded // 2))
+    add(count("yellow card", len(detail.get("yellow_cards") or [])),
+        len(detail.get("yellow_cards") or []) * JPL_POINTS["yellow"])
+    add("red card", len(detail.get("red_card") or []) * JPL_POINTS["red"])
+    add(count("own goal", len(detail.get("own_goals") or [])),
+        len(detail.get("own_goals") or []) * JPL_POINTS["ownGoal"])
+    add(count("penalty saved", len(detail.get("penalty_saved") or [])),
+        len(detail.get("penalty_saved") or []) * JPL_POINTS["penaltySave"])
+    add(count("penalty missed", len(detail.get("penalty_miss") or [])),
+        len(detail.get("penalty_miss") or []) * JPL_POINTS["penaltyMiss"])
     saves = detail.get("saves", 0) or 0
-    add("saves", saves // 3)
+    add("%d saves" % saves, saves // 3)
 
-    add("other", (total or 0) - sum(r["points"] for r in rows))
+    # the game's own bonus for the best-rated player of the match
+    if detail.get("skillIndex") == 1:
+        add("best player of the match", JPL_POINTS["bonus"])
+
+    won, lost = detail.get("duelWon", 0) or 0, detail.get("duelLost", 0) or 0
+    if won > lost:
+        add("won %d of %d duels" % (won, won + lost), 1)
+    recoveries = detail.get("ballRecovery", 0) or 0
+    if pos != "GK" and recoveries >= 6:
+        add("%d ball recoveries" % recoveries, 1)
+    clearances = detail.get("headClearance", 0) or 0
+    if clearances >= 4:
+        add("%d headed clearances" % clearances, 1)
+    interceptions = detail.get("interception", 0) or 0
+    if pos in ("MID", "FWD") and interceptions >= 2:
+        add("%d interceptions" % interceptions, 1)
+    off_target = detail.get("shotOffTarget", 0) or 0
+    if off_target >= 3:
+        add("%d shots off target" % off_target, -1)
+    errors = detail.get("errorLeadToGoal", 0) or 0
+    add(count("error leading to a goal", errors), -errors)
+
+    # Anything the rules above miss is the game's own adjustment. Say so, and by
+    # how much, rather than hide it in a catch-all.
+    add("game adjustment", (total or 0) - sum(r["points"] for r in rows))
     rows.sort(key=lambda r: -abs(r["points"]))
     return rows
 
