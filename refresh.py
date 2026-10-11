@@ -1011,15 +1011,24 @@ def next_kickoff(state):
     return min(pending).isoformat(timespec="seconds") if pending else None
 
 
-# The gap between kickoffs that the collector waits through rather than exiting.
-# Three hours spans every gap inside a matchday in both leagues.
+# A match never runs this long past its kickoff; one that has not started by
+# then has been postponed.
 WATCH_AHEAD = timedelta(hours=3)
+
+# How far ahead a kickoff keeps the collector up. GitHub's cron cannot be relied
+# on to start a run before a matchday (on Sunday 11 October it fired at 22:52
+# and 01:22, then not again until long after the 11:30 kickoff), so the run that
+# covers one day waits through the night for the next. Thirty hours spans the
+# longest gap inside a round: Sunday evening to Monday's late kickoff.
+STAY_UP = timedelta(hours=30)
 
 
 def pace():
     """How long the publisher should sleep before the next reading: a minute while
-    anything is live, up to the next kickoff when one is close, otherwise "stop".
-    No reading at all means no pass has worked yet, so try again in a minute."""
+    anything is live, up to the next kickoff when one is due, otherwise "stop".
+    With a kickoff hours away it reads every half hour, enough to keep the page
+    and the deadline current overnight. No reading at all means no pass has
+    worked yet, so try again in a minute."""
     if not os.path.exists(STATE):
         return 60
     with open(STATE) as fh:
@@ -1030,9 +1039,10 @@ def pace():
     if kickoff is None:
         return "stop"
     until = kickoff - datetime.now(timezone.utc)
-    if until > WATCH_AHEAD:
+    if until > STAY_UP:
         return "stop"
-    return int(min(300, max(60, until.total_seconds())))
+    longest = 300 if until <= WATCH_AHEAD else 1800
+    return int(min(longest, max(60, until.total_seconds())))
 
 
 # --------------------------------------------------------------------------

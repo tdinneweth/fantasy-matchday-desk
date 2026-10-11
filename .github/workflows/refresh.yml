@@ -1,15 +1,16 @@
 name: Refresh points
 
-# GitHub drops most runs of a 5-minute cron: on Friday 9 October it fired twice
-# between 10:00 and 22:00, and neither landed during a match. So a run does not
-# take a fixed handful of readings and leave; it stays up, reading every minute
-# while a match is on and sleeping through the gaps between kickoffs, and only
-# exits once nothing is live or due within three hours. Any one trigger before a
-# matchday's first kickoff is then enough to cover the day. Times are UTC; this
-# covers roughly 12:00-24:00 in Brussels on the days both leagues play.
+# GitHub drops most runs of a scheduled workflow: on Friday 9 October a 5-minute
+# cron fired twice between 10:00 and 22:00 and neither landed during a match.
+# So the schedule only has to start a run once in a while; the run then keeps
+# itself going. It reads every minute while a match is on, waits through the
+# gaps between kickoffs (overnight too, when the round carries on the next
+# day), and exits only when no kickoff is due within thirty hours. Before the
+# six-hour job limit it starts its own successor. The schedule runs every day,
+# since rounds are sometimes midweek; a run with nothing coming exits at once.
 on:
   schedule:
-    - cron: "*/5 10-22 * * 5,6,0,1"
+    - cron: "7,37 * * * *"
   workflow_dispatch:
 
 concurrency:
@@ -81,7 +82,7 @@ jobs:
 
             nap=$(./refresh.py --pace) || nap=60
             if [ "$nap" = stop ]; then
-              echo "nothing live or kicking off within three hours"
+              echo "nothing live or kicking off within thirty hours"
               break
             fi
             if [ $(( $(date +%s) + nap )) -ge "$stop_at" ]; then
