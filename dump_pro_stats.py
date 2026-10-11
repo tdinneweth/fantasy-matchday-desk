@@ -37,5 +37,5 @@ for t in cfg["teams"]:
     payload = r.get(f"{r.PRO}/team/{t['id']}/points/8?{r.PRO_Q}", headers=headers)
     for p in payload.get("players") or []:
         for s in p.get("stats") or []:
-            if s.get("weekId") == 8 and s.get("clubId") in (4, 3, 7, 15, 16):
+            if s.get("weekId") == 8:
                 print("LIVE", p.get("short"), "points", s.get("points"), "value", s.get("value"))
