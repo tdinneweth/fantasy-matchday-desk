@@ -14,7 +14,7 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: refresh
+  group: pro-stat-dump
   cancel-in-progress: false
 
 permissions:
@@ -28,70 +28,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Restore the running state
-        run: |
-          # events.json and ranks-history.json carry the ticker and rank history
-          # between runs; without them every run would re-backfill from scratch.
-          git clone --depth 1 --branch data \
-            "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" data-branch \
-            || { mkdir -p data-branch; }
-          for f in events.json ranks-history.json; do
-            [ -f "data-branch/$f" ] && cp "data-branch/$f" . || true
-          done
-
-      - name: Collect and publish readings
+      - name: Dump Pro League stat records
         env:
           PROLEAGUE_TOKEN: ${{ secrets.PROLEAGUE_TOKEN }}
-          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -u
-          git config --global user.email "actions@github.com"
-          git config --global user.name "Matchday refresher"
-          remote="https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"
-
-          # Jobs are killed at six hours. Stop short of that and hand over.
-          stop_at=$(( $(date +%s) + 340 * 60 ))
-          fails=0
-          pass=0
-          while :; do
-            pass=$((pass + 1))
-            if ./refresh.py; then
-              fails=0
-              ./notify.py || echo "notifier failed, carrying on" >&2
-              rm -rf data-branch/.git data-branch
-              mkdir -p data-branch
-              cp state.json events.json ranks-history.json data-branch/ 2>/dev/null || true
-              (
-                cd data-branch
-                git init -q
-                git checkout -q -b data
-                git add -A
-                git commit -q -m "reading $(date -u +%FT%TZ)"
-                git push -q -f "$remote" data
-              )
-              echo "published reading $pass"
-            else
-              fails=$((fails + 1))
-              echo "collector failed on pass $pass" >&2
-              if [ "$fails" -ge 5 ]; then
-                echo "five failures in a row, giving up until the next trigger" >&2
-                break
-              fi
-            fi
-
-            nap=$(./refresh.py --pace) || nap=60
-            if [ "$nap" = stop ]; then
-              echo "nothing live or kicking off within thirty hours"
-              break
-            fi
-            if [ $(( $(date +%s) + nap )) -ge "$stop_at" ]; then
-              # the successor queues behind this run in the concurrency group and
-              # starts the moment it ends; no point trusting the cron to do it
-              gh workflow run refresh.yml --ref "$GITHUB_REF_NAME" \
-                && echo "handed over to a fresh run" \
-                || echo "could not start a successor run" >&2
-              break
-            fi
-            sleep "$nap"
-          done
+        run: python3 dump_pro_stats.py
