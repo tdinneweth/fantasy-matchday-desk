@@ -214,7 +214,26 @@ def fixture_state(fx):
     return "upcoming"
 
 
-def fpl_team(entry, label, boot, live, fixtures, gw):
+def fpl_next_five(team, future, clubs):
+    """The club's next five fixtures with their FPL difficulty rating."""
+    out = []
+    for f in future:
+        if team not in (f["team_h"], f["team_a"]):
+            continue
+        home = f["team_h"] == team
+        out.append({
+            "opponent": clubs[f["team_a"] if home else f["team_h"]]["short_name"],
+            "home": home,
+            "gw": f.get("event"),
+            "kickoff": f.get("kickoff_time"),
+            "difficulty": f.get("team_h_difficulty") if home else f.get("team_a_difficulty"),
+        })
+        if len(out) == 5:
+            break
+    return out
+
+
+def fpl_team(entry, label, boot, live, fixtures, gw, future=()):
     elements = {e["id"]: e for e in boot["elements"]}
     clubs = {t["id"]: t for t in boot["teams"]}
     livemap = {e["id"]: e for e in live["elements"]}
@@ -269,6 +288,8 @@ def fpl_team(entry, label, boot, live, fixtures, gw):
             "pos": POS.get(el["element_type"], "?"),
             "club": club["short_name"],
             "opponent": opponent,
+            "price": el["now_cost"] / 10 if el.get("now_cost") is not None else None,
+            "nextFixtures": fpl_next_five(el["team"], future, clubs),
             "points": pts,
             "bonus": stats.get("bonus", 0),
             "multiplier": p["multiplier"],
@@ -400,7 +421,16 @@ def fpl_block(cfg):
         except Exception:
             upcoming = []
 
-    teams = [fpl_team(t["entry"], t.get("label", ""), boot, live, fixtures, gw) for t in cfg]
+    # unplayed fixtures from every later round, for each player's next five
+    try:
+        future = sorted((f for f in get(f"{FPL}/fixtures/?future=1", cache_seconds=600)
+                         if f.get("event") and f["event"] > gw),
+                        key=lambda f: f.get("kickoff_time") or "")
+    except Exception:
+        future = []
+
+    teams = [fpl_team(t["entry"], t.get("label", ""), boot, live, fixtures, gw, future)
+             for t in cfg]
     return {
         "gw": gw,
         "name": cur["name"],
@@ -612,6 +642,7 @@ def pro_team(cfg, week, headers, clubs):
             "pos": {1: "GK", 2: "DEF", 3: "MID", 4: "FWD"}.get(p.get("positionId"), "?"),
             "club": clubs.get(p.get("clubId") or detail.get("club_id"), ""),
             "opponent": "",
+            "price": p.get("value") if p.get("value") is not None else p.get("price"),
             "points": (stat or {}).get("points", 0) or 0,
             "bonus": 0,
             "multiplier": 2 if cap == 1 else 1,
@@ -832,6 +863,20 @@ def pro_block(cfg):
         context[m["away"]] = {"opponent": m["home"] + " (A)", "state": state,
                               "kickoff": m["kickoff"], "score": score}
 
+    # the next five rounds' matches, so each player can show what is coming
+    ahead = {}
+    for w in range(week + 1, week + 6):
+        try:
+            rows = out["upcoming"] if w == week + 1 and out.get("upcoming") else pro_matches(w)
+        except Exception:
+            continue
+        for m in rows:
+            if m["finished"]:
+                continue
+            for club, other, home in ((m["home"], m["away"], True), (m["away"], m["home"], False)):
+                ahead.setdefault(club, []).append(
+                    {"opponent": other, "home": home, "gw": w, "kickoff": m["kickoff"]})
+
     for t in teams_cfg:
         try:
             row = pro_team(t, week, headers, clubs)
@@ -842,6 +887,7 @@ def pro_block(cfg):
                     s["kickoff"] = ctx["kickoff"]
                     s["state"] = ctx["state"]
                     s["score"] = ctx["score"]
+                s["nextFixtures"] = (ahead.get(s["club"]) or [])[:5]
             starters = [s for s in row["squad"] if not s["bench"]]
             row["playersLive"] = sum(1 for s in starters if s["state"] == "live")
             row["playersPlayed"] = sum(1 for s in starters if s["state"] == "done")

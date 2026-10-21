@@ -1210,6 +1210,9 @@
   .drow b { font-weight: 700; }
   .drow b.plus { color: var(--up); }
   .drow b.minus { color: var(--down); }
+  .drow b.fdr { min-width: 22px; text-align: center; border-radius: 4px; font-size: 12px; }
+  .drow b.fdr1, .drow b.fdr2 { color: var(--up); }
+  .drow b.fdr4, .drow b.fdr5 { color: var(--down); }
 
   .ev { font-size: 11.5px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: var(--line-2); color: var(--ink-2); }
   .ev.g { background: var(--up); color: #fff; }
@@ -2470,6 +2473,14 @@
       '<div class="d-score"><div class="big">' + (p.points || 0) + '<small style="text-align:left">points · ' + esc(roundName(x.game)) + '</small></div>' +
         '<div class="m"><b>' + esc((p.opponent || "") + (p.score ? " · " + p.score : "")) + '</b>' + esc(status) + '</div></div>' +
       '<div class="evs">' + eventChips(p) + '</div>' +
+      '<div class="d-sec"><h3>Price</h3><div class="drow"><span>Current value</span><b>' + money(p.price) + '</b></div></div>' +
+      '<div class="d-sec"><h3>Next five fixtures</h3>' +
+        ((p.nextFixtures || []).length ? p.nextFixtures.map(function (f) {
+          return '<div class="drow"><span>' + esc(f.opponent) + ' (' + (f.home ? "H" : "A") + ') · <span class="muted">' +
+            esc((x.game === "FPL" ? "GW " : "Week ") + (f.gw != null ? f.gw : "?")) + (f.kickoff ? " · " + esc(dayTime(f.kickoff)) : "") + '</span></span>' +
+            (f.difficulty != null ? '<b title="Fixture difficulty (1 easy, 5 hard)" class="fdr fdr' + f.difficulty + '">' + f.difficulty + '</b>' : "") + '</div>';
+        }).join("") : '<p class="empty">No fixtures announced yet.</p>') +
+      '</div>' +
       '<div class="d-sec"><h3>Where the points came from</h3>' +
         (drivers.length ? drivers.map(function (d) {
           return '<div class="drow"><span>' + esc(d.label) + '</span><b class="' + (d.points > 0 ? "plus" : "minus") + '">' + signed(d.points) + '</b></div>';
