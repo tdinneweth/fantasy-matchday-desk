@@ -11,6 +11,13 @@ two in the Belgian Fantasy Pro League — on one page, refreshed while matches a
 - `photos.py` — pulls each squad's portraits for the artifact build only, whose
   CSP blocks remote images so `build.py` inlines them
 
+Between rounds the page opens on **Decisions**: flagged players and who covers
+them, an armband on a hard fixture, players one booking from a ban, heavy selling,
+and what the rest of the game is buying. Each Premier League team also has a
+**Plan** tab with form, price moves and the next five fixtures by difficulty. All
+of it comes from the Premier League API with every reading; the Pro League API
+offers no equivalent yet.
+
 GitHub Actions runs the collector on a schedule and pushes each reading to the
 `data` branch; the published page reads it from there, so nothing needs to run
 locally.

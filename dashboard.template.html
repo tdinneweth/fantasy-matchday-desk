@@ -1342,6 +1342,70 @@
 
     .drawer { top: auto; left: 8px; right: 8px; bottom: 8px; width: auto; max-height: 86vh; border-radius: 26px; }
   }
+
+  /* ---------- planning: decisions, fixture planner, market ---------- */
+
+  .fdr {
+    display: inline-block;
+    min-width: 48px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 6px;
+    border-radius: 6px;
+    background: color-mix(in srgb, var(--ink) 7%, transparent);
+    color: var(--ink-2);
+    white-space: nowrap;
+  }
+
+  .fdr.d1, .fdr.d2 { background: color-mix(in srgb, var(--up) 18%, transparent); color: var(--up); }
+  .fdr.d4 { background: color-mix(in srgb, var(--live) 18%, transparent); color: var(--live); }
+  .fdr.d5 { background: var(--down); color: #fff; }
+
+  .flag {
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 800;
+    padding: 1px 6px;
+    border-radius: 6px;
+    margin-left: 6px;
+    vertical-align: 1px;
+    white-space: nowrap;
+  }
+
+  .flag.bad { background: var(--live-soft); color: var(--live); }
+  .flag.warn { background: color-mix(in srgb, var(--yc) 30%, transparent); color: var(--ink); }
+  .flag.arm { background: var(--ink); color: var(--surface); }
+
+  .alert {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 0 12px;
+    padding: 12px 4px 12px 12px;
+    align-items: start;
+    border-left: 4px solid color-mix(in srgb, var(--ink) 14%, transparent);
+  }
+
+  .alert + .alert { border-top: 1px solid color-mix(in srgb, var(--ink) 6%, transparent); }
+  .alert.s3 { border-left-color: var(--live); }
+  .alert.s2 { border-left-color: var(--yc); }
+  .alert b { display: block; font-size: 14px; font-weight: 700; line-height: 1.3; text-wrap: balance; }
+  .alert p { margin: 3px 0 0; font-size: 13px; line-height: 1.45; color: var(--ink-2); max-width: 64ch; }
+  .alert .lvl { font-size: 10.5px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); }
+  .alert.s3 .lvl { color: var(--live); }
+
+  .plan-wrap { overflow-x: auto; margin: 0 -4px; padding-bottom: 6px; }
+  table.plan { border-collapse: collapse; width: 100%; min-width: 600px; font-size: 13px; font-variant-numeric: tabular-nums; }
+  table.plan th { font-size: 11.5px; font-weight: 600; color: var(--ink-3); text-align: left; padding: 6px 5px; white-space: nowrap; }
+  table.plan td { padding: 7px 5px; white-space: nowrap; border-top: 1px solid color-mix(in srgb, var(--ink) 6%, transparent); }
+  table.plan .r { text-align: right; }
+  table.plan td b { font-weight: 700; }
+  table.plan tr.bn td { color: var(--ink-3); }
+  table.plan tr.sep td { font-size: 11.5px; font-weight: 700; color: var(--ink-2); padding-top: 14px; border-top: 0; }
+  table.plan .up { color: var(--up); }
+  table.plan .dn { color: var(--down); }
+  table.plan .why { white-space: normal; color: var(--ink-2); min-width: 180px; }
+  .plan-note { font-size: 12.5px; color: var(--ink-3); margin: 0; padding: 8px 4px 12px; }
 </style>
 
 <div class="app" id="app">
@@ -1427,6 +1491,7 @@
   var state = SNAPSHOT;
   var sel = null;            // team index, null = all four
   var tab = "round";
+  var tabAuto = true;        // until a tab is picked, the page chooses the one that fits the moment
   var sideMode = null;       // overview list: live | todo | top, null = pick for me
   var fxMode = null;         // team results panel: played | next, null = pick for me
   var rankMode = null;       // overall | week
@@ -2412,10 +2477,208 @@
 
   /* ---------- main panel ---------- */
 
+  /* ---------- planning: decisions, fixture planner, market ---------- */
+
+  function hasPlan(t) {
+    return !!(t && t.game === "FPL" && (t.squad || []).some(function (p) { return p.plan; }));
+  }
+
+  function planTeams() {
+    return ((state && state.fpl && state.fpl.teams) || []).filter(hasPlan);
+  }
+
+  function one(v) { return v == null ? "–" : Number(v).toFixed(1); }
+
+  function fdr(f) {
+    if (!f) return '<span class="fdr">–</span>';
+    return '<span class="fdr d' + (f.diff || 3) + '" title="GW ' + f.gw + ' · difficulty ' + (f.diff || "?") + ' of 5">' +
+      esc(f.opp) + (f.home ? " H" : " A") + '</span>';
+  }
+
+  function whereText(f) {
+    return f ? f.opp + (f.home ? " at home" : " away") + ", difficulty " + f.diff : "no fixture";
+  }
+
+  /* one booking short of a ban: five before a club's 19th league match, ten before its 32nd */
+  function nearBan(q) {
+    var gw = (state.fpl || {}).gw || 0;
+    return (q.yellows === 4 && gw < 19) || (q.yellows === 9 && gw < 32);
+  }
+
+  function flags(p) {
+    var q = p.plan || {}, out = "";
+    if (p.captain) out += '<span class="flag arm">C</span>';
+    else if (p.vice) out += '<span class="flag arm">V</span>';
+    if (q.status && q.status !== "a") {
+      out += '<span class="flag bad" title="' + esc(q.news) + '">' + (q.chance != null ? q.chance + "%" : "flagged") + '</span>';
+    }
+    if (nearBan(q)) out += '<span class="flag warn">' + q.yellows + ' yellows</span>';
+    return out;
+  }
+
+  /* Everything below is read off the game's own data, so it is as fresh as the
+     last reading. Severity 3 wants an action before the deadline, 2 is worth a
+     look, 1 is context. */
+  function decisions(only) {
+    var out = [];
+    var teams = planTeams();
+    teams.forEach(function (t) {
+      if (only && t.name !== only) return;
+      var xi = t.squad.filter(function (p) { return !p.bench && p.plan; });
+      var bench = t.squad.filter(function (p) { return p.bench && p.plan; });
+      function add(sev, p, title, body) {
+        out.push({ sev: sev, team: t.name, key: pkey("FPL", p), p: p, title: title, body: body });
+      }
+
+      t.squad.forEach(function (p) {
+        var q = p.plan;
+        if (!q) return;
+        if (q.status && q.status !== "a") {
+          var cover = bench.filter(function (b) { return b.pos !== "GK" && b.plan.status === "a"; })[0];
+          add(p.bench ? 1 : 3, p,
+            p.name + (q.chance === 0 ? " is out" : " is a doubt") + (p.captain ? " and has your armband" : ""),
+            (q.news || "Flagged by the game") + "." + (p.bench ? " He is on your bench."
+              : (cover ? " First off the bench is " + cover.name + " (form " + one(cover.plan.form) + ", " +
+                cover.plan.seasonMinutes + " minutes this season)." : "")));
+        }
+        if (!p.bench && nearBan(q)) {
+          add(2, p, p.name + " is one booking from a ban",
+            q.yellows + " yellow cards so far. One more before the cut-off means a suspension. Next: " + whereText(q.next[0]) + ".");
+        }
+        if (q.out - q.in > 50000) {
+          add(1, p, "Managers are selling " + p.name,
+            brief(q.out) + " out against " + brief(q.in) + " in this gameweek, on form " + one(q.form) +
+            (q.priceMove < 0 ? ". His price has already dropped " + money(-q.priceMove) : "") + ". Next: " + whereText(q.next[0]) + ".");
+        }
+      });
+
+      var cap = xi.filter(function (p) { return p.captain; })[0];
+      var c0 = cap && cap.plan.next[0];
+      if (c0) {
+        var rate = function (p) {
+          var n = p.plan.next[0];
+          return (p.plan.form || 0) + (3 - n.diff) * 1.5 - (p.pos === "DEF" ? 2 : 0);
+        };
+        var better = xi.filter(function (p) {
+          return p !== cap && p.pos !== "GK" && p.plan.status === "a" && p.plan.next[0] && rate(p) - rate(cap) >= (c0.diff >= 4 ? 1.5 : 2.5);
+        }).sort(function (a, b) { return rate(b) - rate(a); }).slice(0, 2);
+        if (better.length) {
+          add(c0.diff >= 4 ? 3 : 2, cap, "Check the armband: " + cap.name + " has " + c0.opp + (c0.home ? " at home" : " away"),
+            cap.name + " is on form " + one(cap.plan.form) + " with a difficulty " + c0.diff + " fixture. " +
+            better.map(function (p) { return p.name + " (form " + one(p.plan.form) + ", " + whereText(p.plan.next[0]) + ")"; }).join(" and ") +
+            (better.length === 1 ? " rates" : " rate") + " higher on form and fixture. The armband carries over unless you move it.");
+        }
+      }
+
+      bench.forEach(function (b) {
+        if (b.pos === "GK" || b.plan.status !== "a") return;
+        var weak = xi.filter(function (p) { return p.pos === b.pos && (b.plan.form || 0) - (p.plan.form || 0) >= 3; })
+          .sort(function (x, y) { return x.plan.form - y.plan.form; })[0];
+        if (weak) {
+          add(1, b, b.name + " is benched in better form than " + weak.name,
+            b.name + ": form " + one(b.plan.form) + ", " + whereText(b.plan.next[0]) + ". " + weak.name + ": form " +
+            one(weak.plan.form) + ", " + whereText(weak.plan.next[0]) + ". Same position, so the swap keeps your formation.");
+        }
+      });
+    });
+
+    if (!only && teams.length > 1) {
+      var seen = {};
+      teams.forEach(function (t) {
+        t.squad.forEach(function (p) { (seen[p.name + "|" + p.club] = seen[p.name + "|" + p.club] || []).push(p); });
+      });
+      var twice = Object.keys(seen).filter(function (k) { return seen[k].length > 1; }).map(function (k) { return seen[k][0]; });
+      if (twice.length) {
+        out.push({ sev: 1, team: "", key: pkey("FPL", twice[0]), p: twice[0],
+          title: twice.map(function (p) { return p.name; }).join(", ") + (twice.length > 1 ? " are" : " is") + " in more than one squad",
+          body: "A blank, an injury or a ban there costs you in every squad at once." });
+      }
+    }
+    return out.sort(function (a, b) { return b.sev - a.sev; });
+  }
+
+  function decisionList(only) {
+    var list = decisions(only);
+    if (!list.length) return emptyP("Nothing needs a decision right now: no flags, no bans looming, armbands look sound.");
+    var lvl = { 3: "Act", 2: "Check", 1: "Note" };
+    return '<div>' + list.map(function (a) {
+      var i = teamIndex(a.team);
+      return '<div class="alert s' + a.sev + '">' +
+        '<span class="plink" data-p="' + esc(a.key) + '" role="button" tabindex="0">' + face(a.p, "s") + '</span>' +
+        '<div><span class="lvl">' + lvl[a.sev] + '</span><b>' + esc(a.title) + '</b><p>' + esc(a.body) + '</p></div>' +
+        (a.team ? '<span class="own" style="--tc:' + tc(i) + '" title="' + esc(a.team) + '">' + esc(initials(a.team)) + '</span>' : '<span></span>') +
+        '</div>';
+    }).join("") + '</div>';
+  }
+
+  function planRow(p) {
+    var q = p.plan || {}, net = (q["in"] || 0) - (q.out || 0);
+    var next = (q.next || []).slice(0, 5);
+    while (next.length < 5) next.push(null);
+    return '<tr class="' + (p.bench ? "bn" : "") + '">' +
+      '<td><span class="who plink" data-p="' + esc(pkey("FPL", p)) + '" role="button" tabindex="0">' + face(p, "s") +
+        '<span><b>' + esc(p.name) + flags(p) + '</b><em>' + esc(p.pos) + ' · ' + esc(p.club) + '</em></span></span></td>' +
+      '<td class="r">' + one(q.price) + (q.priceMove ? ' <span class="' + (q.priceMove > 0 ? "up" : "dn") + '">' + (q.priceMove > 0 ? "▲" : "▼") + '</span>' : "") + '</td>' +
+      '<td class="r"><b>' + one(q.form) + '</b></td>' +
+      '<td class="r ' + (net >= 0 ? "up" : "dn") + '">' + (net >= 0 ? "+" : "−") + brief(Math.abs(net)) + '</td>' +
+      next.map(function (f) { return '<td>' + fdr(f) + '</td>'; }).join("") + '</tr>';
+  }
+
+  function planView(t) {
+    var xi = t.squad.filter(function (p) { return !p.bench; }), bench = t.squad.filter(function (p) { return p.bench; });
+    var first = ((xi[0] || {}).plan || {}).next || [], head = "";
+    for (var i = 0; i < 5; i++) head += '<th>' + (first[i] ? "GW " + first[i].gw : "") + '</th>';
+    var chips = (t.chipsPlayed || []).map(function (c) { return c.name + " (GW " + c.w + ")"; }).join(", ");
+    return '<div class="sub mint" style="margin-bottom:18px"><div class="sub-h"><h3>Needs a decision</h3></div>' + decisionList(t.name) + '</div>' +
+      '<div class="sub sky"><div class="sub-h"><h3>Fixture planner</h3><span class="sum">Bank<b>' + money(t.bank) + '</b> · Free transfers<b>' +
+        (t.freeTransfers == null ? "–" : "about " + t.freeTransfers) + '</b></span></div>' +
+      '<div class="plan-wrap"><table class="plan"><thead><tr><th>Player</th><th class="r">£m</th><th class="r">Form</th>' +
+        '<th class="r">Net transfers</th>' + head + '</tr></thead><tbody>' +
+        xi.map(planRow).join("") + '<tr class="sep"><td colspan="9">Bench, in order</td></tr>' + bench.map(planRow).join("") +
+      '</tbody></table></div>' +
+      '<p class="plan-note">Free transfers are worked out from your transfer history, since the game only shows them to you signed in. ' +
+        (chips ? "Chips played: " + esc(chips) + "." : "No chips played yet.") + ' Line-up and armband are as you last saved them.</p></div>';
+  }
+
+  function marketTable(rows, field) {
+    return '<div class="plan-wrap"><table class="plan" style="min-width:420px"><thead><tr><th>Player</th><th class="r">Managers</th><th class="r">Form</th><th>Next</th></tr></thead><tbody>' +
+      rows.map(function (m) {
+        var key = findKeyByName(m.name, m.club);
+        return '<tr><td><span class="who' + (key ? " plink" : "") + '"' + (key ? ' data-p="' + esc(key) + '" role="button" tabindex="0"' : "") + '>' + face(m, "s") +
+          '<span><b>' + esc(m.name) + (key ? '<span class="flag arm">yours</span>' : "") +
+            (m.status !== "a" ? '<span class="flag bad">' + (m.chance != null ? m.chance + "%" : "flagged") + '</span>' : "") + '</b>' +
+          '<em>' + esc(m.pos) + ' · ' + esc(m.club) + ' · ' + money(m.price) + (m.news ? " · " + esc(m.news) : "") + '</em></span></span></td>' +
+          '<td class="r"><b>' + brief(m[field]) + '</b></td><td class="r">' + one(m.form) + '</td><td>' + fdr((m.next || [])[0]) + '</td></tr>';
+      }).join("") + '</tbody></table></div>';
+  }
+
+  function decideView() {
+    var m = (state.fpl || {}).market;
+    var html = '<div class="sub mint" style="margin-bottom:18px"><div class="sub-h"><h3>Needs a decision</h3><span class="sum">' +
+      planTeams().map(function (t) { return esc(t.name) + '<b>' + money(t.bank) + '</b> · about ' + (t.freeTransfers == null ? "–" : t.freeTransfers) + ' free'; }).join(" &nbsp; ") +
+      '</span></div>' + decisionList(null) + '</div>';
+    if (!m) return html;
+    var fresh = (m.form || []).filter(function (x) { return !findKeyByName(x.name, x.club); }).slice(0, 6);
+    return html + '<div class="duo">' +
+      '<div class="sub sky"><div class="sub-h"><h3>Most sold this gameweek</h3></div>' + marketTable(m.out || [], "out") + '</div>' +
+      '<div class="sub sky"><div class="sub-h"><h3>Most bought this gameweek</h3></div>' + marketTable(m["in"] || [], "in") + '</div></div>' +
+      (fresh.length ? '<div class="sub mint" style="margin-top:18px"><div class="sub-h"><h3>In form and in none of your squads</h3></div>' +
+        '<div class="plan-wrap"><table class="plan"><thead><tr><th>Player</th><th class="r">£m</th><th class="r">Form</th><th class="r">Owned %</th><th colspan="3">Next three</th></tr></thead><tbody>' +
+        fresh.map(function (x) {
+          var nx = (x.next || []).slice(0, 3); while (nx.length < 3) nx.push(null);
+          return '<tr><td><span class="who">' + face(x, "s") + '<span><b>' + esc(x.name) + '</b><em>' + esc(x.pos) + ' · ' + esc(x.club) + '</em></span></span></td>' +
+            '<td class="r">' + one(x.price) + '</td><td class="r"><b>' + one(x.form) + '</b></td><td class="r">' + one(x.owned) + '</td>' +
+            nx.map(function (f) { return '<td>' + fdr(f) + '</td>'; }).join("") + '</tr>';
+        }).join("") + '</tbody></table></div></div>' : "");
+  }
+
   function renderMain(teams) {
     var t = sel == null ? null : teams[sel];
     var tabs = t ? [["round", "This round"], ["pitch", "Pitch"], ["transfers", "Transfers"]]
                  : [["round", "This round"], ["next", "Next round"]];
+    if (t ? hasPlan(t) : planTeams().length) tabs.splice(t ? 2 : 1, 0, t ? ["plan", "Plan"] : ["decide", "Decisions"]);
+    // between rounds the open question is what to change, not what was scored
+    if (tabAuto) tab = (!t && !state.live && planTeams().length) ? "decide" : "round";
     if (!tabs.some(function (x) { return x[0] === tab; })) tab = "round";
 
     el("tabs").innerHTML = tabs.map(function (x) {
@@ -2435,6 +2698,13 @@
     } else if (tab === "pitch") {
       meta = icon("shirt") + '<span>' + esc(shape(t)) + '</span>';
       body = pitchView(t);
+    } else if (tab === "plan") {
+      meta = icon("clock") + '<span>next five fixtures</span>';
+      body = planView(t);
+    } else if (tab === "decide") {
+      var dl = nextDeadline("FPL"), todo = decisions(null).filter(function (a) { return a.sev === 3; }).length;
+      meta = icon("clock") + '<span>' + (dl ? esc(dl.label) + ' deadline ' + esc(until(dl.at)) + ' · ' : "") + todo + ' to act on</span>';
+      body = decideView();
     } else if (tab === "transfers") {
       var list = t.transfers || [];
       var net = list.reduce(function (a, x) { return a + (x["in"].price || 0) - (x.out.price || 0); }, 0);
@@ -2578,7 +2848,7 @@
 
   function applyHash() {
     var next = fromHash();
-    if (next !== sel) { sel = next; tab = "round"; fxMode = null; rankMode = null; squadQuery = ""; el("sq").value = ""; }
+    if (next !== sel) { sel = next; tab = "round"; tabAuto = true; fxMode = null; rankMode = null; squadQuery = ""; el("sq").value = ""; }
     var m = el("menu"); if (m) m.hidden = true;
     render();
     window.scrollTo({ top: 0 });
@@ -2612,7 +2882,7 @@
     var t;
     if ((t = e.target.closest("[data-team]"))) { choose(t.dataset.team); return; }
     if ((t = e.target.closest("#pick"))) { var m = el("menu"); m.hidden = !m.hidden; e.stopPropagation(); return; }
-    if ((t = e.target.closest("[data-tab]"))) { tab = t.dataset.tab; render(); return; }
+    if ((t = e.target.closest("[data-tab]"))) { tab = t.dataset.tab; tabAuto = false; render(); return; }
     if ((t = e.target.closest("[data-side]"))) { sideMode = t.dataset.side; render(); return; }
     if ((t = e.target.closest("[data-fxmode]"))) { fxMode = t.dataset.fxmode; render(); return; }
     if ((t = e.target.closest("[data-rank]"))) { rankMode = t.dataset.rank; render(); return; }
@@ -2626,7 +2896,7 @@
     }
     if (e.target.closest("#dclose") || e.target === el("scrim")) { closeDrawer(); return; }
     if (e.target.closest("#bell")) {
-      tab = "round"; showSeen = false; render();
+      tab = "round"; tabAuto = false; showSeen = false; render();
       var box = el("tickerbox");
       if (box) box.scrollIntoView({ behavior: "smooth", block: "center" });
       return;

@@ -214,7 +214,89 @@ def fixture_state(fx):
     return "upcoming"
 
 
-def fpl_team(entry, label, boot, live, fixtures, gw):
+def fpl_ahead(boot, future, count=5):
+    """Each club's next fixtures: opponent, venue and FPL's own difficulty rating
+    (1 easy to 5 hard). This is what a transfer or captaincy call is weighed on."""
+    clubs = {t["id"]: t["short_name"] for t in boot["teams"]}
+    ahead = {}
+    for f in sorted(future, key=lambda f: (f.get("event") or 99, f.get("kickoff_time") or "")):
+        if not f.get("event") or f.get("started") or f.get("finished"):
+            continue
+        for mine, other, home, diff in (
+            (f["team_h"], f["team_a"], True, f.get("team_h_difficulty")),
+            (f["team_a"], f["team_h"], False, f.get("team_a_difficulty")),
+        ):
+            rows = ahead.setdefault(mine, [])
+            if len(rows) < count:
+                rows.append({"gw": f["event"], "opp": clubs.get(other, "?"), "home": home,
+                             "diff": diff, "kickoff": f.get("kickoff_time")})
+    return ahead
+
+
+def number(value):
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def fpl_plan(el, ahead):
+    """What the game itself knows about a player beyond this round's points: the
+    availability flag and its news line, form, price and where it is heading,
+    how many managers are buying or selling, bookings, and the fixtures to come."""
+    return {
+        "status": el.get("status"),
+        "news": el.get("news") or "",
+        "newsAt": el.get("news_added"),
+        "chance": el.get("chance_of_playing_next_round"),
+        "form": number(el.get("form")),
+        "perGame": number(el.get("points_per_game")),
+        "price": (el.get("now_cost") or 0) / 10,
+        "priceMove": (el.get("cost_change_event") or 0) / 10,
+        "owned": number(el.get("selected_by_percent")),
+        "in": el.get("transfers_in_event", 0),
+        "out": el.get("transfers_out_event", 0),
+        "yellows": el.get("yellow_cards", 0),
+        "seasonMinutes": el.get("minutes", 0),
+        "next": ahead.get(el.get("team"), []),
+    }
+
+
+def free_transfers(rows, chips):
+    """Free transfers in hand for the next deadline. FPL does not publish this for
+    a team you are not signed in as, so it is rebuilt from the season so far: one
+    a week, unused ones roll over up to five, and a wildcard or free hit week
+    leaves the count alone. An estimate - the page says so."""
+    played = {c.get("event"): c.get("name") for c in chips or []}
+    have = 1
+    for i, r in enumerate(rows):
+        if i == 0 or played.get(r.get("event")) in ("wildcard", "freehit"):
+            continue
+        have = min(5, max(0, have - (r.get("event_transfers") or 0)) + 1)
+    return have if rows else None
+
+
+def fpl_market(boot, ahead, count=8):
+    """Who the whole game is buying and selling this gameweek, and who is in form.
+    A flood of sales usually means news; a flood of buys means a price rise."""
+    clubs = {t["id"]: t["short_name"] for t in boot["teams"]}
+
+    def row(el):
+        plan = fpl_plan(el, ahead)
+        plan["next"] = plan["next"][:3]
+        return dict(plan, id=el["id"], name=el["web_name"], photo="fpl-%s.png" % el["code"],
+                    club=clubs.get(el["team"], "?"), pos=POS.get(el["element_type"], "?"))
+
+    els = boot["elements"]
+    fit = [e for e in els if e.get("status") == "a" and (e.get("minutes") or 0) >= 450]
+    return {
+        "in": [row(e) for e in sorted(els, key=lambda e: -(e.get("transfers_in_event") or 0))[:count]],
+        "out": [row(e) for e in sorted(els, key=lambda e: -(e.get("transfers_out_event") or 0))[:count]],
+        "form": [row(e) for e in sorted(fit, key=lambda e: -(number(e.get("form")) or 0))[:20]],
+    }
+
+
+def fpl_team(entry, label, boot, live, fixtures, gw, ahead=None):
     elements = {e["id"]: e for e in boot["elements"]}
     clubs = {t["id"]: t for t in boot["teams"]}
     livemap = {e["id"]: e for e in live["elements"]}
@@ -287,6 +369,7 @@ def fpl_team(entry, label, boot, live, fixtures, gw):
             "penaltySaves": stats.get("penalties_saved", 0),
             "penaltyMisses": stats.get("penalties_missed", 0),
             "bps": stats.get("bps", 0),
+            "plan": fpl_plan(el, ahead or {}),
         }
         squad.append(row)
         if bench:
@@ -298,9 +381,11 @@ def fpl_team(entry, label, boot, live, fixtures, gw):
     hit = hist.get("event_transfers_cost", 0)
 
     overall_move = week_move = None
-    rows = []
+    rows, chips = [], []
     try:
-        rows = get(f"{FPL}/entry/{entry}/history/", cache_seconds=300).get("current") or []
+        season = get(f"{FPL}/entry/{entry}/history/", cache_seconds=300)
+        rows = season.get("current") or []
+        chips = season.get("chips") or []
         overall_move = delta_of(rows, "overall_rank")
         week_move = delta_of(rows, "rank")
     except Exception:
@@ -357,6 +442,8 @@ def fpl_team(entry, label, boot, live, fixtures, gw):
         "chip": picks.get("active_chip"),
         "transfersMade": hist.get("event_transfers", 0),
         "autoSubs": len(picks.get("automatic_subs") or []),
+        "freeTransfers": free_transfers(rows, chips),
+        "chipsPlayed": [{"name": c.get("name"), "w": c.get("event")} for c in chips],
         # FPL counts money in tenths of a million
         "value": (latest.get("value") or 0) / 10 or None,
         "bank": (latest["bank"] / 10) if latest.get("bank") is not None else None,
@@ -400,7 +487,15 @@ def fpl_block(cfg):
         except Exception:
             upcoming = []
 
-    teams = [fpl_team(t["entry"], t.get("label", ""), boot, live, fixtures, gw) for t in cfg]
+    # the fixtures ahead and the transfer market are for planning, not scoring;
+    # a failure here must not cost the page its live points
+    try:
+        ahead = fpl_ahead(boot, get(f"{FPL}/fixtures/?future=1", cache_seconds=600))
+        market = fpl_market(boot, ahead)
+    except Exception:
+        ahead, market = {}, None
+
+    teams = [fpl_team(t["entry"], t.get("label", ""), boot, live, fixtures, gw, ahead) for t in cfg]
     return {
         "gw": gw,
         "name": cur["name"],
@@ -412,6 +507,7 @@ def fpl_block(cfg):
                      if e.get("finished") or e.get("is_current")},
         "next": {"gw": nxt["id"], "deadline": nxt.get("deadline_time")} if nxt else None,
         "upcoming": upcoming,
+        "market": market,
         "matches": matches,
         "teams": teams,
         "anyLive": any(m["started"] and not m["finished"] for m in matches),
